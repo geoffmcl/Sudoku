@@ -1,0 +1,15 @@
+*.vcxproj
+*.filters
+*.user
+CMakeCache.txt
+CMakeFiles/*
+Debug/*
+Release/*
+*.dir/*
+*.opensdf
+*.sdf
+*.sln
+Win32/*
+bldlog-1.txt
+cmake_install.cmake
+ipch/*
