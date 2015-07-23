@@ -20,7 +20,7 @@ If you have your build tools setup, then the simple build steps are :-
  
 Of course, alteratively the cmake GUI can be used, and then the MSVC IDE can also be used to build the project.
 
-The `examples` folder contains a considerable list of `sample` files which can be loaded. Or you can manually setup the puzzle from say a magazine and try to solve it...
+The `examples` folder contains a considerable list of `sample` files which can be loaded. Or you can manually setup the puzzle from say a magazine and try to solve it... using the menu `->` Options `->` Solve!, or One Step, or simply selecting a square and entering a number manually...
 
 The main thing is **have FUN!**
 
