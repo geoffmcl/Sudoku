@@ -1,0 +1,79 @@
+640398020328010496091624300130080649069143000854069030916452873070831964483976215
+
+// File: uniqrect5.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   || * | * |   || * | * | * ||1  | * |1  ||
+// A ||*6*|*4*| 5 ||*3*|*9*|*8*|| 5 |*2*|   || 1
+//   || * | * |7  || * | * | * ||7  | * |7  ||
+//    ---------------------------------------
+//   || * | * | * ||   | * |   || * | * | * ||
+// B ||*3*|*2*|*8*|| 5 |*1*| 5 ||*4*|*9*|*6*|| 2
+//   || * | * | * ||7  | * |7  || * | * | * ||
+//    ---------------------------------------
+//   ||   | * | * || * | * | * || * |   |   ||
+// C || 5 |*9*|*1*||*6*|*2*|*4*||*3*| 5 |   || 3
+//   ||7  | * | * || * | * | * || * | 8 |78 ||
+//    =======================================
+//   || * | * | 2 || 2 | * |   || * | * | * ||
+// D ||*1*|*3*|   || 5 |*8*| 5 ||*6*|*4*|*9*|| 4
+//   || * | * |7  ||7  | * |7  || * | * | * ||
+//    ---------------------------------------
+//   || 2 | * | * || * | * | * ||   |   | 2 ||
+// E ||   |*6*|*9*||*1*|*4*|*3*|| 5 | 5 |   || 5
+//   ||7  | * | * || * | * | * ||7  | 8 |78 ||
+//    ---------------------------------------
+//   || * | * | * || 2 | * | * ||1  | * |12 ||
+// F ||*8*|*5*|*4*||   |*6*|*9*||   |*3*|   || 6
+//   || * | * | * ||7  | * | * ||7  | * |7  ||
+//    =======================================
+//   || * | * | * || * | * | * || * | * | * ||
+// G ||*9*|*1*|*6*||*4*|*5*|*2*||*8*|*7*|*3*|| 7
+//   || * | * | * || * | * | * || * | * | * ||
+//    ---------------------------------------
+//   || 2 | * | 2 || * | * | * || * | * | * ||
+// H || 5 |*7*| 5 ||*8*|*3*|*1*||*9*|*6*|*4*|| 8
+//   ||   | * |   || * | * | * || * | * | * ||
+//    ---------------------------------------
+//   || * | * | * || * | * | * || * | * | * ||
+// I ||*4*|*8*|*3*||*9*|*7*|*6*||*2*|*1*|*5*|| 9
+//   || * | * | * || * | * | * || * | * | * ||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+
+// eof - generated 2012/09/30 17:07:07
+// from : http://www.brainbashers.com/sudokuuniquerectangles.asp
+// Unique Rectangles Type 1. There are almost two occurrences of 
+// a locked pair in <57>. However, we can never end up with all 
+// four squares only containing <57> otherwise we could swap 
+// the <5> & <7> and still have a valid solution, which is not 
+// allowed. Therefore <5> & <7> can be removed from R4C4. This 
+// is a little tricky to understand, but if R4C4 was a <5> then 
+// the other three squares would be known, but we could then 
+// swap the <5> & <7> in these squares, which would give the 
+// Sudoku multiple solutions. Similarly, R4C4 cannot be a <7> either.
+// ie RECT: 57@B4 57@B6 257@D4 and 57@D6
+// ie ELIM: 57@D4
+// from : http://www.sudokuwiki.org/sudoku.htm
+// XY CHAIN length=4, chain ends: A3 and E7
+// This proves 5 is the solution at one end of the chain or the other
+// -5[A3]+7[A3]-7[D3]+2[D3]-2[E1]+7[E1]-7[E7]+5[E7]
+// - 5 taken off A7
+// ie CHAIN: 5@E7A-7@E7--7@E1-2@E1--2@D3-7@D3--7@A3-5@A3B
+// ie ELIM: 5@A7 - seen by 5@E7A and 5@A3B
+// then
+// SINGLE: A3 set to 5, unique in Row
+// SINGLE: C8 set to 5, unique in Box
+// SINGLE: E7 set to 5, unique in Column
+// then
+// SINGLE: A3 set to 5, unique in Row
+// SINGLE: C8 set to 5, unique in Box
+// SINGLE: E7 set to 5, unique in Column
+// then
+// onwards... Why do I get a Unique Rectangle ELIM at all
+// ======================================================
+
+
+
+// 
+

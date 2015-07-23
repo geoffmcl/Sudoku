@@ -1,0 +1,203 @@
+000918006018000029700040100900100800000534000007800003006080004050000230200001000
+
+// File: AIC-scan-02.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   ||  3| 23| 23|| * | * | * ||  3|   | * ||
+// A ||45 |4  |45 ||*9*|*1*|*8*||45 |45 |*6*|| 1
+//   ||   |   |   || * | * | * ||7  |7  | * ||
+//    ---------------------------------------
+//   ||  3| * | * ||  3|   |  3||  3| * | * ||
+// B ||456|*1*|*8*||  6| 56| 56||45 |*2*|*9*|| 2
+//   ||   | * | * ||7  |7  |7  ||7  | * | * ||
+//    ---------------------------------------
+//   || * | 23| 23|| 23| * | 23|| * |   |   ||
+// C ||*7*|  6| 5 ||  6|*4*| 56||*1*| 5 | 5 || 3
+//   || * |  9|  9||   | * |   || * | 8 | 8 ||
+//    =======================================
+//   || * | 23| 23|| * | 2 | 2 || * |   | 2 ||
+// D ||*9*|4 6|45 ||*1*|  6|  6||*8*|456| 5 || 4
+//   || * |   |   || * |7  |7  || * |7  |7  ||
+//    ---------------------------------------
+//   ||1  | 2 |12 || * | * | * ||   |1  |12 ||
+// E ||  6|  6|   ||*5*|*3*|*4*||  6|  6|   || 5
+//   || 8 | 8 |   || * | * | * ||7 9|7 9|7  ||
+//    ---------------------------------------
+//   ||1  | 2 | * || * | 2 | 2 ||   |1  | * ||
+// F ||456|4 6|*7*||*8*|  6|  6||456|456|*3*|| 6
+//   ||   |   | * || * |  9|  9||  9|  9| * ||
+//    =======================================
+//   ||1 3|  3| * || 23| * | 23||   |1  | * ||
+// G ||   |   |*6*||   |*8*| 5 || 5 | 5 |*4*|| 7
+//   ||   |7 9| * ||7  | * |7 9||7 9|7 9| * ||
+//    ---------------------------------------
+//   ||1  | * |1  ||   |   |   || * | * |1  ||
+// H ||4  |*5*|4  ||4 6|  6|  6||*2*|*3*|   || 8
+//   || 8 | * |  9||7  |7 9|7 9|| * | * |78 ||
+//    ---------------------------------------
+//   || * |  3|  3||  3|   | * ||   |   |   ||
+// I ||*2*|4  |4  ||4 6| 56|*1*|| 56| 56| 5 || 9
+//   || * |789|  9||7  |7 9| * ||7 9|789|78 ||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+
+// eof - generated 2012/10/08 13:08:59
+// from : http://www.pauls-pc-repair.com/sudoku/index.php?page=AIC
+// Although an example of x-wings, includes it in AIC
+// --------------------------------------------------
+// We shall prove that when R6C1 is not 1 R7C1 must be 1, 
+// eliminating the possibility that R5C1 or R8C1 could be 1.
+// Begin by assuming R6C1 is not 1.
+// If R6C1 is not 1 then R6C8 must be 1.
+// If R6C8 is 1 then R7C8 cannot be 1.
+// If R7C8 is not 1 then R7C1 must be 1.
+// We have now shown that when R6C1 is not 1 R7C1 
+// must be 1 so in no case can R5C1 or R8C1 ever be 1.
+// ==================================================
+// We shall prove that when R5C3 is not 2 R5C9 must be 2, 
+// eliminating the possibility that R5C2 could be 2.
+// Begin by assuming R5C3 is not 2.
+// If R5C3 is not 2 then it must be 1.
+// If R5C3 is 1 then R5C9 and R8C3 cannot be 1.
+// If R8C3 is not 1 then R8C3, R8C4, R8C5 and R8C6 
+// form a naked quad which must contain the digits 
+// 4, 6, 7 and 9.
+// If the naked quad at R8C3, R8C4, R8C5 and R8C6 must 
+// contain a 4, then R8C1 cannot be 4.
+// If R8C1 cannot be 4 then it must be 8
+// If R8C1 is 8 then R5C1 cannot be 8.
+// If R5C1 cannot be 8 then it must be 6.
+// If R5C1 must be 6 then R5C7 and R5C8 cannot be 6.
+// If R5C7 and R5C8 cannot be 6 then R5C7 and R5C8 form 
+// a naked pair containing the digits 7 and 9.
+// If the naked pair at R5C7 and R5C8 must contain a 7 
+// then R5C9 cannot be 7.
+// If R5C9 cannot be 7 and we have already shown that 
+// it cannot be 1 then it must be 2.
+// We have now shown that when R5C3 is not 2 R5C9 must 
+// be 2 so in no case can R5C2 ever be 2.
+// IMPORTANT - THe present CODE makes a BIG error with 
+// solving THIS - TODO - Fix this error!!!
+// 20121015 - Update
+// 000918006018000029700040100900100800000534000007800003006080004050000230200001000
+// File: examples\AIC-scan-02.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   ||  3| 23| 23|| * | * | * ||  3|   | * ||
+// A ||45 |4  |45 ||*9*|*1*|*8*||4  |4  |*6*|| 1
+//   ||   |   |   || * | * | * ||7  |7  | * ||
+//    ---------------------------------------
+//   ||  3| * | * ||  3|   |  3||  3| * | * ||
+// B ||4 6|*1*|*8*||  6| 56| 5 ||4  |*2*|*9*|| 2
+//   ||   | * | * ||7  |7  |   ||   | * | * ||
+//    ---------------------------------------
+//   || * |  3|  3|| 23| * | 23|| * |   |   ||
+// C ||*7*|  6|   ||  6|*4*|   ||*1*| 5 | 5 || 3
+//   || * |  9|  9||   | * |   || * | 8 | 8 ||
+//    =======================================
+//   || * | 23| 23|| * | 2 |   || * |   | 2 ||
+// D ||*9*|4 6|45 ||*1*|  6|  6||*8*|456| 5 || 4
+//   || * |   |   || * |7  |7  || * |   |   ||
+//    ---------------------------------------
+//   ||   | 2 |12 || * | * | * ||   |   |12 ||
+// E ||  6|  6|   ||*5*|*3*|*4*||  6|  6|   || 5
+//   || 8 | 8 |   || * | * | * ||7 9|7 9|7  ||
+//    ---------------------------------------
+//   ||1  | 2 | * || * | 2 |   ||   |1  | * ||
+// F ||456|4 6|*7*||*8*|  6|  6||456|456|*3*|| 6
+//   ||   |   | * || * |  9|  9||   |   | * ||
+//    =======================================
+//   ||1 3|  3| * || 23| * | 23||   |1  | * ||
+// G ||   |   |*6*||   |*8*| 5 || 5 | 5 |*4*|| 7
+//   ||   |7 9| * ||7  | * |   ||7 9|7 9| * ||
+//    ---------------------------------------
+//   ||   | * |1  ||   |   |   || * | * |1  ||
+// H ||4  |*5*|4  ||4 6|  6|  6||*2*|*3*|   || 8
+//   || 8 | * |  9||7  |7 9|7 9|| * | * |78 ||
+//    ---------------------------------------
+//   || * |  3|  3||  3|   | * ||   |   |   ||
+// I ||*2*|4  |4  ||4  | 5 |*1*|| 56| 56| 5 || 9
+//   || * |789|  9||7  |7 9| * ||7 9|789|7  ||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+// eof - generated 2012/10/15 16:27:29
+// Seemed to have 'fixed' the error, but now NO SOLUTION
+// from : http://www.sudokuwiki.org/sudoku.htm
+// HIDDEN UNIQUE RECTANGLE Type 1: removing 3 at G4 because of 
+// CG46 and two strong links on 2
+// ------------------------------
+// Mark Strong Links shows - rectangle
+// 2@C4==2@C6 and 2@C6==2@G6 and 2@G6==2@G4 and 2@G4==2@C4
+// From this eliminates 3@G4 - WHY???
+// All cands 236@C4 23@C5 235@G6 237@G4
+// from : http://sudoku.ironmonger.com/home/home.tpl?board=000918006018000029700040100900100800000534000007800003006080004050000230200001000
+// NEXT: Found a Naked Pair 
+// The candidates 5 and 8 are the only candidates in the blue cells in box 3. 
+// These candidates can be removed from all other cells in box 3. OK
+// NEXT: Found Box Claim 
+// All instances of the candidate 2 in box 2 are in row 3. The candidate 
+// 2 can be removed from all cells in row 3 that are not in box 2. OK
+// NEXT: Found Box Claim 
+// All instances of the candidate 5 in box 2 are in row 2. The candidate 
+// 5 can be removed from all cells in row 2 that are not in box 2. OK
+// NEXT: Found Box Claim 
+// All instances of the candidate 7 in box 2 are in row 2. The candidate 
+// 7 can be removed from all cells in row 2 that are not in box 2. OK
+// NEXT: Found Box Claim 
+// All instances of the candidate 7 in box 5 are in row 4. The candidate 
+// 7 can be removed from all cells in row 4 that are not in box 5. OK
+// NEXT : Found Box Claim 
+// All instances of the candidate 9 in box 5 are in row 6. The candidate 
+// 9 can be removed from all cells in row 6 that are not in box 5. OK
+// NEXT : Found Box Claim 
+// All instances of the candidate 6 in box 9 are in row 9. The candidate 
+// 6 can be removed from all cells in row 9 that are not in box 9. OK
+// NEXT : Found Row-Column Claim 
+// All instances of the candidate 2 in column 5 are in box 5. The candidate 
+// 2 can be removed from all cells in box 5 that are not in column 5. OK
+// NEXT : Found a Naked Triplet 
+// The candidates 6, 7 and 9 are the only candidates in the blue cells in 
+// column 6. These candidates can be removed from all other cells in column 6. OK
+// NEXT : Found X Wing 
+// All instances of the number 1 in rows 6 and 7 are found in columns 1 and 8 
+// (The blue cells). The number 1 can be removed from all other cells in 
+// columns 1 and 8. OK
+// NEXT : Found Hidden Unique Rectangle Type 1
+// There is a strong link on the number 2 between the colored cells in row 7 and 
+// column 4. If the number 3 is placed in the blue cell in column 4, it forces 
+// the number 3 to be placed in the green cell in column 6 and creates a 
+// deadly pattern on the numbers 2 and 3. This is not allowed in a puzzle 
+// that has a unique solution so the 3 can be removed from the blue cell 
+// in column 4. - MISS THIS
+// 236@C4G == 23@C6G and 237@G4B == 235@G6B
+// if +3[G4], then +2[C4], +3[C6], +2[G6] ???
+// or +2[G4], then +3[C4], +2[C6], +3[G6] ???
+// if +2[G4], then +6[C4], +23[C6], +35[G6] ok
+// if +7[G4], then +2[C4], +3[C6], +2[G6] ok
+// An Almost Deadly Pattern is an instance of a deadly pattern with some additional 
+// candidates. The only way to avoid the deadly pattern is to make sure that at 
+// least one of the additional candidates is used in one of the cells contained 
+// in the almost deadly pattern.
+// REMEBER: A 'deadly pattern' only exist when we have a rectangle of pairs
+// that occupies 2 ROWS, 2 COLS, *AND* JUST 2 BOXES!!!
+// This 'rectangle' of candidate 23 is in 2 ROWS, C & G, 2 COLS 4 & 5,
+// and JUST 2 BOXES 2 & 8.
+// BUT how to 'decide' 3@G4' should be eliminated to preserve uniqueness???
+// It is the 'hinge' cell, that has an additional candidate, leading to 2 buddies, also with additional
+// Using any of the other 3 corners as a 'hinge' would NOT fit this condition
+// Can the elimination be based on that fact?
+// Let's see if I can generate logic code that take all this into account?
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+

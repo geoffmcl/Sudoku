@@ -1,0 +1,69 @@
+030006200500080301180300600001972500859003742723845916010007805208531407075408100
+
+// File: examples\xy-wing.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   ||   | * |   ||1  |1  | * || * |   |   ||
+// A ||4  |*3*|4  ||   | 5 |*6*||*2*| 5 |4  || 1
+//   ||  9| * |7  ||7  |  9| * || * |789| 89||
+//    ---------------------------------------
+//   || * |   | 2 || 2 | * |   || * |   | * ||
+// B ||*5*|4 6|4 6||   |*8*|4  ||*3*|   |*1*|| 2
+//   || * |  9|7  ||7  | * |  9|| * |7 9| * ||
+//    ---------------------------------------
+//   || * | * | 2 || * | 2 |   || * |   |   ||
+// C ||*1*|*8*|4  ||*3*| 5 |4  ||*6*| 5 |4  || 3
+//   || * | * |7  || * |  9|  9|| * |7 9|  9||
+//    =======================================
+//   ||   |   | * || * | * | * || * |  3|  3||
+// D ||4 6|4 6|*1*||*9*|*7*|*2*||*5*|   |   || 4
+//   ||   |   | * || * | * | * || * | 8 | 8 ||
+//    ---------------------------------------
+//   || * | * | * ||1  |1  | * || * | * | * ||
+// E ||*8*|*5*|*9*||  6|  6|*3*||*7*|*4*|*2*|| 5
+//   || * | * | * ||   |   | * || * | * | * ||
+//    ---------------------------------------
+//   || * | * | * || * | * | * || * | * | * ||
+// F ||*7*|*2*|*3*||*8*|*4*|*5*||*9*|*1*|*6*|| 6
+//   || * | * | * || * | * | * || * | * | * ||
+//    =======================================
+//   ||  3| * |   || 2 | 2 | * || * | 23| * ||
+// G ||4 6|*1*|4 6||  6|  6|*7*||*8*|  6|*5*|| 7
+//   ||  9| * |   ||   |  9| * || * |  9| * ||
+//    ---------------------------------------
+//   || * |   | * || * | * | * || * |   | * ||
+// H ||*2*|  6|*8*||*5*|*3*|*1*||*4*|  6|*7*|| 8
+//   || * |  9| * || * | * | * || * |  9| * ||
+//    ---------------------------------------
+//   ||  3| * | * || * | 2 | * || * | 23|  3||
+// I ||  6|*7*|*5*||*4*|  6|*8*||*1*|  6|   || 9
+//   ||  9| * | * || * |  9| * || * |  9|  9||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+//      a   b   c    d   e   f    g   h   i
+
+// eof - generated 2012/09/09 22:31:11
+// from : http://www.sudokudragon.com/advancedstrategy.htm#XL115
+// The green squares are the ones we have tentatively allocated 
+// and the blue squares indicate where a 7 can not be allocated.
+// The only other option for Ce was for it to be a 5 rather than a 2, 
+// and this forces us to put a 7 in Ch. So now we have the alternative 
+// scenario with Ch and Ce highlighted in green and for this alternative 
+// the blue squares show other squares which can not take a 7.
+// Well, we are in luck as there is one square which is blue in both the 
+// alternatives, this is square Bh - which we have coloured darker blue 
+// to highlight it. In general there could be more than one square in 
+// common and the rule would apply to all the squares common to the two 
+// alternatives. Square Bh can not be a 7 for either of the only two 
+// possibilities available for Ce (5 or 2) and so 7 can be safely excluded 
+// from the possibilities for this square. In the case of this particular 
+// puzzle, this is crucial, as that leaves only one choice for Bh as it 
+// can not be a 7 it must be the remaining possibility of '9', the hook 
+// strategy enables us to immediately solve a square and it turns out to 
+// be the last tricky one to solve.
+
+// BEWARE THIS IS A COMMERCIAL OPERATION
+// They want you to BUY it...
+// Sudoku Dragon 
+// Version 5.1, May 2012. Download the Sudoku Solver 
+// ./sdkinst.exe (1.75 Mb) file by clicking the animated button

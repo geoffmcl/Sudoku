@@ -1,0 +1,73 @@
+400278059928305470070409238204050300050904027007020504040000962769542813382196745
+
+// File: Uniqrect10.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   || * |1 3|1 3|| * | * | * ||1  | * | * ||
+// A ||*4*|   |  6||*2*|*7*|*8*||  6|*5*|*9*|| 1
+//   || * |   |   || * | * | * ||   | * | * ||
+//    ---------------------------------------
+//   || * | * | * || * |1  | * || * | * |1  ||
+// B ||*9*|*2*|*8*||*3*|  6|*5*||*4*|*7*|  6|| 2
+//   || * | * | * || * |   | * || * | * |   ||
+//    ---------------------------------------
+//   ||1  | * |1  || * |1  | * || * | * | * ||
+// C || 56|*7*| 56||*4*|  6|*9*||*2*|*3*|*8*|| 3
+//   ||   | * |   || * |   | * || * | * | * ||
+//    =======================================
+//   || * |1  | * ||   | * |1  || * |   |1  ||
+// D ||*2*|   |*4*||  6|*5*|   ||*3*|   |  6|| 4
+//   || * |  9| * ||78 | * |7  || * | 89|   ||
+//    ---------------------------------------
+//   ||1  | * |1 3|| * |  3| * ||1  | * | * ||
+// E ||  6|*5*|  6||*9*|   |*4*||  6|*2*|*7*|| 5
+//   || 8 | * |   || * | 8 | * ||   | * | * ||
+//    ---------------------------------------
+//   ||1  |1 3| * ||   | * |1 3|| * |   | * ||
+// F ||  6|   |*7*||  6|*2*|   ||*5*|   |*4*|| 6
+//   || 8 |  9| * || 8 | * |   || * | 89| * ||
+//    =======================================
+//   ||1  | * |1  ||   |  3|  3|| * | * | * ||
+// G || 5 |*4*| 5 ||   |   |   ||*9*|*6*|*2*|| 7
+//   ||   | * |   ||78 | 8 |7  || * | * | * ||
+//    ---------------------------------------
+//   || * | * | * || * | * | * || * | * | * ||
+// H ||*7*|*6*|*9*||*5*|*4*|*2*||*8*|*1*|*3*|| 8
+//   || * | * | * || * | * | * || * | * | * ||
+//    ---------------------------------------
+//   || * | * | * || * | * | * || * | * | * ||
+// I ||*3*|*8*|*2*||*1*|*9*|*6*||*7*|*4*|*5*|| 9
+//   || * | * | * || * | * | * || * | * | * ||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+
+// eof - generated 2012/10/02 19:44:36
+// from : http://www.sudoku.org.uk/SolvingTechniques/UniqueRectangles.asp
+// Elim 1@C1 and 1@C3
+// The roof cells are C1 and C3 because they contain the extra 
+// candidate 6.  Without 6 a deadly pattern would form.  But let’s 
+// leave 6 alone and look at the 1/5 in the roof.  The peculiar 
+// characteristic is that in box 1, the roof squares are the only 
+// squares that can contain a 5. This means that, no matter what, 
+// one of those squares must be 5.  Say C1 contained the 5, 1 is 
+// exclude from C3 since it would form the deadly pattern.  The same 
+// would be true if C1 were 5.  Since these are the only alternatives, 
+// we can conclude that neither of the cells can contain a 1.  So we 
+// can remove 1 from C1 and C3. 
+
+// This is an example of a "Type-4 Unique Rectangle". As you have 
+// probably realized, since the roof squares are in the same block, you 
+// can search for conjugate pairs in both of their common units 
+// (the row and the block, in this case).
+
+// In this terminology the 'Floor' is the pair of cells that 
+// just contain the 2 shared candidates. The 'Roof' is the 
+// other tow cells.
+
+// Further a DEADLY PATTERN is when 4 cells in a rectangle 
+// contain just 2 candidates of the same value. Since 
+// these two can be SWAPPED in a solution, then the solution 
+// would NOT be unique - An IMPORTANT rule - UNIQUE SOLUTIONS 
+// ONLY ALLOWED.
+
+

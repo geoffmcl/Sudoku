@@ -1,0 +1,17 @@
+file : ChangeLog.txt - Began 20120921 - to record (some) changes
+*** Grows UPWARDS - Latest date at top ***
+
+FIX20150723 - Add a CMakeLists.txt, and a 'build' folder for out of source building,
+ and created a GitHub repo to hold the source.
+
+FIX20120924 - Changed to using lval lval = setval - 1;
+ then if ( !( ps->val[lval] ) ) continue; // NOT with this value
+ in Get_Empty_Cells_of_setval( PABOX2 pb, vRC &empty, int setval, PRCRCB prcrcb, bool clear = true );
+ and this service moved to Utils...
+
+FIX20120922 - Do_XYChain_Scan() seem to work well - See Sudo_XYChain.cxx
+FIX20120921 - Mark_Color_Rule_1: does NOT have current candidate if ( !(rc.set.val[lval]) ) continue;
+
+;eof - ChangeLog.txt
+
+

@@ -1,0 +1,30 @@
+# test input file
+
+# examples\coloring.txt
+
+# examples\coloring3.txt
+
+# examples\coloring6.txt
+
+# examples\coloring7.txt
+
+#examples\diabolical.txt
+
+# stuck here
+# examples\diabolical4.txt
+
+# move onto X-Cycles
+# from : http://zitowolf.net/sudoku/strategy.html#xcycles
+#examples\xcycles1.txt
+# this exposed  aBUG in the SIMPLE strategy of checking 
+# if any BOX had ONLY ONE possible candidate remaining - now fixed
+# examples\xcycles1-1.txt 
+
+# examples\uniqrect1.txt
+
+examples\uniqrect2.txt
+
+# 20120808 - Added Do_UniqRect_Scan() and Do_Fill_UniqRect() - sg_Fill_Uniq - SOLVED
+# examples\uniqrect4.txt
+
+

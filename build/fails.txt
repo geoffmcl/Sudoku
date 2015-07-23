@@ -1,0 +1,10 @@
+# Examples that FAIL
+
+# from : http://zitowolf.net/sudoku/strategy.html#xcycles
+# 20120808 - Added elimination here BUT still NOT SOLVED
+# examples\uniqrect2.txt   # FAILS!!!
+
+# stuck here - still STUCK
+examples\diabolical4.txt
+
+# examples\extreme-02.txt	# NO SOLUTION!

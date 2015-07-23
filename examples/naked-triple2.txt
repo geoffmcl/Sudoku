@@ -1,0 +1,71 @@
+294513006600842319300697254000056000040080060000470000730164005900735001400928637
+
+// File: Naked-triple2.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   || * | * | * || * | * | * ||   |   | * ||
+// A ||*2*|*9*|*4*||*5*|*1*|*3*||   |   |*6*|| 1
+//   || * | * | * || * | * | * ||78 |78 | * ||
+//    ---------------------------------------
+//   || * |   |   || * | * | * || * | * | * ||
+// B ||*6*| 5 | 5 ||*8*|*4*|*2*||*3*|*1*|*9*|| 2
+//   || * |7  |7  || * | * | * || * | * | * ||
+//    ---------------------------------------
+//   || * |1  |1  || * | * | * || * | * | * ||
+// C ||*3*|   |   ||*6*|*9*|*7*||*2*|*5*|*4*|| 3
+//   || * | 8 | 8 || * | * | * || * | * | * ||
+//    =======================================
+//   ||1  |12 |123|| 23| * | * ||1  | 2 | 23||
+// D ||   |   |   ||   |*5*|*6*||4  |4  |   || 4
+//   || 8 |78 |789||   | * | * ||789|789| 8 ||
+//    ---------------------------------------
+//   ||1  | * |123|| 23| * |1  ||1  | * | 23||
+// E || 5 |*4*| 5 ||   |*8*|   || 5 |*6*|   || 5
+//   ||   | * |7 9||   | * |  9||7 9| * |   ||
+//    ---------------------------------------
+//   ||1  |12 |123|| * | * |1  ||1  | 2 | 23||
+// F || 5 | 56| 56||*4*|*7*|   || 5 |   |   || 6
+//   || 8 | 8 | 89|| * | * |  9|| 89| 89| 8 ||
+//    =======================================
+//   || * | * | 2 || * | * | * ||   | 2 | * ||
+// G ||*7*|*3*|   ||*1*|*6*|*4*||   |   |*5*|| 7
+//   || * | * | 8 || * | * | * || 89| 89| * ||
+//    ---------------------------------------
+//   || * | 2 | 2 || * | * | * ||   | 2 | * ||
+// H ||*9*|  6|  6||*7*|*3*|*5*||4  |4  |*1*|| 8
+//   || * | 8 | 8 || * | * | * || 8 | 8 | * ||
+//    ---------------------------------------
+//   || * |1  |1  || * | * | * || * | * | * ||
+// I ||*4*| 5 | 5 ||*9*|*2*|*8*||*6*|*3*|*7*|| 9
+//   || * |   |   || * | * | * || * | * | * ||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+
+// eof - generated 2012/09/08 18:00:45
+// from : http://www.sudokuwiki.org/Naked_Candidates
+// Any group of three cells in the same unit that contain 
+// IN TOTAL three candidates is a Naked Triple. 
+// Each cell can have two or three numbers, as long as in 
+// combination all three cells have only three numbers. 
+// When this happens, the three candidates can be removed 
+// from all other cells in the same unit.
+
+// The combinations of candidates for a Naked Triple will be one of the following:
+// (123) (123) (123) - {3/3/3} (in terms of candidates per cell)
+// (123) (123) (12) - {3/3/2} (or some combination thereof)
+// (123) (12) (23) - {3/2/2/}
+// (12) (23) (13) - {2/2/2}
+
+// In the ABOVE example
+// We have two Naked Triples at the same time on this board, 
+// in columns 1 and 9. There is no trickery in these Triples because 
+// the cells that form the triples are the last three unsolved cells 
+// in those columns - so they are bound to contain the three remaining 
+// values. Given that fact we can clear out those values from the box 
+// (and only the box since there is nothing to clear off in the columns). 
+// But the manoeuvre nets us a great deal of candidates and we get a 
+// solution of 9 in F8. 
+
+// In terms of the candidates per cell the columns 1 triple is a 
+// {2/2/3} formation (reading down) and the second is {3/2/3}.
+ 

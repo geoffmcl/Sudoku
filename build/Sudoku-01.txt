@@ -1,0 +1,45 @@
+Hi, 
+
+Love your site http://www.sudokuwiki.org/sudoku.htm. It is the 
+very BEST for learning Sudoku ;=))
+
+A little history. Up until a few months ago, my only involvement 
+in Sudoku was to occasionally do the puzzle while sitting on 
+the toilet.
+
+I am a programmer (by trade, but retired now) so a few months 
+ago decide why not try to write an eduational type program 
+in C/C++, to solve Sudoku step by step. This was before I had 
+found your site, or done any other reading on internet...
+
+It is a windows app, and now it can solve a large number 
+of puzzles. Of course by that I mean using ONLY the same logic 
+used by humans... Yes, it can solve every puzzle by brute force 
+trial and error, but that is NOT what it is all about.
+
+So I started looking around for puzzles it can NOT solve, 
+and then try to work out a strategy to get through it...
+
+I am presently STUCK on your diabolical, or an evolution of it...
+000724005020010070000080002090036250602070008053240010400390020030062090209457000
+
+Somehow you strategy eliminate the candidate 1@H9. Your 'strategy' 
+says -
+X-CYCLE on 1 (Discontinuous Alternating Nice Loop, length 8):
+ +1[H9]-1[J9]+1[J2]-1[E2]+1[E6]-1[D4]+1[H4]-1[H9]
+ - Contradiction: When H9 is set to 1 the chain implies it cannot be 1 - it can be removed
+
+Now it is correct that the 1 has to be remvoved, but can NOT 
+follow your strategy...
+
+You suggest an X-Cycle loop
+ 1@I9A == 1@I2B -- 1@E2A == 1@E6B == 1@D4A == 1@H4B -- 1@H9A -- 1@I9B
+ 
+BUT while you mark 1@E6B a weak link 1@D4B it is in fact a 
+STRONG link? Likewise 1@H9A is also a weak link to 1@I9[AB]
+
+So this is NOT a 'classic' X-Cycle where there are alternating 
+STRONG/WEAK link.
+
+ 
+ 

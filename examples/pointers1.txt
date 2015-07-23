@@ -1,0 +1,28 @@
+01790360000008000090000050707201043000040207006437025070`000065000030000005601720
+
+Pointing Pairs
+
+B7 & B9 (3) kill other 3s in Row 2
+from : http://www.sudokuwiki.org/Intersection_Removal#IR
+
+032006100410000000000901000500090004060000071300020005000508000000000519057009860
+B4 & B6 2s kill all 2s in ROW outside Box 2
+D2 & F2 7s kill C2 7
+D3 & F3 1 kill G3 1
+H2 & H3 4S kill 4 s in Row H 
+G7 & G8 4s kill 4s in Row G
+G7 & G9 7s kill 7s in row G
+
+Box/Line Reduction
+
+016007803090800000870001060048000300650009082039000650060900020080002936924600510
+
+A4 & A5 2s in Box 2, and in Box 1 and Box 3 Row A can NOT have a 2
+forces either A4 or A5 2, so ohter 2s in box 2 canbe eliminated
+
+016007803090800000870001060048000300650009082039000650060900020080002936924600510
+
+And after the above reduction, the 
+A8 & B8 4s, whihc can not go anywhere else in column 8
+means the other 4s in this box can be eliminated.
+

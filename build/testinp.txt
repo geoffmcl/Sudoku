@@ -1,0 +1,123 @@
+# test input file
+
+# brute force timing
+# examples\brute-force.txt
+
+# TEST SET - started 20121012
+# simple - only minimum strats
+# examples\simple1.txt
+
+
+# move onto X-Cycles
+# from : http://zitowolf.net/sudoku/strategy.html#xcycles
+# examples\xcycles1.txt
+# this exposed  a BUG in the SIMPLE strategy of checking 
+# if any BOX had ONLY ONE possible candidate remaining - now fixed
+# examples\xcycles1-1.txt 
+
+# Checking Unique Rectangle Scan
+#  from : http://zitowolf.net/sudoku/strategy.html#xcycles
+# examples\uniqrect1.txt   # OK - solved but NOT using UR!
+# 20120808 - Added elimination here BUT still NOT SOLVED
+# examples\uniqrect2.txt   # FAILS!!!
+# 20120808 - Added Do_UniqRect_Scan() and Do_Fill_UniqRect() - sg_Fill_Uniq - SOLVED
+# examples\uniqrect4.txt	# ok - solved but not using NR
+# Type 1 - correctly elim 5@D4 and 7@D4
+# examples\uniqrect5.txt		# ok solved but not using UR - but mark UR elims 2 if used
+# Type 2 - elim 6@B2 & 6@A8, but has other solution trails - so only good for SHOWING
+# examples\uniqrect7.txt	# ok
+# Type 3 - marks rect, but elim???
+# examples\uniqrect8.txt		# MAYBE, but solved using other strategies
+# Type 4 - marks rect, but elim??? 
+# examples\uniqrect9.txt	# ok - solved but NOT using unique rectangles???
+
+# from : http://www.sudoku.org.uk/SolvingTechniques/UniqueRectangles.asp
+# Type 4 - marks rect, and elims 6@A3 & 6@C5 BUT site elims 1@C1 & 1@C3
+# examples\uniqrect10.txt	# ok - solved other ways
+
+# from : http://zitowolf.net/sudoku/strategy.html#xcycles
+# Naked Triple
+# examples\naked-triple.txt
+# But this is already solved, but notheless added a Do_Naked_Triple_Scan(), which seems ok
+# done after Do_Naked_Pair_Scan() fails...
+# These triples were in Boxes...
+# examples\naked-triple2.txt
+# a more general case where the triple are in a single COL
+# examples\naked-triple3.txt
+
+#// 20120809 - Seems a PROBLEM with Y-Wing scan
+#// IN the above case it eliminates 5@I9, leaving 
+#// a SINGLE 8, which is the WRONG solution - FIX20120911 - New Y-Wing RULE
+# examples\y-wing2.txt
+# start again with known y-wing example
+# examples\y-wing3.txt
+# but this is OK
+
+# xy-wings example
+# from : http://www.sudokudragon.com/advancedstrategy.htm#XL115
+# examples\xy-wing.txt
+
+# examples\dragon.txt
+
+# Locked - see : http://www.sudokuessentials.com/sudoku-strategy.html
+# examples\locked-01-2.txt # ok
+# examples\locked-03-2.txt # ok 20120911
+# examples\locked-04.txt
+# from : http://sudoku.ironmonger.com/howto/alignedPairExclusion/docs.tpl?setreferrertoself=true
+# examples\locked-05.txt
+
+# Missed X-Wing elimination
+# examples\x-wing3.txt
+# // 1467@C2 - 346@C8 - 14@E2 - 34@E8
+# // Eliminates 4@C3, 4@C7 and 4@E7
+
+# from : http://www.sudoku9981.com/sudoku-online/ - 20120914
+# examples\extreme-01.txt
+# progressed quite well, but near the end coloring missed an elimination... run_test3, cand 7
+# examples\extreme-01-2.txt	# SOLVED using new Color2 scan
+# backing up a little to re-check coloring... run_test3, candidate 1
+# examples\color1.txt		# SOLVED using new Color2 scan
+
+# examples\coloring.txt
+# examples\coloring3.txt
+# examples\coloring6.txt
+# examples\coloring7.txt
+
+# hidden triple - work well but this case solved before used
+# examples\hidden-triple.txt
+
+# Devel XY-Chains
+# examples\xychain1.txt # 20120922 - Looks good
+# examples\xychain2.txt # one more step in STRONG LINKS elimination ok
+# examples\xychain3.txt
+# examples\xychain3-2.txt # ok
+
+# XYZ-Wings
+# examples\xyzwing1.txt
+# examples\xyzwing.sdk	# ok
+# examples\fullsdk.sdk	# ok
+# examples\xyzwing2.sdk	# ok
+# examples\xyzwing3.sdk	# ok - by moving color2 to LAST - suspect it FAILS
+# examples\xyzwing4.sdk	# ok - by moving unique rect to 2nd LAST - suspect it FAILS
+# examples\xyzwing5.sdk	# ok
+# examples\xyzwing6.sdk # ok
+
+# Devel Naked Quads
+# from : http://www.sudokuoftheday.com/pages/techniques-6.php
+# examples\naked-quads1.txt # see Do_Naked_Quad_Scan
+
+# examples\diabolical.txt
+# TODO still to get this...
+# examples\coloring8.txt
+# stuck here - still STUCK
+# examples\diabolical4.txt	# FAILS!
+# examples\extreme-02.txt	# NO SOLUTION
+# devel AIC - 4@B7A==4@H7B--4@H5A-6@H5B--6@B5A-7@B5B--7@B2A-4@B2B--4@B7A
+# elim 7@B3 facing 7@B2A and 7@B5B ok
+# examples\AIC-scan-01.txt	# works ok, but NOT entirely happy with STRONG LINK eliminations
+# examples\AIC-scan-02.txt	# NO SOLUTION ;=(( but 
+# from http://sudoku.ironmonger.com/home/home.tpl?board=000918006018000029700040100900100800000534000007800003006080004050000230200001000
+# seems it could be an 'extension' of Unique Rectangle strategy
+
+
+

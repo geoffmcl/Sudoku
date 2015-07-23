@@ -1,0 +1,110 @@
+000000400020310000000000001700023090002090800930450006000000000060082050009000000
+
+// File: extreem-02.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   ||1 3|1  |1 3|| 2 |   |   || * | 23| 23||
+// A || 56| 5 | 56|| 56|  6| 56||*4*|  6| 5 || 1
+//   || 8 |789|78 ||789|7  |789|| * |78 |789||
+//    ---------------------------------------
+//   ||   | * |   || * | * |   ||   |   |   ||
+// B ||456|*2*|456||*3*|*1*|456|| 56|  6| 5 || 2
+//   || 8 | * |78 || * | * |789||7 9|78 |789||
+//    ---------------------------------------
+//   ||  3|   |  3|| 2 |   |   || 23| 23| * ||
+// C ||456|45 |456|| 56|4 6|456|| 56|  6|*1*|| 3
+//   || 8 |789|78 ||789|7  |789||7 9|78 | * ||
+//    =======================================
+//   || * |1  |1  ||1  | * | * ||1  | * |   ||
+// D ||*7*|45 |456||  6|*2*|*3*|| 5 |*9*|45 || 4
+//   || * | 8 | 8 || 8 | * | * ||   | * |   ||
+//    ---------------------------------------
+//   ||1  |1  | * ||1  | * |1  || * |1 3|  3||
+// E ||456|45 |*2*||  6|*9*|  6||*8*|4  |45 || 5
+//   ||   |   | * ||7  | * |7  || * |7  |7  ||
+//    ---------------------------------------
+//   || * | * |1  || * | * |1  ||12 |12 | * ||
+// F ||*9*|*3*|   ||*4*|*5*|   ||   |   |*6*|| 6
+//   || * | * | 8 || * | * |78 ||7  |7  | * ||
+//    =======================================
+//   ||123|1  |1 3||1  |  3|1  ||123|123| 23||
+// G ||45 |45 |45 || 56|4 6|456||  6|4 6|4  || 7
+//   || 8 |78 |78 ||7 9|7  |7 9||7 9|78 |789||
+//    ---------------------------------------
+//   ||1 3| * |1 3||1  | * | * ||1 3| * |  3||
+// H ||4  |*6*|4  ||   |*8*|*2*||   |*5*|4  || 8
+//   ||   | * |7  ||7 9| * | * ||7 9| * |7 9||
+//    ---------------------------------------
+//   ||123|1  | * ||1  |  3|1  ||123|123| 23||
+// I ||45 |45 |*9*|| 56|4 6|456||  6|4 6|4  || 9
+//   || 8 |78 | * ||7  |7  |7  ||7  |78 |78 ||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+
+// eof - generated 2012/10/04 17:42:21
+// from Andrew Stuart, 23 May 2005, andrew@str8ts.com
+// Version 1.85, 8-Jun-2012 - sudoku3.js
+// Present code gets nowhere...
+// ****************************
+// What am I missing...
+// AIC on 1 (Discontinuous Alternating Nice Loop, length 8):
+// +1[D3]-6[D3]+6[D4]-8[D4]+8[F6]-8[F3]+1[F3]-1[D3]
+// - Contradiction: When D3 is set to 1 the chain 
+// implies it cannot be 1 - it can be removed
+// ie XY-Chain: 8@F6G--8@F3R-1@F3G--1@D3?-6@D3R==6@D4G-8@D4R==8@F6G
+// 1 - not really all XY - 8@F6 is not connected to a second
+// 2 - is not just PAIRS
+// ie have 178@F6 18@F3 14568@D3 168@D4
+// ====================================
+
+// from : http://www.sudokuwiki.org/Alternating_Inference_Chains
+// Alternating Inference Chains
+// Chaining strategies now take a new leap with Alternating Inference 
+// Chains. These extend X-Cycle into a new dimension - where X-Cycles 
+// stuck to a single number, AICs use any candidate number.
+// AICs encapsulate all the discussion of chaining strategies so far. 
+// It’s very useful to split out chain-like strategies into X-Wings, 
+// XY-Chains, Forcing Chains, XYZ-Wings, X-Cycles, Nice Loops and so 
+// on, since they have special characteristics which make them spottable. 
+// But it turns out they are all part of a larger extended family.
+// As we saw in the previous chapter, alternation is just what X-Cycles 
+// are about. However, you’ll remember that X-Cycles are applied only 
+// to a single candidate number. AICs, on the other hand, take everything 
+// from an X-Cycle and extend the logic to as many different candidate 
+// numbers as necessary.
+// AICs ask the question “How many ways are there to make a strong or a 
+// weak link?” If there is more than one way, we can join them up in an 
+// alternating manner and make deductions leading to eliminations. Let’s 
+// look back on the previous chain-like strategies and note the following:
+// We can link two candidates of the same value in a unit – this is 
+// called “bi-location” (X-Cycles).
+// We can link two different candidates in the same cell – this is called 
+// “bi-value”.
+
+// Nice Loops Rule 1
+// Nice Loops that alternate all the way round are said to be 'continuous', 
+// and they must have an even number of nodes. With a continuous AIC, 
+// candidates are not removed from the loop since the loop does not have 
+// any flaws. Instead we are looking to eliminate on the units that can 
+// be seen by two or more cells that belong to the loop. 
+// Specifically, if a unit has an ON number X and an OFF number X then 
+// one or other will be the solution. All other candidates X in that unit 
+// can be removed. These are called off-chain eliminations. Take this example:
+// AIC (Alternating Inference Chain) Rule 1:
+// +4[B7]-4[B2]+7[B2]-7[B5]+6[B5]-6[H5]+4[H5]-4[H7]+4[B7]
+// - Off-chain candidate 7 taken off B3 - weak link: B2 to B5
+// - Off-chain candidate 6 taken off J5 - weak link: B5 to H5
+// Two off-chain eliminations occur on the weak links B2 to B5 (candidate 7) 
+// and B5 to H5 (candidate 6).	
+
+
+
+
+
+
+
+
+
+
+
+

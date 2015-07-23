@@ -1,0 +1,62 @@
+760030219910726003352000607420001060836204091170600020291067830687000902543892176
+
+// File: UniqRect11.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   || * | * |   ||   | * |   || * | * | * ||
+// A ||*7*|*6*|4  ||45 |*3*| 5 ||*2*|*1*|*9*|| 1
+//   || * | * | 8 ||   | * | 8 || * | * | * ||
+//    ---------------------------------------
+//   || * | * |   || * | * | * ||   |   | * ||
+// B ||*9*|*1*|4  ||*7*|*2*|*6*||45 | 5 |*3*|| 2
+//   || * | * | 8 || * | * | * ||   | 8 | * ||
+//    ---------------------------------------
+//   || * | * | * ||1  |1  |   || * |   | * ||
+// C ||*3*|*5*|*2*||   |4  |   ||*6*|4  |*7*|| 3
+//   || * | * | * ||  9|   | 89|| * | 8 | * ||
+//    =======================================
+//   || * | * |   ||  3|   | * ||  3| * |   ||
+// D ||*4*|*2*| 5 ||   | 5 |*1*|| 5 |*6*| 5 || 4
+//   || * | * |  9||  9|78 | * ||7  | * | 8 ||
+//    ---------------------------------------
+//   || * | * | * || * |   | * ||   | * | * ||
+// E ||*8*|*3*|*6*||*2*| 5 |*4*|| 5 |*9*|*1*|| 5
+//   || * | * | * || * |7  | * ||7  | * | * ||
+//    ---------------------------------------
+//   || * | * |   || * |   |  3||  3| * |   ||
+// F ||*1*|*7*| 5 ||*6*| 5 |   ||45 |*2*|45 || 6
+//   || * | * |  9|| * | 8 |  9||   | * | 8 ||
+//    =======================================
+//   || * | * | * ||   | * | * || * | * |   ||
+// G ||*2*|*9*|*1*||45 |*6*|*7*||*8*|*3*|45 || 7
+//   || * | * | * ||   | * | * || * | * |   ||
+//    ---------------------------------------
+//   || * | * | * ||1 3|1  |  3|| * |   | * ||
+// H ||*6*|*8*|*7*||   |4  | 5 ||*9*|45 |*2*|| 8
+//   || * | * | * ||   |   |   || * |   | * ||
+//    ---------------------------------------
+//   || * | * | * || * | * | * || * | * | * ||
+// I ||*5*|*4*|*3*||*8*|*9*|*2*||*1*|*7*|*6*|| 9
+//   || * | * | * || * | * | * || * | * | * ||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+
+// eof - generated 2012/10/02 20:04:26
+// http://www.sudoku.org.uk/SolvingTechniques/UniqueRectangles.asp
+// Type 4b Unique Rectangles
+// By now you’ll recognise that there is a B variant for each 
+// Unique Rectangle (Type 1 contains both variants within itself 
+// since the extra candidate exists only in one corner).
+// In a Type-4B Unique Rectangle variant the floor squares are 
+// not in the same block, and you can only look for the conjugate 
+// pair in their common row or column. For example: 
+ 
+// In this case, since 7 can only appear in row D in the roof squares, 
+// 5 can be removed from both D5 ad D7. 
+
+// As Type-4 Unique Rectangle solutions "destroy" the Unique Rectangle, 
+// it is usually best to look for them only after you've done any other 
+// possible Unique Rectangle reductions. 
+
+// Current code correctly identifies this deletion
+// ***********************************************

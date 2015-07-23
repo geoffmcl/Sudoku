@@ -1,0 +1,83 @@
+240930701590010320700620904352146897467389512189572643820093100600051009900060030
+
+// File: examples\y-wing2.txt
+//      1   2   3    4   5   6    7   8   9
+//    =======================================
+//   || * | * |   || * | * |   || * |   | * ||
+// A ||*2*|*4*|  6||*9*|*3*| 5 ||*7*| 56|*1*|| 1
+//   || * | * | 8 || * | * | 8 || * | 8 | * ||
+//    ---------------------------------------
+//   || * | * |   ||   | * |   || * | * |   ||
+// B ||*5*|*9*|  6||4  |*1*|4  ||*3*|*2*|  6|| 2
+//   || * | * | 8 ||7  | * |7  || * | * | 8 ||
+//    ---------------------------------------
+//   || * |1 3|1 3|| * | * |   || * |   | * ||
+// C ||*7*|   |   ||*6*|*2*| 5 ||*9*| 5 |*4*|| 3
+//   || * |   |   || * | * | 8 || * | 8 | * ||
+//    =======================================
+//   || * | * | * || * | * | * || * | * | * ||
+// D ||*3*|*5*|*2*||*1*|*4*|*6*||*8*|*9*|*7*|| 4
+//   || * | * | * || * | * | * || * | * | * ||
+//    ---------------------------------------
+//   || * | * | * || * | * | * || * | * | * ||
+// E ||*4*|*6*|*7*||*3*|*8*|*9*||*5*|*1*|*2*|| 5
+//   || * | * | * || * | * | * || * | * | * ||
+//    ---------------------------------------
+//   || * | * | * || * | * | * || * | * | * ||
+// F ||*1*|*8*|*9*||*5*|*7*|*2*||*6*|*4*|*3*|| 6
+//   || * | * | * || * | * | * || * | * | * ||
+//    =======================================
+//   || * | * |   ||   | * | * || * |   |   ||
+// G ||*8*|*2*|45 ||4  |*9*|*3*||*1*|  6| 56|| 7
+//   || * | * |   ||7  | * | * || * |7  |   ||
+//    ---------------------------------------
+//   || * |  3|  3|| 2 | * | * || 2 |   | * ||
+// H ||*6*|   |4  ||   |*5*|*1*||4  |   |*9*|| 8
+//   || * |7  |   || 8 | * | * ||   |78 | * ||
+//    ---------------------------------------
+//   || * |1  |1  || 2 | * |   || 2 | * |   ||
+// I ||*9*|   |45 ||   |*6*|4  ||4  |*3*| 5 || 9
+//   || * |7  |   || 8 | * |7  ||   | * | 8 ||
+//    =======================================
+//      1   2   3    4   5   6    7   8   9
+
+// eof - generated 2012/09/09 21:00:47
+// 20120809 - Seems a PROBLEM with Y-Wing scan
+// IN the above case it eliminates 5@I9, leaving 
+// a SINGLE 8, which is the WRONG solution
+
+// The Y is 68@B9 58@C8 56@G9 - it marks 
+// 5@C8 and 5@G9 BUT eliminates 5@I9
+// I must read more, but I guess the elimination
+// should NOT be in the major COL - the top of the 
+// Y Col 9????
+
+// Here http://www.sudokuwiki.org/Y_Wing_Strategy
+// the 3 examples given NEVER eliminate in row 
+// or col or either pair - the 1st is in y-wing3.txt
+// which has no problem.
+
+// from : http://sudoku.com.au/sudokutips.aspx?Go=T21-9-1998
+// words of wisdom perhaps -
+// The table below, which I call a forbidding matrix, contains 
+// the logic for all Y wing style eliminations.
+// A   B    C at least one truth 
+// D   E    F at least one truth 
+// G   H    I at least one truth 
+// ??? weak weak 
+// IN the stylistic examples given there is a case 
+// where the elimination can be in the major axis 
+// but that is because 2 of the Y share a BOX, and 
+// the elim is in that box.
+
+// from : http://www.sudoku.org.uk/SolvingTechniques/Y-Wing.asp
+// 273005081810302004009010200100953728792186345538724196021060500300201869080530412
+// Appears moe classic
+// The Y is 46@C1 68@C4 48@G4
+// Eliminates 4@G1 since it is seen by both
+// C1 and G4
+// But when I run it, get a different Y-Wing, again with 
+// a BAD elimination
+
+
+
