@@ -4,14 +4,13 @@
 #endif
 
 #include "Sudoku.hxx"
-
-#ifdef WIN32
-/////////////////////////////////////////////////////////////////////////////////////////
 #include "Sudo_Paint.hxx"
 #include "Sudo_Menu.hxx"
 #include "Sudo_Ini.hxx"
 #include "sprtf.hxx"
+#ifdef WIN32
 #include <direct.h> // for _getcwd()
+#endif
 
 static char m_szTmpBuf[1024];
 static char g_szDefIni[] = "Sudoku.ini";
@@ -195,6 +194,9 @@ BOOL gChgLPath = FALSE;
 
 char szDbg[] = "Debug";
 char szStr[] = "Strategies";
+
+#ifdef WIN32
+/////////////////////////////////////////////////////////////////////////////////////////
 
 DWORD Add_INI_Files_to_Menu()
 {
