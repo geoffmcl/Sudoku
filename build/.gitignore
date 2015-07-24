@@ -15,3 +15,6 @@ cmake_install.cmake
 ipch/*
 *.suo
 Sudoku.ini
+Makefile
+bldlog-u.txt
+
