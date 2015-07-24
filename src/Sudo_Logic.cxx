@@ -3271,7 +3271,7 @@ int Find_YWing_3rd(PABOX2 pb, PROWCOL prc1 , PROWCOL prc2, int br, int bc)
                                     strcat(tb, "Click [Yes] to FORCE elimination." MEOL);
                                     strcat(tb, "Click [No] to abort operation." MEOL );
                                 }
-                                strcat(tb,"Click [Cancel] to exit application!" MEOL);
+                                strcat(tb,"Click [Cancel] (or ESC) to exit application!" MEOL);
                                 res = MB3(tb, "Y-Wing Strategy Problem");
                                 if (abort || (res == IDCANCEL)) {
                                     Post_Command(IDM_EXIT);
@@ -3389,7 +3389,7 @@ int Do_YWing_Scan(PABOX2 pb)
                             strcat(tb, "Click [Yes] to FORCE elimination." MEOL);
                             strcat(tb, "Click [No] to abort operation." MEOL );
                         }
-                        strcat(tb,"Click [Cancel] to exit application!" MEOL);
+                        strcat(tb,"Click [Cancel] (or ESC) to exit application!" MEOL);
                         res = MB3(tb, "Y-Wing Strategy Problem");
                         if (res == IDCANCEL) {
                             Post_Command(IDM_EXIT);

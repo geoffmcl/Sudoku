@@ -11,7 +11,7 @@ bool done_end_dialog = false;
 int iSolveStage = -1;
 PABOX2 bgn_box;
 
-char *done_msg = "Sudoku has been SOLVED!\nTime for a NEW one ;=))\nClick [Cancel] to Exit application\n";
+char *done_msg = "Sudoku has been SOLVED!\nTime for a NEW one ;=))\nClick [Cancel] (or ESC) to Exit application\n";
 
 int Compare_with_Solution(PABOX2 pb, char *tb_in)
 {
