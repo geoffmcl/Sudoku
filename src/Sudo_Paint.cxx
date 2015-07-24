@@ -2,7 +2,6 @@
 #ifndef _CRT_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #endif
-#pragma comment ( lib, "Msimg32" )
 #include <vector>
 #include "Sudoku.hxx"
 #ifdef WIN32
@@ -10,6 +9,7 @@
 #include "Sudo_Paint.hxx"
 #include "sprtf.hxx"
 #include "Sudo_File.hxx"
+#pragma comment ( lib, "Msimg32" )
 
 using namespace std;
 
