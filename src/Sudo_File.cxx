@@ -2195,7 +2195,7 @@ void Write_Temp_File()
     DWORD opts = g_dwSvOptBits;
     bool ok = Save_a_File2( NULL, pf, opts );
     size_t st = strlen(pf);
-    if ((st < 4) || stricmp(&pf[st-4],".csv")) {
+    if ((st < 4) || STRICMP(&pf[st-4],".csv")) {
         // NO CSV output if NOT .csv extension
         opts |= sff_NO_ADD_CSV;
     }
