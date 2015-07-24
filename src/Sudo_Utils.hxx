@@ -87,7 +87,7 @@ extern bool Same_RC_Pair( PRCPAIR pp1, PRCPAIR pp2 );
 
 extern char *Get_RCPair_Stg( PRCPAIR prcp, int setval );
 
-extern void Explode( char *msg, char *file, char *func, int line );
+extern void Explode( const char *msg, const char *file, const char *func, int line );
 #define EXPLODE(m) Explode( m, __FILE__, __FUNCTION__, __LINE__ )
 
 extern int Get_Pairs_of_setval( PABOX2 pb, int setval, vRC *pp, PRCRCB prcrcb, vRCP *pvrcp, bool debug = false );

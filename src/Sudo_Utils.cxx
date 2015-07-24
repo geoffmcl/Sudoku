@@ -635,7 +635,7 @@ char *Get_RCPair_Stg( PRCPAIR prcp, int setval )
     return tb;
 }
 
-void Explode( char *msg, char *file, char *func, int line )
+void Explode( const char *msg, const char *file, const char *func, int line )
 {
     char *tb = GetNxtBuf();
     sprtf("%s\n",msg);
