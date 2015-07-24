@@ -19,7 +19,7 @@ int g_iSlValues[9] = { 1,2,3,4,5,6,7,8,9 };
 //BOOL gChgIWL = FALSE;
 
 //char szIBL[] = "Include_Box_Links";
-//BOOL g_bIBL = FALSE;
+//BOOL g_bIBL = FALSE;F
 //BOOL gChgIBL = FALSE;
 
 bool Show_SL_Value( int setval )
