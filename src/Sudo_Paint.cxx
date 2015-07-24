@@ -95,7 +95,7 @@ bool m_IsRectEmpty( PRECT pr )
 }
 
 #ifndef WIN32
-#define IsRectEmpty m_IsRectEmtpy
+#define IsRectEmpty m_IsRectEmpty
 #endif
 
 bool Is_Selected_Valid()
