@@ -175,6 +175,17 @@ char *get_date_time_stg()
 }
 #else // !WIN32
 
+void add_date_stg( char *ps, struct timeval *ptv )
+{
+    time_t curtime;
+    struct tm * ptm;
+    curtime = (ptv->tv_sec & 0xffffffff);
+    ptm = localtime(&curtime);
+    if (ptm) {
+        strftime(EndBuf(ps),128,"%Y/%m/%d",ptm);
+    }
+}
+
 void add_time_stg( char *ps, struct timeval *ptv )
 {
     time_t curtime;
@@ -192,6 +203,18 @@ char *get_time_stg()
     gettimeofday( (struct timeval *)&tv, (struct timezone *)0 );
     char *ps = GetNxtBuf();
     *ps = 0;
+    add_time_stg( ps, &tv );
+    return ps;
+}
+
+char *get_date_time_stg()
+{
+    struct timeval tv;
+    gettimeofday( (struct timeval *)&tv, (struct timezone *)0 );
+    char *ps = GetNxtBuf();
+    *ps = 0;
+    add_date_stg( ps, &tv );
+    strcat(ps," ");
     add_time_stg( ps, &tv );
     return ps;
 }
