@@ -12,6 +12,15 @@
 #include <direct.h> // for _getcwd()
 #endif
 
+#ifndef STRCMPFIL
+#ifdef WIN32
+#define STRCMPFIL  strcmpi
+#else
+#define STRCMPFIL  strcmp
+#endif
+#endif
+
+
 static char m_szTmpBuf[1024];
 static char g_szDefIni[] = "Sudoku.ini";
 char g_szIni[264] = { "\0" };
@@ -237,7 +246,7 @@ void Add_to_INI_File_List( char * pfile )
     DWORD count = 1;    // have ONE in list
     for (ii = vsp->begin(); ii != vsp->end(); ii++) {
         s2 = *ii;
-        if (strcmpi(s.c_str(),s2.c_str()) == 0 )
+        if (STRCMPFIL(s.c_str(),s2.c_str()) == 0 )
             continue; // was already in list
         nlist.push_back(s2);
         count++;
@@ -394,7 +403,7 @@ int Chk4Debug( char * lpd )
          if(p)
          {
             p++;
-            if( strcmpi(p, "DEBUG") == 0 )
+            if( STRCMPFIL(p, "DEBUG") == 0 )
             {
                *p = 0;
                strcpy(lpd,ptmp);    // use this
@@ -963,7 +972,7 @@ void Add_to_INI_File_List( char * pfile )
     DWORD count = 1;    // have ONE in list
     for (ii = vsp->begin(); ii != vsp->end(); ii++) {
         s2 = *ii;
-        if (strcmpi(s.c_str(),s2.c_str()) == 0 )
+        if (STRCMPFIL(s.c_str(),s2.c_str()) == 0 )
             continue; // was already in list
         nlist.push_back(s2);
         count++;
