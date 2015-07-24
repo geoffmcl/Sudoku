@@ -3286,6 +3286,26 @@ void set_repaint( bool erase)
 {
 }
 
+void Move_Selection(HWND hWnd, int row, int col)
+{
+    if (VALIDRC(row,col)) {
+        PRECT prs = &rcSquares[row][col];
+        int offset = 4;
+        RECT rc = *prs;
+        rc.left += offset;
+        rc.bottom -= offset;
+        rc.top += offset;
+        rc.right -= offset;
+        // TODO: Paint_Outline(hWnd, &rc, true, row, col);
+        rc.left += offset;
+        rc.bottom -= offset;
+        rc.top += offset;
+        rc.right -= offset;
+        // TODO: Set_New_Selected(hWnd, &rc, true, row, col);
+    }
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32
 
