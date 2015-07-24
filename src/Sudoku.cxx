@@ -20,6 +20,12 @@
    ================================================== */
 
 #include "Sudoku.hxx"
+
+// Global Variables:
+BOOL        g_bChanged = FALSE;
+HWND        g_hWnd = 0;
+HINSTANCE   hInst = 0;			// current instance
+
 #ifdef WIN32
 ////////////////////////////////////////////////////////////////////////////////////////////
 #define MAX_LOADSTRING 100
@@ -28,8 +34,6 @@
 #endif
 
 // Global Variables:
-HWND g_hWnd = 0;
-HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 
@@ -37,7 +41,6 @@ BOOL        g_bAShiftDown = FALSE;   // shift key DOWN (VK_SHIFT)
 BOOL        g_bCtrlDown   = FALSE;    // CTRL key (VK_CONTROL)
 BOOL        g_bAltDown    = FALSE;     // ALT key  (VK_MENU)
 BOOL        g_bLBDown     = FALSE;
-BOOL        g_bChanged    = FALSE;
 BOOL        g_bShowHints  = TRUE;
 BOOL        gChgHint      = FALSE;
 BOOL        g_bComCtl6    = FALSE;
