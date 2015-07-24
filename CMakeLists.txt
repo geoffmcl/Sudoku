@@ -103,7 +103,7 @@ set( ${name}_SRCS
     ${dir}/sprtf.cxx
     )
 set( ${name}_HDRS
-    ${dir}/Resource.h
+    ${dir}/resource.h
     ${dir}/Sudo_AIC.hxx
     ${dir}/Sudo_BMP.hxx
     ${dir}/Sudo_Change.hxx
