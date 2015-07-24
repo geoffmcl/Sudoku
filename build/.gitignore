@@ -13,3 +13,5 @@ Win32/*
 bldlog-1.txt
 cmake_install.cmake
 ipch/*
+*.suo
+Sudoku.ini
