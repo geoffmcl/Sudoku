@@ -189,6 +189,8 @@ DBGLIST DbgList[] = {
     { 0, 0, 0, 0, 0, 0, 0 }
 };
 
+#ifdef WIN32
+
 BOOL Do_INIT_DebugOptions(HWND hDlg)
 {
     PDBGLIST plist = &DbgList[0];
@@ -232,6 +234,7 @@ VOID Do_ALL_Dbg_OFF(HWND hDlg)
     }
 }
 
+#endif // #ifdef WIN32
 
 void Out_Debug_Set()
 {

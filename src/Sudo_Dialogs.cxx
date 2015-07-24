@@ -1,10 +1,14 @@
 // Sudo_Dialogs.cxx
 
+#include "Sudoku.hxx"
+
+#ifdef WIN32
+//////////////////////////////////////////////////////
+
 #ifndef _MSC_VERS
 #pragma warning ( disable : 4996 )
 #endif
 
-#include "Sudoku.hxx"
 #include "Commctrl.h"
 #include <time.h>
 
@@ -1730,6 +1734,23 @@ VOID Do_ID_OPTIONS_MISCOPTIONS(HWND hWnd)
     }
 }
 
+//////////////////////////////////////////////////////
+#else // #ifdef WIN32
+//////////////////////////////////////////////////////
+VOID Do_ID_OPTIONS_ENABLESTRATEGIES(HWND hWnd)
+{
+    sprtf("Do_ID_OPTIONS_ENABLESTRATEGIES not yet implemented in unix!\n");
+}
+
+VOID Do_ID_OPTIONS_MISCOPTIONS(HWND hWnd)
+{
+    sprtf("Do_ID_OPTIONS_MISCOPTIONS not yet implemented in unix!\n");
+}
+
+//////////////////////////////////////////////////////
+#endif // #ifdef WIN32
+//////////////////////////////////////////////////////
 
 // ====================================================================
 // eof - Sudo_Dialogs.cxx
+

@@ -7,6 +7,9 @@
 #endif
 
 #include "Sudoku.hxx"
+
+#ifdef WIN32
+///////////////////////////////////////////////////////////////////////////////////////////
 #include <CommCtrl.h>
 
 using namespace std;
@@ -2154,6 +2157,23 @@ VOID Do_ID_FILE_OPENDIRECTORY(HWND hWnd)
 
 // *********************************************
 
+///////////////////////////////////////////////////////////////////////////////////////////
+#else // !#ifdef WIN32
+///////////////////////////////////////////////////////////////////////////////////////////
+VOID Do_ID_FILE_OPEN(HWND hWnd)
+{
+    sprtf("Do_ID_FILE_OPEN not yet implemented in unix\n");
+}
+VOID Do_ID_FILE_OPENDIRECTORY(HWND hWnd)
+{
+    sprtf("Do_ID_FILE_OPENDIRECTORY not yet implemented in unix\n");
+}
+VOID Do_VIEW_FILELIST( HWND hWnd, vSTG *plist )
+{
+    sprtf("Do_VIEW_FILELIST not yet implemented in unix\n");
 
+}
+///////////////////////////////////////////////////////////////////////////////////////////
+#endif // #ifdef WIN32 y/n
 
 // eof - Sudo_File.cxx

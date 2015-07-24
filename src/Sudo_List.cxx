@@ -1,6 +1,8 @@
 // Sudo_List.cxx
 
 #include "Sudoku.hxx"
+
+#ifdef WIN32
 #include <CommCtrl.h>
 
 #ifdef ADD_LISTVIEW
@@ -364,5 +366,8 @@ void LVAddExStyle(HWND hwndListView, DWORD dwNewStyle)
 	SendMessage(hwndListView, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, dwStyle);
 
 }
+
+#endif // #ifdef WIN32
+
 
 // eof - Sudo_List.cxx

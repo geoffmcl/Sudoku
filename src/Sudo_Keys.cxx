@@ -19,6 +19,7 @@ bool Check_Exit()
 
 VOID Do_WM_KEYDOWN( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
+#ifdef WIN32
     switch (wParam)
     {
     case VK_UP:
@@ -120,10 +121,12 @@ VOID Do_WM_KEYDOWN( HWND hWnd, WPARAM wParam, LPARAM lParam )
             }
         }
     }
+#endif // #ifdef WIN32
 }
 
 VOID Do_WM_KEYUP( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
+#ifdef WIN32
    switch (wParam)
    {
    case VK_UP:
@@ -156,6 +159,7 @@ VOID Do_WM_KEYUP( HWND hWnd, WPARAM wParam, LPARAM lParam )
        // ONE valid value fo rhte cell, then put in in
        break;
    }
+#endif // #ifdef WIN32
 }
 
 // WM_CHAR
