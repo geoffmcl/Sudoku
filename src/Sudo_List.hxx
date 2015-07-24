@@ -2,7 +2,9 @@
 #ifndef _SUDO_LIST_HXX_
 #define _SUDO_LIST_HXX_
 
+#ifdef WIN32
 #pragma comment ( lib, "COMCTL32" )
+#endif
 
 #ifdef ADD_LISTVIEW
 #define IDC_LISTVIEW	9876

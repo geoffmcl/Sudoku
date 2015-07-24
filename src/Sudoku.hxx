@@ -36,6 +36,7 @@
 // Windows Header Files:
 #include <windows.h>
 #else
+#include "resourceu.h"
 #include "unixglue.hxx"
 #endif
 
@@ -44,10 +45,12 @@
 #include <malloc.h>
 #include <memory.h>
 #include <vector>
+#include <string>
 #ifdef WIN32
 #include <tchar.h>
 #include "unistd.h"
 #else
+#include <stdint.h>
 #include <unistd.h>
 #endif
 
@@ -232,10 +235,6 @@ extern HWND g_hWnd;         // parent handle
 extern HINSTANCE hInst;		// current instance
 extern TCHAR szTitle[]; 	// The title bar text
 
-#define  MB(a) MessageBox( g_hWnd, a, "CRITICAL ERROR", MB_OK | MB_ICONINFORMATION )
-#define  MB2(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNO )
-#define  MB3(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNOCANCEL )
-
 extern BOOL g_bAShiftDown, g_bCtrlDown, g_bAltDown, g_bLBDown, g_bChanged, g_bShowHints, gChgHint;
 extern BOOL g_bDoneInit, g_bComCtl6;
 
@@ -292,6 +291,16 @@ extern BOOL res_scn_rect;
 #ifndef MEOL
 #define MEOL "\r\n"
 #endif
+
+#ifdef WIN32
+#define  MB(a) MessageBox( g_hWnd, a, "CRITICAL ERROR", MB_OK | MB_ICONINFORMATION )
+#define  MB2(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNO )
+#define  MB3(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNOCANCEL )
+#else // !#ifdef WIN32
+#define  MB(a) sprtf("%s %s\n", "CRITICAL ERROR", a )
+#define  MB2(a,b) sprtf("%s %s\n", b, a )
+#define  MB3(a,b) sprtf("%s %s\n", b, a )
+#endif // #ifdef WIN32 y/n
 
 #endif // #ifndef _SUDOKU_HXX_
 // eof - Sudoku.hxx

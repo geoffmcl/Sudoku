@@ -88,15 +88,20 @@ BOOL ChoosNewColor( HWND hWnd, COLORREF crCurrent, COLORREF *pcrChoice )
     pcc->lCustData      = 0;
     pcc->lpfnHook       = 0;
     pcc->lpTemplateName = 0;
-
+#ifdef WIN32
     BOOL bRet = ChooseColor( pcc );
     if (bRet) {
         *pcrChoice = pcc->rgbResult;
     }
 
     return bRet;
+#else // #ifdef WIN32
+    sprtf("ChoosNewColor not yet implemented in unix\n");
+    return 0;
+#endif // WIN32 y.n
 }
 
+#ifdef WIN32
 INT_PTR Do_INIT_SelectColor(HWND hDlg)
 {
     PCLRSTR pcs = &clrstr[0];
@@ -276,5 +281,16 @@ VOID Do_ID_OPTIONS_SELECTCOLORS(HWND hWnd)
 
 
 }
+
+#else // #ifdef WIN32
+
+VOID Do_ID_OPTIONS_SELECTCOLORS(HWND hWnd)
+{
+    sprtf("Select color not implmented in uxix\n");
+}
+
+#endif // #ifdef WIN32 y/n
+
+
 
 // eof - Sudo_Color.cxx

@@ -159,6 +159,7 @@ char *Get_AIC_RCPAIR_Stg(PRCPAIR prcp)
 
 void Pnt_Chain( vRCP *pvrcp )
 {
+#ifdef WIN32
     HDC hdc = GetDC(g_hWnd);
     HANDLE bitmap = 0;
     bool use_copy = false;
@@ -179,6 +180,7 @@ void Pnt_Chain( vRCP *pvrcp )
             BitBlt(hdc,0,0,RECTWIDTH(rc),RECTHEIGHT(rc),hdcmem,0,0,SRCCOPY);
         ReleaseDC(g_hWnd,hdc);
     }
+#endif 
 }
 
 void Store_AIC_Chain( PAICSTR paic )
@@ -573,7 +575,7 @@ static int add_debug_aic3 = 1;
 // This scan introduces an extended use of ROWCOL
 // where the candidate value is also known... so the cnum member of ROWCOL
 // with be used for this...
-static int AIC_Follow_Chain( PAICSTR paic )
+int AIC_Follow_Chain( PAICSTR paic )
 {
     int count = 0;
     size_t max;

@@ -605,7 +605,7 @@ int Mark_Color_Rule_1( PABOX2 pb, int setval, vRC &empty, vRC &members, vRC &non
     vRC *pvbox;
     uint64_t flg;
     uint64_t flag2;
-    char *clrtype;
+    const char *clrtype;
     char *tb = GetNxtBuf();
     char *tb2 = GetNxtBuf();
 

@@ -3,6 +3,7 @@
 #include "Sudoku.hxx"
 
 // Sometimes is is just better to SEE the image ;=))
+#ifdef WIN32
 
 // WIDTHBYTES takes # of bits in a scan line and rounds up to nearest
 //  dword (32-bits). The # of bits in a scan line would typically be
@@ -301,6 +302,15 @@ Cleanup:
         sprtf("Failed to write BMP file!\n");
     set_repaint(false);
 }
+
+#else // !#ifdef WIN32
+void Do_Write_BMP( HWND hWnd )
+{
+    sprtf("Write BMP file NOT implemented in unix yet!\n");
+    set_repaint2();
+}
+
+#endif // #ifdef WIN32 y/n
 
 // eof - Sudo_BMP.cxx
 
