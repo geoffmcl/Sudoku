@@ -2,6 +2,37 @@
 
 #include "Sudoku.hxx"
 
+// ===========================================================
+// stong (AND weak) LINKS dialog
+// *****************************
+//char szASV[] = "All_Candidates";
+BOOL g_bAllSL = TRUE;
+//BOOL gChgASV = FALSE;
+
+//char szCLST[] = "Candidate_List";
+//char g_szCandList[_MAX_PATH] = { "123456789" };
+//BOOL gChgCLST = FALSE;
+int g_iSlValues[9] = { 1,2,3,4,5,6,7,8,9 };
+
+//char szIWL[] = "Include_Weak_Links";
+//BOOL g_bIWL = FALSE;
+//BOOL gChgIWL = FALSE;
+
+//char szIBL[] = "Include_Box_Links";
+//BOOL g_bIBL = FALSE;
+//BOOL gChgIBL = FALSE;
+
+bool Show_SL_Value( int setval )
+{
+    if (!VALUEVALID(setval))
+        return false;
+    if (g_bAllSL)
+        return true;
+    if (g_iSlValues[setval - 1])
+        return true;
+    return false;
+}
+
 #ifdef WIN32
 //////////////////////////////////////////////////////
 
@@ -545,36 +576,6 @@ void Do_ID_FILE_SAVETEMP(HWND hWnd)
     }
 }
 
-// ===========================================================
-// stong (AND weak) LINKS dialog
-// *****************************
-//char szASV[] = "All_Candidates";
-BOOL g_bAllSL = TRUE;
-//BOOL gChgASV = FALSE;
-
-//char szCLST[] = "Candidate_List";
-//char g_szCandList[_MAX_PATH] = { "123456789" };
-//BOOL gChgCLST = FALSE;
-int g_iSlValues[9] = { 1,2,3,4,5,6,7,8,9 };
-
-//char szIWL[] = "Include_Weak_Links";
-//BOOL g_bIWL = FALSE;
-//BOOL gChgIWL = FALSE;
-
-//char szIBL[] = "Include_Box_Links";
-//BOOL g_bIBL = FALSE;
-//BOOL gChgIBL = FALSE;
-
-bool Show_SL_Value( int setval )
-{
-    if (!VALUEVALID(setval))
-        return false;
-    if (g_bAllSL)
-        return true;
-    if (g_iSlValues[setval - 1])
-        return true;
-    return false;
-}
 
 // Draw Strong Links
 INT_PTR Do_INIT_STRONGLINKS(HWND hDlg) // IDD_STRONGLINKS
