@@ -172,6 +172,28 @@ char *get_date_time_stg()
     add_time_stg( EndBuf(ps), &st );
     return ps;
 }
+#else // !WIN32
+
+void add_time_stg( char *ps, struct timeval *ptv )
+{
+    time_t curtime;
+    struct tm * ptm;
+    curtime = (ptv->tv_sec & 0xffffffff);
+    ptm = localtime(&curtime);
+    if (ptm) {
+        strftime(EndBuf(ps),128,"%H:%M:%S",ptm);
+    }
+}
+
+char *get_time_stg()
+{
+    struct timeval tv;
+    gettimeofday( (struct timeval *)&tv, (struct timezone *)0 );
+    char *ps = GetNxtBuf();
+    *ps = 0;
+    add_time_stg( ps, &tv );
+    return ps;
+}
 
 #endif  // WIN32
 
