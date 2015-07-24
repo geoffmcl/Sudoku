@@ -2214,6 +2214,10 @@ VOID Do_ID_FILE_SAVE(HWND hWnd)
 {
     sprtf("TODO: Do_ID_FILE_SAVE not yet ported!\n");
 }
+void File_Reset()
+{
+    sprtf("TODO: File_Reset() not yet ported!\n");
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n
