@@ -951,6 +951,37 @@ void WriteINI( void )
     sprtf("WriteINI not yet implemented in unix\n");
 }
 
+void Add_to_INI_File_List( char * pfile )
+{
+    vSTG *vsp = &load_files;
+    string s = pfile;
+    string s2;
+    vSTGi ii;
+    // last file is ALWAYS put to TOP of list
+    vSTG nlist;
+    nlist.push_back(s);
+    DWORD count = 1;    // have ONE in list
+    for (ii = vsp->begin(); ii != vsp->end(); ii++) {
+        s2 = *ii;
+        if (strcmpi(s.c_str(),s2.c_str()) == 0 )
+            continue; // was already in list
+        nlist.push_back(s2);
+        count++;
+        if (count >= gdwMaxFiles)
+            break;
+    }
+    gChgFiles = TRUE;
+    vsp->clear();
+    for (ii = nlist.begin(); ii != nlist.end(); ii++)
+    {
+        s = *ii;
+        vsp->push_back(s);
+    }
+    nlist.clear();
+    // Add_INI_Files_to_Menu();    // reset the MENU LIST MRU
+
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n
 
