@@ -20,6 +20,52 @@ COLORREF crClr2 = RGB(170,255,170); // Light Green
 COLORREF crClr3 = RGB(170,170,255); // Purple
 COLORREF crClr4 = RGB(201,236,250); // Soft Blue
 
+COLORREF crBlack = RGB(0,0,0);
+COLORREF crWhite = RGB(255,255,255);
+COLORREF crRed = RGB(255,0,0);
+COLORREF crGreen = RGB(0,255,0);
+COLORREF crBlue = RGB(0,0,255);
+COLORREF crYellow = RGB(255,255,0);
+COLORREF crPink = RGB(255,0,255);
+COLORREF crCyan = RGB(0,255,255);
+
+//COLORREF crDRed = RGB(128,0,0);
+COLORREF crDBlue = RGB(0,0,128);
+COLORREF crDGreen = RGB(0,128,0);
+
+COLORREF crGrid = RGB(90,90,90);
+COLORREF crBox = RGB(190,190,190);
+COLORREF crGray = RGB(90,90,90);
+COLORREF crText = RGB(90,90,90);
+COLORREF crLGray = RGB(190,190,190);
+COLORREF crCntr = RGB(255,0,0);
+COLORREF crTop = RGB(255,0,0);
+COLORREF crPurp = RGB(128,0,255);
+COLORREF crLBrown = RGB(192,128,32);
+COLORREF crLBrown2 = RGB(217,202,167);
+COLORREF crLGreen = RGB(144,238,144);
+//COLORREF crDBlue = RGB(0,0,128);
+COLORREF crLBlue = RGB(194,209,244); // cf_XC
+//COLORREF crPBlue = RGB(200,200,255); // good for square background - highlight_cells
+//COLORREF crPBlue = RGB(0x60,0xC0,255); // good for square background - highlight_cells
+COLORREF crPBlue = RGB(0xc0,255,255); // good for square background - highlight_cells
+//COLORREF crLYellow = RGB(255,255,192);
+COLORREF crBYellow = RGB(248,252,121);  // Unique Rectangle
+COLORREF crLOrange = RGB(255,192,255); // = RGB(0xff,0xc0,0x60); // also square background
+COLORREF crLOrange2 = RGB(255,238,221);
+COLORREF crLPink = RGB(255,192,255);
+
+// Colors By Type
+COLORREF crNewVal = RGB(128,0,0);
+COLORREF crOrgVal = RGB(0,0,128);
+COLORREF crBadVal = RGB(128,0,0);
+COLORREF crSelVal = RGB(0xc0,255,255); // good for square background - highlight_cells
+
+COLORREF crSLnk   = RGB(255,0,0);
+COLORREF crWLnk   = RGB(0,0,255);
+
+COLORREF crOddBox = RGB(250,250,250); // g_bOddBox - g_rcRegions[9] - g_bOddBox
+COLORREF crEvnBox = RGB(255,255,255); // Standard background
 
 #ifdef WIN32
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,64 +236,6 @@ vSTG vSLines;
 vSTG * Get_Screen_Lines() { return &vSLines; }
 
 PRECT get_rcSquares(int row, int col) { return &rcSquares[row][col]; }
-
-COLORREF crBlack = RGB(0,0,0);
-COLORREF crWhite = RGB(255,255,255);
-COLORREF crRed = RGB(255,0,0);
-COLORREF crGreen = RGB(0,255,0);
-COLORREF crBlue = RGB(0,0,255);
-COLORREF crYellow = RGB(255,255,0);
-COLORREF crPink = RGB(255,0,255);
-COLORREF crCyan = RGB(0,255,255);
-
-//COLORREF crDRed = RGB(128,0,0);
-COLORREF crDBlue = RGB(0,0,128);
-COLORREF crDGreen = RGB(0,128,0);
-
-COLORREF crGrid = RGB(90,90,90);
-COLORREF crBox = RGB(190,190,190);
-COLORREF crGray = RGB(90,90,90);
-COLORREF crText = RGB(90,90,90);
-COLORREF crLGray = RGB(190,190,190);
-COLORREF crCntr = RGB(255,0,0);
-COLORREF crTop = RGB(255,0,0);
-COLORREF crPurp = RGB(128,0,255);
-COLORREF crLBrown = RGB(192,128,32);
-COLORREF crLBrown2 = RGB(217,202,167);
-COLORREF crLGreen = RGB(144,238,144);
-//COLORREF crDBlue = RGB(0,0,128);
-COLORREF crLBlue = RGB(194,209,244); // cf_XC
-//COLORREF crPBlue = RGB(200,200,255); // good for square background - highlight_cells
-//COLORREF crPBlue = RGB(0x60,0xC0,255); // good for square background - highlight_cells
-COLORREF crPBlue = RGB(0xc0,255,255); // good for square background - highlight_cells
-//COLORREF crLYellow = RGB(255,255,192);
-COLORREF crBYellow = RGB(248,252,121);  // Unique Rectangle
-COLORREF crLOrange = RGB(255,192,255); // = RGB(0xff,0xc0,0x60); // also square background
-COLORREF crLOrange2 = RGB(255,238,221);
-COLORREF crLPink = RGB(255,192,255);
-
-// Colors By Type
-COLORREF crNewVal = RGB(128,0,0);
-COLORREF crOrgVal = RGB(0,0,128);
-COLORREF crBadVal = RGB(128,0,0);
-COLORREF crSelVal = RGB(0xc0,255,255); // good for square background - highlight_cells
-
-COLORREF crSLnk   = RGB(255,0,0);
-COLORREF crWLnk   = RGB(0,0,255);
-
-COLORREF crOddBox = RGB(250,250,250); // g_bOddBox - g_rcRegions[9] - g_bOddBox
-COLORREF crEvnBox = RGB(255,255,255); // Standard background
-
-//COLORREF crElimBk = RGB(255,255,192);
-//COLORREF crElimFg = RGB(128,0,0);
-
-//COLORREF crOn = RGB(255,192,255);
-//COLORREF crOff = RGB(0xc0,255,255);
-
-//COLORREF crClr1 = RGB(238,170,85);  // Light Brown
-//COLORREF crClr2 = RGB(170,255,170); // Light Green
-//COLORREF crClr3 = RGB(170,170,255); // Purple
-//COLORREF crClr4 = RGB(201,236,250); // Soft Blue
 
 HPEN hpSLnk = NULL;
 HPEN hpWLnk = NULL;
