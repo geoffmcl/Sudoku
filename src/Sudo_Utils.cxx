@@ -926,4 +926,62 @@ void Show_RC_Vector( vRC & vrc )
     }
 }
 
+#ifndef STRLEN
+#define STRLEN strlen
+#endif
+
+void trim_float_buf( char *pb )
+{
+   size_t len = STRLEN(pb);
+   size_t i, dot, zcnt;
+   for( i = 0; i < len; i++ )
+   {
+      if( pb[i] == '.' )
+         break;
+   }
+   dot = i + 1; // keep position of decimal point (a DOT)
+   zcnt = 0;
+   for( i = dot; i < len; i++ )
+   {
+      if( pb[i] != '0' )
+      {
+         i++;  // skip past first
+         if( i < len )  // if there are more chars
+         {
+            i++;  // skip past second char
+            if( i < len )
+            {
+               size_t i2 = i + 1;
+               if( i2 < len )
+               {
+                  if ( pb[i2] >= '5' )
+                  {
+                     if( pb[i-1] < '9' )
+                     {
+                        pb[i-1]++;
+                     }
+                  }
+               }
+            }
+         }
+         pb[i] = 0;
+         break;
+      }
+      zcnt++;     // count ZEROS after DOT
+   }
+   if( zcnt == (len - dot) )
+   {
+      // it was ALL zeros
+      pb[dot - 1] = 0;
+   }
+}
+
+char *double_to_stg( double d )
+{
+    char *cp = GetNxtBuf();
+    sprintf(cp,"%lf",d);
+    trim_float_buf(cp);
+    return cp;
+}
+
 // eof - Sudo_Utils.cxx

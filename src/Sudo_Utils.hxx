@@ -106,6 +106,7 @@ extern void Clear_PRCRCB( PRCRCB prcrcb );
 
 extern void Show_RC_Vector( vRC & vrc );
 
+extern char *double_to_stg( double d );
 
 #endif // #ifndef _SUDO_UTILS_HXX_
 // eof - Sudo_Utils.hxx
