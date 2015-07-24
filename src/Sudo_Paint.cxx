@@ -71,6 +71,20 @@ int one_value_count = 0;
 int NO_value_count = 0;
 int total_empty_count = -1;
 
+// current mouse HOVERING
+RECT g_rcHover = { 0, 0, 0, 0 };
+int g_hov_Row = -1;
+int g_hov_Col = -1;
+// current SELECTED cell
+static RECT g_rcSelected = { 0, 0, 0, 0 };
+int g_sel_Row = -1;
+int g_sel_Col = -1;
+
+PRECT get_curr_sel() { return &g_rcSelected; }
+void get_curr_selRC( int *pr, int *pc ) { *pr = g_sel_Row; *pc = g_sel_Col; }
+void set_curr_selRC( int row, int col ) { g_sel_Row = row; g_sel_Col = col; }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma comment ( lib, "Msimg32" )
@@ -112,7 +126,6 @@ typedef struct tagPPSET {
    HBRUSH hb, hbOld;
 }PPSET, * PPPSET;
 
-
 // forward reference
 void Paint_Box( HDC hdc );
 void get_text_size_len_hdc( PSIZE psz, char * ps, int len, HDC hdc );
@@ -122,17 +135,6 @@ void Clear_BkBr();
 
 static PPSET _s_act_set;
 PPPSET get_act_paint_set(void) { return &_s_act_set; }
-
-// current mouse HOVERING
-RECT g_rcHover = { 0, 0, 0, 0 };
-int g_hov_Row, g_hov_Col;
-// current SELECTED cell
-static RECT g_rcSelected = { 0, 0, 0, 0 };
-int g_sel_Row, g_sel_Col;
-
-PRECT get_curr_sel() { return &g_rcSelected; }
-void get_curr_selRC( int *pr, int *pc ) { *pr = g_sel_Row; *pc = g_sel_Col; }
-void set_curr_selRC( int row, int col ) { g_sel_Row = row; g_sel_Col = col; }
 
 // BOOL g_bShwSel in INI - was int highlight_cells = 1;    // if cell with value is SELECTED, mark ALL blank cells with that candidate value
 
