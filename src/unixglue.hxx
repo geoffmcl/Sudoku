@@ -97,6 +97,11 @@ typedef struct tagCHOOSECOLOR {
 
 #define RGB(r,g,b) (COLORREF)(r & 0xff) | ((g << 8) & 0xff00) | ((b << 16) & 0xff0000)
 
+#ifndef _MAX_PATH
+#define _MAX_PATH   264
+#endif
+
+
 #endif // #ifndef _UNIXGLUE_HXX_
 // eof - unixglue.hxx
 
