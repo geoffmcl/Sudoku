@@ -2178,7 +2178,294 @@ void Set_Window_Title()
 
 }
 
+bool Save_a_File2( HWND hWnd, char *pf, int flag );
+
+void Write_Temp_File()
+{
+    char *pf = g_szSvOptFl;
+    if (*pf == 0) strcpy(pf,"temptemp.txt");
+    DWORD opts = g_dwSvOptBits;
+    bool ok = Save_a_File2( NULL, pf, opts );
+    size_t st = strlen(pf);
+    if ((st < 4) || stricmp(&pf[st-4],".csv")) {
+        // NO CSV output if NOT .csv extension
+        opts |= sff_NO_ADD_CSV;
+    }
+    if (ok) {
+        sprtf("Current written to [%s] opts %d\n",pf,opts);
+    } else {
+        sprtf("Failed to create [%s] opts %d\n",pf,opts);
+    }
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n
+
+bool Save_a_File2( HWND hWnd, char *pf, int flag )
+{
+    bool ok = false;
+    FILE *hfile = fopen(pf,"w");
+    DWORD wtn = 1;
+    DWORD len = 2;
+    if (hfile) {
+        size_t st = strlen(pf);
+        if ((st < 4) || stricmp(&pf[st-4],".csv")) {
+            // NO CSV output if NOT .csv extension
+            flag |= sff_NO_ADD_CSV;
+        }
+        PABOX2 pb = get_curr_box();
+        int row, col, val;
+        char *ps = _s_buf;
+        *ps = 0;
+        if ( !(flag & sff_NO_ADD_CSV) ) {
+            for (row = 0; row < 9; row++) {
+                for ( col = 0; col < 9; col++ ) {
+                    val = pb->line[row].val[col];
+                    if (val) {
+                        sprintf(EndBuf(ps),"%d",val);
+                    }
+                    if ((col + 1) < 9)
+                        strcat(ps,",");
+                }
+                strcat(ps,EOL_CHRS);
+            }
+            strcat(ps,EOL_CHRS);
+        }
+
+        if ( !(flag & sff_NO_ADD_ASCII) ) {
+            for (row = 0; row < 9; row++) {
+                for ( col = 0; col < 9; col++ ) {
+                    val = pb->line[row].val[col];
+                    if (val)
+                        sprintf(EndBuf(ps),"%d",val);
+                    else
+                        strcat(ps,NUL_VAL);
+                }
+            }
+            strcat(ps,EOL_CHRS);
+        }
+        strcat(ps,EOL_CHRS);
+
+        len = (DWORD)strlen(ps);
+        // WriteFile(hfile,ps,len,&wtn,NULL);
+        wtn = fwrite(ps,1,len,hfile);
+        if (wtn != len) {
+            fclose(hfile);
+            return false;
+        }
+
+        if (flag & sff_ADD_ASCII_BLOCK) {
+            int rc = 0;
+            int cc = 0;
+            PSET ps2;
+            char *pfv = "*";
+            char *cp = Get_Act_File();
+            *ps = 0;
+            if (cp)
+                sprintf(ps,"// File: %s"EOL_CHRS, cp);
+            strcat(ps,"//      1   2   3    4   5   6    7   8   9"EOL_CHRS);
+            strcat(ps,"//    ======================================="EOL_CHRS);
+            for (row = 0; row < 9; row++) {     // 9 ROWS
+                //if (((row + 1) & 3) == 0)
+                //    strcat(ps,"//    ======================================="EOL_CHRS);
+                for (rc = 0; rc < 3; rc++) {    // each row in 3 rows
+                    // commence a ROW
+                    switch(rc) {
+                    case 0:
+                        strcat(ps,"//   ||");
+                        break;
+                    case 1:
+                        sprintf(EndBuf(ps),"// %c ||", (row + 'A'));
+                        break;
+                    case 2:
+                        strcat(ps,"//   ||");
+                        break;
+                    }
+                    for (col = 0; col < 9; col++ ) {   // 9 COLS
+                        val = pb->line[row].val[col];
+                        ps2 = &pb->line[row].set[col];
+                        for (cc = 0; cc < 3; cc++) {      // has col in 3 columns
+                            if (val) {
+                                switch(rc) {
+                                case 0:
+                                case 2:
+                                    //   ||===|123|===||===|123|===||   | 23|  3||  
+                                    switch(cc) {
+                                    case 0:
+                                        strcat(ps," ");
+                                        break;
+                                    case 1:
+                                        strcat(ps,pfv);
+                                        //strcat(ps," ");
+                                        break;
+                                    case 2:
+                                        strcat(ps," ");
+                                        break;
+                                    }
+                                    break;
+                                case 1:
+                                    // B ||=9=|   |=4=||=6=| 5 |=7=|| 5 | 5 | 5 || 2
+                                    switch(cc) {
+                                    case 0:
+                                        strcat(ps,pfv);
+                                        //strcat(ps,"[");
+                                        break;
+                                    case 1:
+                                        sprintf(EndBuf(ps),"%d",val);
+                                        break;
+                                    case 2:
+                                        strcat(ps,pfv);
+                                        //strcat(ps,"]");
+                                        break;
+                                    }
+                                    break;
+                                }
+                            } else {
+                                // NO VALUE - fill in possibilities/candidates
+                                if (flag & sff_ADD_CANDIDATES) {
+                                    switch(rc) {
+                                    case 0:
+                                        // "//   ||123|123|123||123|123|123||123|123|123||  
+                                        switch(cc) {
+                                        case 0:
+                                            if (ps2->val[0])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[0]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        case 1:
+                                            if (ps2->val[1])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[1]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        case 2:
+                                            if (ps2->val[2])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[2]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        }
+                                        break;
+                                    case 1:
+                                        // // A ||456|456|456||456|456|456||456|456|456|| 1
+                                        switch(cc) {
+                                        case 0:
+                                            if (ps2->val[3])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[3]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        case 1:
+                                            if (ps2->val[4])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[4]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        case 2:
+                                            if (ps2->val[5])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[5]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        }
+                                        break;
+                                    case 2:
+                                        // //   ||789|789|789||789|789|789||789|789|789||  
+                                        switch(cc) {
+                                        case 0:
+                                            if (ps2->val[6])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[6]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        case 1:
+                                            if (ps2->val[7])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[7]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        case 2:
+                                            if (ps2->val[8])
+                                                sprintf(EndBuf(ps),"%d",ps2->val[8]);
+                                            else
+                                                strcat(ps," ");
+                                            break;
+                                        }
+                                        break;
+                                    }
+                                } else {
+                                    strcat(ps," ");
+                                }
+                            }
+                        }
+                        // END OF CELL
+                        strcat(ps,"|");
+                        //if (col && ((col % 3) == 0))
+                        if (((col + 1) % 3) == 0)
+                            strcat(ps,"|");
+                    }
+                    // END OF EACH ROW
+                    switch(rc) {
+                    case 0:
+                        strcat(ps,EOL_CHRS);
+                        break;
+                    case 1:
+                        sprintf(EndBuf(ps)," %d"EOL_CHRS, (row + 1));
+                        break;
+                    case 2:
+                        strcat(ps,EOL_CHRS);
+                        break;
+                    }
+                }
+                if ( ( (row + 1) % 3 ) == 0 )
+                    strcat(ps,"//    ======================================="EOL_CHRS);
+                else
+                    strcat(ps,"//    ---------------------------------------"EOL_CHRS);
+            }
+            strcat(ps,"//      1   2   3    4   5   6    7   8   9"EOL_CHRS);
+            sprintf(EndBuf(ps),EOL_CHRS"// eof - generated %s"EOL_CHRS, get_date_time_stg());
+            len = (DWORD)strlen(ps);
+            //WriteFile(hfile,ps,len,&wtn,NULL);
+            wtn = fwrite(ps,1,len,hfile);
+            //if (wtn != len) {
+            //    fclose(hfile);
+            //    return false;
+            //}
+        }
+
+        //CloseHandle(hfile);
+        fclose(hfile);
+        if ((len != wtn) && !(flag & sff_NO_LENGTH_CHECK)) {
+            sprintf(ps,"WARNING: Writing to file [%s] FAILED!\nRequested write %d, but written %d\nCheck the FILE!\n",
+                pf, len, wtn);
+            sprtf("%s\n",ps);
+            MB2(ps,"File Write Failed");
+        } else {
+            ok = true;
+        }
+
+        if ( !(flag & sff_NO_CHANGE_RESET) )
+            g_bChanged = FALSE;
+
+        if ( !(flag & sff_NO_CHANGE_ACTIVE) ) {
+            char *cp = Get_Act_File();
+            if ( !cp || strcmp(cp,pf) ) {
+                // must CHANGE the active file name
+                Reset_Active_File(pf);
+            }
+            cp = Get_Act_File();
+            if (cp) {
+                sprtf("Saved [%s]\n",cp);
+                Add_to_INI_File_List(cp);   // reset the MENU to reflect this change
+            }
+        }
+
+        if ( !(flag & sff_NO_RESET_TITLE) )
+            Set_Window_Title(); // clear change from title
+    }
+    return ok;
+}
 
 // eof - Sudo_File.cxx
