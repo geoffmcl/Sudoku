@@ -39,7 +39,7 @@ if(WIN32 AND MSVC)
     # to distinguish between debug and release lib in windows
     set( CMAKE_DEBUG_POSTFIX "d" ) # little effect in unix
 else()
-    set(MSVC_FLAGS "${MSVC_FLAGS} -Wno-write-strings -Wno-unused-variable")
+    set(MSVC_FLAGS "${MSVC_FLAGS} -Wno-write-strings -Wno-unused-variable -Wno-unused-but-set-variable")
 endif()
 
 # Uncomment to REDUCE the Windows configurations buildable
