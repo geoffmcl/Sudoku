@@ -7,12 +7,15 @@
 \*/
 
 #include <stdio.h>
-// other includes
+#include "Sudoku.hxx"
 #include "unixglue.hxx"
 
 static const char *module = "unixglue";
 
-// implementation
+void Post_Command( WPARAM cmd )
+{
+    sprtf("TODO: Post_Command( %d ) to be done...\n", (int)cmd );
+}
 
 
 // eof = unixglue.cxx
