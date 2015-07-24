@@ -1666,8 +1666,7 @@ VOID Do_ID_OPTIONS_ENABLESTRATEGIES(HWND hWnd)
 // ID_OPTIONS_MISCOPTIONS - IDD_MISCOPTIONS
 BOOL Do_INIT_MiscOptions(HWND hDlg)
 {
-    char *tb = GetNxtBuf();
-    sprintf(tb,"%f",g_AutoDelay);
+    char *tb = double_to_stg(g_AutoDelay);
     SetDlgItemText(hDlg,IDC_EDIT1,tb);
 
     CenterWindow(hDlg, g_hWnd);
@@ -1681,6 +1680,8 @@ BOOL Do_MiscOptions_OK(HWND hDlg)
     double d = atof(tb);
     if (d >= 0.0) {
         if ((d > g_AutoDelay) || (d < g_AutoDelay)) {
+            sprtf("Changed AutoDelay from %s to %s seconds\n", double_to_stg(g_AutoDelay), double_to_stg(d) );
+            set_repaint2();
             g_AutoDelay = d;
             gChgASD = TRUE;
         }

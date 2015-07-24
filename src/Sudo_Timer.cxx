@@ -85,6 +85,8 @@ VOID Start_Auto_Solve()
             pAutoTime->start();
             last_seconds = -1.0;
             g_bAutoSolve = true;    // repeat steps
+            sprtf("Starting AutoSolve with delay of %s secs between steps.\n", double_to_stg(g_AutoDelay));
+            set_repaint2();
         }
     }
 }
