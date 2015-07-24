@@ -8,15 +8,21 @@
 
 #include "Sudoku.hxx"
 
+#define EOL_CHRS "\r\n"
+#define NUL_VAL "0"
+
+#ifndef MAX_STRING
+#define MAX_STRING 1024
+#endif
+
+static char _s_buf[MAX_STRING*16];
+
+///////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
 ///////////////////////////////////////////////////////////////////////////////////////////
 #include <CommCtrl.h>
 
 using namespace std;
-
-#ifndef MAX_STRING
-#define MAX_STRING 512
-#endif
 
 static ABOX2 _s_box;
 
@@ -741,8 +747,6 @@ VOID Do_ID_FILE_OPEN(HWND hWnd)
     }
 }
 
-#define EOL_CHRS "\r\n"
-#define NUL_VAL "0"
 // Add ASCII block is like -
 // Filled with possibilities
 //      1   2   3    4   5   6    7   8   9
@@ -795,8 +799,6 @@ HANDLE OpenSaveFile( char *pf )
         NULL );
     return hfile;
 }
-
-static char _s_buf[MAX_STRING*16];
 
 bool Save_a_File( HWND hWnd, char *pf, int flag )
 {
