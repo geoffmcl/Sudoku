@@ -8,6 +8,12 @@
 
 #include "Sudoku.hxx"
 
+#ifdef WIN32
+#define STRICMP stricmp
+#else
+#define STRICMP strcasecmp
+#endif
+
 #define EOL_CHRS "\r\n"
 #define NUL_VAL "0"
 
@@ -719,7 +725,7 @@ VOID Do_ID_FILE_OPEN(HWND hWnd)
             
         }
         size_t len = strlen(lpstrFile);
-        if ((len > 4) && (stricmp(&lpstrFile[len-4],".xml") == 0)) {
+        if ((len > 4) && (STRICMP(&lpstrFile[len-4],".xml") == 0)) {
             ok = Load_XML_File(hWnd, lpstrFile);
         } else {
             ok = Load_a_file(hWnd, lpstrFile);
@@ -2203,12 +2209,6 @@ void Write_Temp_File()
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n
-
-#ifdef WIN32
-#define STRICMP stricmp
-#else
-#define STRICMP strcasecmp
-#endif
 
 bool Save_a_File2( HWND hWnd, char *pf, int flag )
 {
