@@ -27,12 +27,15 @@
 #endif
 
 #include "targetver.h"
-#include "resource.h"
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#ifdef WIN32
+#include "resource.h"
 // #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files:
 #include <windows.h>
+#endif
 
 // C RunTime Header Files
 #include <stdlib.h>
@@ -40,7 +43,11 @@
 #include <memory.h>
 #include <tchar.h>
 #include <vector>
+#ifdef WIN32
 #include "unistd.h"
+#else
+#include <unistd.h>
+#endif
 
 using namespace std;
 

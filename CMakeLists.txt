@@ -99,11 +99,9 @@ set( ${name}_SRCS
     ${dir}/Sudo_XYChain.cxx
     ${dir}/Sudo_XYZWings.cxx
     ${dir}/Sudoku.cxx
-    ${dir}/Sudoku.rc
     ${dir}/sprtf.cxx
     )
 set( ${name}_HDRS
-    ${dir}/resource.h
     ${dir}/Sudo_AIC.hxx
     ${dir}/Sudo_BMP.hxx
     ${dir}/Sudo_Change.hxx
@@ -142,8 +140,11 @@ set( ${name}_HDRS
     ${dir}/Sudoku.hxx
     ${dir}/sprtf.hxx
     ${dir}/targetver.h
-    ${dir}/unistd.h 
     )
+if (WIN32)
+    list(APPEND ${name}_SRCS ${dir}/Sudoku.rc)
+    list(APPEND  ${name}_HDRS ${dir}/resource.h ${dir}/unistd.h )
+endif ()
 add_executable( ${name} WIN32 ${${name}_SRCS} ${${name}_HDRS} )
 if (add_LIBS)
 target_Link_libraries(${name} ${add_LIBS} )
