@@ -4,11 +4,25 @@
 #endif
 #include <vector>
 #include "Sudoku.hxx"
-#ifdef WIN32
-///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #include "Sudo_Paint.hxx"
 #include "sprtf.hxx"
 #include "Sudo_File.hxx"
+
+// global variables
+COLORREF crElimBk = RGB(255,255,192);
+COLORREF crElimFg = RGB(128,0,0);
+
+COLORREF crOn = RGB(255,192,255);
+COLORREF crOff = RGB(0xc0,255,255);
+
+COLORREF crClr1 = RGB(238,170,85);  // Light Brown
+COLORREF crClr2 = RGB(170,255,170); // Light Green
+COLORREF crClr3 = RGB(170,170,255); // Purple
+COLORREF crClr4 = RGB(201,236,250); // Soft Blue
+
+
+#ifdef WIN32
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma comment ( lib, "Msimg32" )
 
 using namespace std;
@@ -224,16 +238,16 @@ COLORREF crWLnk   = RGB(0,0,255);
 COLORREF crOddBox = RGB(250,250,250); // g_bOddBox - g_rcRegions[9] - g_bOddBox
 COLORREF crEvnBox = RGB(255,255,255); // Standard background
 
-COLORREF crElimBk = RGB(255,255,192);
-COLORREF crElimFg = RGB(128,0,0);
+//COLORREF crElimBk = RGB(255,255,192);
+//COLORREF crElimFg = RGB(128,0,0);
 
-COLORREF crOn = RGB(255,192,255);
-COLORREF crOff = RGB(0xc0,255,255);
+//COLORREF crOn = RGB(255,192,255);
+//COLORREF crOff = RGB(0xc0,255,255);
 
-COLORREF crClr1 = RGB(238,170,85);  // Light Brown
-COLORREF crClr2 = RGB(170,255,170); // Light Green
-COLORREF crClr3 = RGB(170,170,255); // Purple
-COLORREF crClr4 = RGB(201,236,250); // Soft Blue
+//COLORREF crClr1 = RGB(238,170,85);  // Light Brown
+//COLORREF crClr2 = RGB(170,255,170); // Light Green
+//COLORREF crClr3 = RGB(170,170,255); // Purple
+//COLORREF crClr4 = RGB(201,236,250); // Soft Blue
 
 HPEN hpSLnk = NULL;
 HPEN hpWLnk = NULL;

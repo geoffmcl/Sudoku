@@ -2173,6 +2173,11 @@ VOID Do_VIEW_FILELIST( HWND hWnd, vSTG *plist )
     sprtf("Do_VIEW_FILELIST not yet implemented in unix\n");
 
 }
+void Set_Window_Title()
+{
+
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n
 
