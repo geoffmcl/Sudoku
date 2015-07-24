@@ -7,7 +7,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "Sudoku.hxx"
+#ifdef WIN32
 #include <shlwapi.h>
+#endif
 
 typedef vector<FILLSERV> vFSS;
 
@@ -118,7 +120,8 @@ bool Col_in_RC_Vector( vRC & vrc, int row, int col )
 }
 
 
-
+#ifdef WIN32
+///////////////////////////////////////////////////////////////////////
 #define PACKVERSION(major,minor) MAKELONG(minor,major)
 
 DWORD GetVersion(LPCTSTR lpszDllName)
@@ -171,6 +174,14 @@ BOOL Got_Comm_Ctrl6()
     // Use an alternate approach for older the DLL version.
     return FALSE;
 }
+///////////////////////////////////////////////////////////////////////
+#endif // #ifdef WIN32
+
+#ifdef WIN32
+#define M_IS_DIR    _S_IFDIR
+#else
+#define M_IS_DIR    S_IFDIR
+#endif
 
 static struct stat _s_buf;
 struct stat *Get_Stat_Buf() { return &_s_buf; }
@@ -179,7 +190,7 @@ int is_file_or_directory( char * file )
 {
     struct stat *psb = Get_Stat_Buf();
     if (stat(file,psb) == 0) {
-        if (psb->st_mode & _S_IFDIR)
+        if (psb->st_mode & M_IS_DIR)
             return 2;
         return 1;
     }
@@ -191,7 +202,7 @@ char *Get_Rect_Stg(PRECT pr)
 {
     char *cp = GetNxtBuf();
     sprintf(cp,"%d,%d,%d,%d",
-        pr->left, pr->top, pr->right, pr->bottom);
+        (int)pr->left, (int)pr->top, (int)pr->right, (int)pr->bottom);
     return cp;
 }
 
@@ -347,7 +358,8 @@ void Append_RCPAIR_Settings( char *tb, PRCPAIR prcpair, int setval )
 {
     uint64_t flg, lflg;
     const char *lnktyp;
-    char *clrtype1, *clrtype2;
+    const char *clrtype1;
+    const char *clrtype2;
     flg = prcpair->rowcol[0].set.flag[setval - 1];
     lflg = (flg & cl_SLA); // isolate LINK type - same both ends
     lnktyp = (lflg & cl_SLA) ? stglnk : weklnk;
@@ -370,10 +382,10 @@ const char *Get_Link_Type( uint64_t flag )
     return lnktyp;
 }
 
-char *Get_Color_Type( uint64_t flag )
+const char *Get_Color_Type( uint64_t flag )
 {
     uint64_t flg = (flag & cf_XAB); // isolate COLOR
-    char *clrtype = ((flg == (cf_XCA|cf_XCB)) ? "?" : (flg & cf_XCA) ? "A" : (flg & cf_XCB) ? "B" : "U");
+    const char *clrtype = ((flg == (cf_XCA|cf_XCB)) ? "?" : (flg & cf_XCA) ? "A" : (flg & cf_XCB) ? "B" : "U");
     if (add_debug_aic && !flg)
         debug_stop2();
     return clrtype;
@@ -383,7 +395,8 @@ void Append_RCPAIR_Stg( char *tb, PRCPAIR prcpair, int setval, bool all )
 {
     uint64_t flg;
     const char *lnktyp;
-    char *clrtype1, *clrtype2;
+    const char *clrtype1;
+    const char *clrtype2;
     flg = prcpair->rowcol[0].set.flag[setval - 1];
     lnktyp = Get_Link_Type(flg); // LINK type - should be same both ends!
     clrtype1 = Get_Color_Type(flg);
@@ -407,7 +420,7 @@ char *Get_RCPAIR_Stg( PRCPAIR prcpair, int setval, bool all )
 void Append_RC_Stg( char *tb, PROWCOL prc, int setval )
 {
     uint64_t flg;
-    char *clrtyp;
+    const char *clrtyp;
     int i;
     if (VALUEVALID(setval)) {
         flg = prc->set.flag[setval - 1];
@@ -432,7 +445,7 @@ char *Get_RC_Stg( PROWCOL prc, int setval )
 void Append_RC_Settings( char *tb, PROWCOL prc, int setval )
 {
     uint64_t flg, lflg;
-    char *clrtype;
+    const char *clrtype;
     if (VALUEVALID(setval)) {
         flg = prc->set.flag[setval - 1];
         lflg = (flg & cl_SLA); // isolate LINK type - same both ends
@@ -449,7 +462,7 @@ char *Get_RC_setval_color_Stg( PROWCOL prc, int setval )
 {
     char *tb = GetNxtBuf();
     uint64_t flg, lflg;
-    char *clrtype;
+    const char *clrtype;
     if (VALUEVALID(setval)) {
         flg = prc->set.flag[setval - 1];
         lflg = (flg & cl_SLA); // isolate LINK type - same both ends

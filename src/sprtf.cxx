@@ -1,16 +1,22 @@
 // sprtf.cxx
 
-#include <Windows.h>
 #include <stdio.h> // fopen()...
 #include "Sudoku.hxx"
 #include "sprtf.hxx"
 #include "Sudo_Paint.hxx"
+#ifdef WIN32
+#include <Windows.h>
+#else
+#include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
+#endif
 
 // sprtf.cxx
 #ifndef _CRT_SECURE_NO_DEPRECATE
 #define _CRT_SECURE_NO_DEPRECATE
 #endif // #ifndef _CRT_SECURE_NO_DEPRECATE
+#ifdef _MSC_VER
 #pragma warning( disable:4996 )
+#endif
 
 #ifndef MX_ONE_BUF
 #define MX_ONE_BUF 1024
@@ -101,17 +107,25 @@ char * get_log_file( void )
    return logfile;
 }
 
+#ifdef WIN32
+#define STRCMP  strcmpi
+#else
+#define STRCMP  strcmp
+#endif
+
 void   set_log_file( char * nf )
 {
    if (logfile[0] == 0)
       strcpy(logfile,def_log);
-   if ( nf && *nf && strcmpi(nf,logfile) ) {
+   if ( nf && *nf && STRCMP(nf,logfile) ) {
       close_log_file(); // remove any previous
       strcpy(logfile,nf); // set new name
       open_log_file();  // and open it ... anything previous written is 'lost'
    }
 }
 
+#ifdef WIN32
+///////////////////////////////////////////////////////////////////////
 void add_date_stg( char *ps, SYSTEMTIME *pst )
 {
     sprintf(ps, "%4d/%02d/%02d",
@@ -158,6 +172,8 @@ char *get_date_time_stg()
     add_time_stg( EndBuf(ps), &st );
     return ps;
 }
+
+#endif  // WIN32
 
 static void oi( char * ps )
 {

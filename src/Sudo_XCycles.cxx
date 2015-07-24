@@ -1049,7 +1049,8 @@ int Extend_Chain_Pairs( PABOX2 pb, vRCP *pdst, vRCP &src )
     if ( ppfirst && pplast ) { // got FIRST and LAST in CHAIN
         PROWCOL prcl1, prcl2, prcf1, prcf2;
         uint64_t flg;
-        char *clrtype1, *clrtype2;
+        const char *clrtype1;
+        const char *clrtype2;
         prcl1 = &pplast->rowcol[0];
         prcl2 = &pplast->rowcol[1];  // LAST on CHAIN
         prcf1 = &ppfirst->rowcol[0]; // FIRST on CHAIN
@@ -1253,7 +1254,8 @@ int Transfer_Chain_Pairs( PABOX2 pb, vRCP *pdst, vRCP &src )
     ROWCOL rc;
     bool change;
     const char *lnktype;
-    char *clrtype1, *clrtype2;
+    const char *clrtype1;
+    const char *clrtype2;
     uint64_t flag;
     time_t ch_num = -1;
     vRCP dst_copy;
@@ -1490,7 +1492,7 @@ vRCP *Get_SL_Pairs_NO_DUPES()
         prcp1 = &pp->at(ii); // get PTR to a pair
         prc1 = &prcp1->rowcol[0];
         prc2 = &prcp1->rowcol[1];
-        for (i2 = 0; i2 < max; i2) {
+        for (i2 = 0; i2 < max; i2++) {
             if (i2 == ii) continue;
             prcp2 = &pp->at(i2);
             prc3 = &prcp2->rowcol[0];

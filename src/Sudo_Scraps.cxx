@@ -778,7 +778,9 @@ void run_test2(PABOX2 pb)
     msg.str("");
     vGrid.clear();
     sudo_main();
+#ifdef WIN32
     MessageBox( g_hWnd, msg.str().c_str(), "Test Solution", MB_OK | MB_ICONINFORMATION );
+#endif    
     if (vGrid.size()) {
         Write_Solution_File();
     }
@@ -916,7 +918,7 @@ int Get_Solution( PABOX2 pb, bool test_unique )
         }
         x = 1;
     }
-    char *uniq_test = 0;
+    const char *uniq_test = 0;
     if (x && test_unique) {
         for (y = 0; y < 9; y++) {
             for (x = 0; x < 9; x++) {

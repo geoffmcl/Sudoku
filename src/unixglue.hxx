@@ -25,6 +25,10 @@ typedef void * HBRUSH;
 typedef void * HDC;
 typedef void * HFONT;
 typedef void * HANDLE;
+typedef void * HMENU;
+typedef void * HPALETTE;
+typedef void * HBITMAP;
+typedef unsigned char byte;
 
 typedef unsigned long COLORREF;
 typedef unsigned int DWORD;

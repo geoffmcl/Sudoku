@@ -138,8 +138,8 @@ int Show_XY_Chain(PXYSTR pxystr)
     sprintf(tb,"XY for %d cnt %d ", bgnval, (int) max);
     *tb2 = 0;
     onoff = true;
-    char *on;
-    char *off;
+    const char *on;
+    const char *off;
     char crow;
     sprintf(tb3,"XY-Cells: ");
     for (ii = 0; ii < max; ii++) {
