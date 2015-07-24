@@ -84,6 +84,33 @@ PRECT get_curr_sel() { return &g_rcSelected; }
 void get_curr_selRC( int *pr, int *pc ) { *pr = g_sel_Row; *pc = g_sel_Col; }
 void set_curr_selRC( int row, int col ) { g_sel_Row = row; g_sel_Col = col; }
 
+bool m_IsRectEmpty( PRECT pr )
+{
+    if ((pr->right == 0)||(pr->bottom == 0)||
+        (pr->right <= pr->left) ||
+        (pr->bottom >= pr->top)) {
+        return true;
+    }
+    return false;
+}
+
+#ifndef WIN32
+#define IsRectEmpty m_IsRectEmtpy
+#endif
+
+bool Is_Selected_Valid()
+{
+    if (IsRectEmpty(get_curr_sel()))
+        return false;
+    return true;
+}
+bool Is_Hover_Valid()
+{
+    if (IsRectEmpty(&g_rcHover))
+        return false;
+    return true;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2760,18 +2787,18 @@ void Paint_Row_Col_Text( HDC hdc, int row, int col )
 
 #endif // #ifdef ADD_HINT_TEXT
 
-bool Is_Selected_Valid()
-{
-    if (IsRectEmpty(get_curr_sel()))
-        return false;
-    return true;
-}
-bool Is_Hover_Valid()
-{
-    if (IsRectEmpty(&g_rcHover))
-        return false;
-    return true;
-}
+//bool Is_Selected_Valid()
+//{
+//    if (IsRectEmpty(get_curr_sel()))
+//        return false;
+//    return true;
+//}
+//bool Is_Hover_Valid()
+//{
+//    if (IsRectEmpty(&g_rcHover))
+//        return false;
+//    return true;
+//}
 
 void Paint_Outline(HWND hWnd, PRECT prt, bool found, int row, int col)
 {
