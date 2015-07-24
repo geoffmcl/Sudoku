@@ -2204,6 +2204,12 @@ void Write_Temp_File()
 ///////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n
 
+#ifdef WIN32
+#define STRICMP stricmp
+#else
+#define STRICMP strcasecmp
+#endif
+
 bool Save_a_File2( HWND hWnd, char *pf, int flag )
 {
     bool ok = false;
@@ -2212,7 +2218,7 @@ bool Save_a_File2( HWND hWnd, char *pf, int flag )
     DWORD len = 2;
     if (hfile) {
         size_t st = strlen(pf);
-        if ((st < 4) || stricmp(&pf[st-4],".csv")) {
+        if ((st < 4) || STRICMP(&pf[st-4],".csv")) {
             // NO CSV output if NOT .csv extension
             flag |= sff_NO_ADD_CSV;
         }
