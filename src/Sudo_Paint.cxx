@@ -67,6 +67,10 @@ COLORREF crWLnk   = RGB(0,0,255);
 COLORREF crOddBox = RGB(250,250,250); // g_bOddBox - g_rcRegions[9] - g_bOddBox
 COLORREF crEvnBox = RGB(255,255,255); // Standard background
 
+int one_value_count = 0;
+int NO_value_count = 0;
+int total_empty_count = -1;
+
 #ifdef WIN32
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma comment ( lib, "Msimg32" )
@@ -1005,9 +1009,9 @@ VOID Draw_Top_Text( HDC hdc )
 }
 #endif // #ifdef ADD_TEXT_BLOCK
 
-int one_value_count = 0;
-int NO_value_count = 0;
-int total_empty_count = -1;
+//int one_value_count = 0;
+//int NO_value_count = 0;
+//int total_empty_count = -1;
 ROWCOL ones[9*9];
 ROWCOL all_anal[9*9];
 PROWCOL Get_Copy_All_Anal()
