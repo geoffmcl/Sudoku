@@ -2,6 +2,9 @@
 // Handle file menu
 
 #include "Sudoku.hxx"
+
+DWORD gdwMaxFiles = IDM_FILEMax - IDM_FILE1;
+
 #ifdef WIN32
 //////////////////////////////////////////////////////////////////////////////////////////////
 #include "Sudo_Paint.hxx"
@@ -12,7 +15,6 @@
 
 DWORD gdwlMenuFlag = 0;
 #define M_Fil           1
-DWORD gdwMaxFiles = IDM_FILEMax - IDM_FILE1;
 DWORD gdwMenuMax = 20;  // Limit MRU menu size
 BOOL gfAddSep = FALSE;  // add separator only once
 DWORD gdwLastMax = 0;
