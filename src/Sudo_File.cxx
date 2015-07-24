@@ -23,6 +23,27 @@
 
 static char _s_buf[MAX_STRING*16];
 
+char *g_pAct_File = 0;          // current ACTIVE file
+char *g_pSpecial = "Untitled";  // when a box is say generated
+
+// ****************************
+// Reset the SINGLE ACTIVE FILE
+void Reset_Active_File(char *file)
+{
+    if (g_pAct_File) {
+        free(g_pAct_File);
+    }
+    g_pAct_File = (char *)malloc( strlen(file) + 8 );
+    if (!g_pAct_File) {
+        MB("Memory allocation for file name FAILED!");
+        exit(1);
+    }
+    strcpy(g_pAct_File,file);
+}
+
+char *Get_Act_File() { return g_pAct_File; }
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -46,8 +67,8 @@ enum FileType {
 // TCHAR g_filter[_MAX_PATH] = _T("CSV Files\0*.csv\0XML Files\0*.xml\0TXT FIles\0*.txt\0All Files\0*.*\0\0");
 TCHAR g_filter[_MAX_PATH] = _T("CSV Files\0*.csv\0XML Files\0*.xml\0TXT Files\0*.txt\0SDK Files\0*.sdk\0All Files\0*.*\0\0");
 
-char *g_pAct_File = 0;          // current ACTIVE file
-char *g_pSpecial = "Untitled";  // when a box is say generated
+//char *g_pAct_File = 0;          // current ACTIVE file
+//char *g_pSpecial = "Untitled";  // when a box is say generated
 
 // forward reference
 int Test_Extract_CSV_Info(PABOX2 pb, char *pbuf, int len);
@@ -56,23 +77,6 @@ int Test_Extract_SDK_Info( PABOX2 pb, char *pbuf, int len );
 int Extract_SDK_Info( char *pbuf, int len );
 bool Save_SDK_File( HWND hWnd, char *pf, int flag = 0 );
 
-
-// ****************************
-// Reset the SINGLE ACTIVE FILE
-void Reset_Active_File(char *file)
-{
-    if (g_pAct_File) {
-        free(g_pAct_File);
-    }
-    g_pAct_File = (char *)malloc( strlen(file) + 8 );
-    if (!g_pAct_File) {
-        MB("Memory allocation for file name FAILED!");
-        exit(1);
-    }
-    strcpy(g_pAct_File,file);
-}
-
-char *Get_Act_File() { return g_pAct_File; }
 
 void Set_Window_Title()
 {
