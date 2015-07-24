@@ -114,6 +114,16 @@ bool Is_Hover_Valid()
 // sudoku rect
 RECT rcSquares[9][9];
 
+vSTG vSLines;
+vSTG * Get_Screen_Lines() { return &vSLines; }
+
+void Add_String( char * ps )
+{
+    string s = ps;
+    vSTG *vlp = Get_Screen_Lines();
+    vlp->push_back(s);
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -266,9 +276,8 @@ int curr_xPos, curr_yPos; // current mouse position
 //typedef vector<string> vSTG;
 //typedef vSTG::iterator vSTGi;
 
-vSTG vSLines;
-
-vSTG * Get_Screen_Lines() { return &vSLines; }
+//vSTG vSLines;
+//vSTG * Get_Screen_Lines() { return &vSLines; }
 
 PRECT get_rcSquares(int row, int col) { return &rcSquares[row][col]; }
 
@@ -951,13 +960,6 @@ void draw_Y( HDC hdc, PRECT pr )
     draw_line( hdc, p.x, p.y, p.x, pr->bottom );
 }
 
-
-void Add_String( char * ps )
-{
-    string s = ps;
-    vSTG *vlp = Get_Screen_Lines();
-    vlp->push_back(s);
-}
 
 void set_repaint2( bool erase)
 {
