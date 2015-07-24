@@ -41,9 +41,9 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
-#include <tchar.h>
 #include <vector>
 #ifdef WIN32
+#include <tchar.h>
 #include "unistd.h"
 #else
 #include <unistd.h>
