@@ -2219,6 +2219,10 @@ void File_Reset()
     sprtf("TODO: File_Reset() not yet ported!\n");
 }
 
+void Auto_Load_file(HWND hWnd)
+{
+    sprtf("TODO: Auto_Load_file() not yet ported!\n");
+}
 ///////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n
 
