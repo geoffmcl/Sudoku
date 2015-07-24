@@ -8,6 +8,7 @@
 #include <Windows.h>
 #else
 #include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
+#include <sys/time.h>  /* gettimeofday() */
 #endif
 
 // sprtf.cxx
