@@ -3329,6 +3329,14 @@ int Do_YWing_Scan(PABOX2 pb)
     xwing_scans++;
     ROWCOL trc;
     bool abort = false;
+    int br, bc;
+    int brw, bcl;
+    int i;
+    int setcnt = 0;
+    int box;
+    ROWCOL rc[9+2];
+    PROWCOL prc;
+
     if (add_debug_yw) sprtf("Doing YWing scan %d\n", xwing_scans);
     // classic Y-Wing - rectangle
     for (row = 0; row < 9; row++) {
@@ -3418,13 +3426,6 @@ int Do_YWing_Scan(PABOX2 pb)
     // Now to do the more generalised case
     // work box by box
     //int r, c, rw, cl, i;
-    int br, bc;
-    int brw, bcl;
-    int i;
-    int setcnt = 0;
-    int box;
-    ROWCOL rc[9+2];
-    PROWCOL prc;
     for (br = 0; br < 3; br++) {
         for (bc = 0; bc < 3; bc++) {
             // Do a BOX
@@ -3495,6 +3496,14 @@ int Do_YWing_Scan_nearly_OK(PABOX2 pb)
     PSET ps, ps2, ps3, ps4;
     SET comm, comm2, comm3;
     char *tb = GetNxtBuf();
+    int br, bc;
+    int brw, bcl;
+    int i;
+    int setcnt = 0;
+    int box, box2;
+    ROWCOL rc[9+2];
+    PROWCOL prc;
+
     xwing_scans++;
     if (add_debug_yw) sprtf("Doing YWing scan %d\n", xwing_scans);
     // classic Y-Wing - rectangle
@@ -3564,13 +3573,6 @@ int Do_YWing_Scan_nearly_OK(PABOX2 pb)
     // Now to do the more generalised case
     // work box by box
     //int r, c, rw, cl, i;
-    int br, bc;
-    int brw, bcl;
-    int i;
-    int setcnt = 0;
-    int box, box2;
-    ROWCOL rc[9+2];
-    PROWCOL prc;
     for (br = 0; br < 3; br++) {
         for (bc = 0; bc < 3; bc++) {
             // Do a BOX
