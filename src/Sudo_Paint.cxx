@@ -111,6 +111,9 @@ bool Is_Hover_Valid()
     return true;
 }
 
+// sudoku rect
+RECT rcSquares[9][9];
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -204,7 +207,6 @@ int min_height = 20;
 RECT g_rcFullClient;    // this is a FULL client rectangle
 
 RECT g_rcClient;        // same or lesser rectange
-RECT rcSquares[9][9];
 RECT g_rcSudoku;    // Sudoku rect
 RECT g_rcSudokuLeg;    // Sudoku rect + legend text
 RECT g_rcRegions[9];    // each REGION (BOX)
