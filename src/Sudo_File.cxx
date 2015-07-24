@@ -334,8 +334,10 @@ int Count_Lines_In_Buffer( char *pbuf, int len, int *max, int *cvs )
             i++;
             for (; i < len; i++) {
                 c = pbuf[i];
-                if (!EOLCHAR(c))
+                if (!EOLCHAR(c)) {
+                    i--;    // back up to count this char on next row
                     break;
+                }
             }
             if ((lines == 0) && (cols > mcols))
                 mcols = cols;   // max columns is ONLY the first LINE
@@ -357,6 +359,8 @@ int Count_Lines_In_Buffer( char *pbuf, int len, int *max, int *cvs )
                 comma_cnt++;
         }
     }
+    if ((cols >= 8) && (comma_cnt >= 8))
+       cvslines++; // think of it as a CVS line
     if (max)
         *max = mcols;
     if (cvs)
@@ -421,6 +425,7 @@ int Process_Buffer( char *file, char * pbuf, int len )
         
     // other formats??????
     sprtf("File [%s] unhandled format!\n", file);
+    set_repaint2();
     return -1;
 }
 
