@@ -1,9 +1,9 @@
 // Sudo_Ini.hxx
 #ifndef _SUDO_INI_HXX
 #define _SUDO_INI_HXX
-
+#ifdef WIN32
 #include <Windows.h>
-
+#endif
 
 #define	GetStg( a, b )	\
 	GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
