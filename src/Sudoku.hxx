@@ -52,6 +52,7 @@
 #else
 #include <stdint.h>
 #include <unistd.h>
+#include <inttypes.h> // for PRIx64, ...
 #endif
 
 using namespace std;

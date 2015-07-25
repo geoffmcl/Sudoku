@@ -508,7 +508,9 @@ int Randomizer_GetInt( double range_max, double range_min)
         srand( (unsigned) time(0) );
         done_seed = true;
     }
-    int u = (int)(((double)rand() / (RAND_MAX + 1) * (range_max - range_min)) + range_min);
+    //double r = (double)rand() / (double)(RAND_MAX + 1);
+    double r = ((double)rand() / (double)RAND_MAX);
+    int u = (int)((r * (range_max - range_min)) + range_min);
     return u;
 }
 

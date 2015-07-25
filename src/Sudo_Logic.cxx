@@ -732,7 +732,7 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
     mPAIR mMap;
     int prev = add_list_out(0);
     char *tb = GetNxtBuf();
-    sprintf(tb,"S2d: Map LIST ALL %d pairs", vp.size());
+    sprintf(tb,"S2d: Map LIST ALL %d pairs", (int)vp.size());
     sprtf("%s\n",tb);
     for (ii = vp.begin(); ii != vp.end(); ii++) {
         cnt++;
@@ -769,7 +769,7 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
         pvp = (*mi).second;
         val1 = cval / 10;
         val2 = cval % 10;
-        sprintf(tb,"%3d: key %d+%d has %d pairs", cnt, val1, val2, pvp->size());
+        sprintf(tb,"%3d: key %d+%d has %d pairs", cnt, val1, val2, (int)pvp->size());
         sprtf("%s\n",tb);
     }
     // Delete element of NO interest
@@ -803,7 +803,7 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
             val1 = cval / 10;
             val2 = cval % 10;
             if (!VALUEVALID(val1) || !VALUEVALID(val2)) {
-                sprintf(tb,"WARNING: %3d: key %d+%d has %d pairs - VALUE INVALID!", cnt, val1, val2, pvp->size());
+                sprintf(tb,"WARNING: %3d: key %d+%d has %d pairs - VALUE INVALID!", cnt, val1, val2, (int)pvp->size());
                 sprtf("%s\n",tb);
                 continue;
             }
@@ -867,7 +867,7 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
                     if (vrc.size() == 2) {
                         // YOW, we have TWO empty cells in this BOX, NOT eliminated
                         // WE can APPLY the Naked Pair Strategy
-                        sprintf(tb,"%3d:%d: key %d+%d has %d pairs, remainer 2", cnt, box, val1, val2, pvp->size());
+                        sprintf(tb,"%3d:%d: key %d+%d has %d pairs, remainer 2", cnt, box, val1, val2, (int)pvp->size());
                         sprtf("%s\n",tb);
                         *tb = 0;
                         rc = vrc[0];
@@ -892,8 +892,8 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
                         //    pair = *ii;
                         //}
                     } else {
-                        sprintf(tb,"%3d:%d: key %d+%d has %d pairs", cnt, box, val1, val2, pvp->size());
-                        sprintf(EndBuf(tb)," found %d blanks", vrc.size());
+                        sprintf(tb,"%3d:%d: key %d+%d has %d pairs", cnt, box, val1, val2, (int)pvp->size());
+                        sprintf(EndBuf(tb)," found %d blanks", (int)vrc.size());
                     }
                     sprtf("%s\n",tb);
                     *tb = 0;
@@ -2714,7 +2714,7 @@ int Do_XWing_Scan( PABOX2 pb )
                                 cnt3 = Mark_SET_in_SET( ps5, &comm3, cf_XWE, false );
                                 cnt2 += cnt3;
                                 if (cnt3)
-                                    sprintf(EndBuf(tb),"r%c% ", row2 + 1, col3 + 1);
+                                    sprintf(EndBuf(tb),"r%dc%d ", row2 + 1, col3 + 1);
                             }
                         }
                         count += cnt2;
@@ -2844,7 +2844,11 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
     mflags = 0;
     cflags = 0;
     char *tb = GetNxtBuf();
+#ifdef WIN32 // format 64-bit value
     sprintf(tb,"%s eflg=%I64x mflg=%I64x cflg=%I64x ",type, eflg, mflg, cflg);
+#else    
+    sprintf(tb,"%s eflg=%" PRIx64 " mflg=%" PRIx64 " cflg=%" PRIx64 " ",type, eflg, mflg, cflg);
+#endif
     // do whole puzzle
     for (row = 0; row < 9; row++) {
         for (col = 0; col < 9; col++) {

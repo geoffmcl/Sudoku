@@ -537,7 +537,7 @@ int Do_Locked_Excl2( PABOX2 pb, vRC *pelims, vRC *pelimby )
             tbox = j;
             ps = &prc->set;
             COPY_SET(&tset,ps);
-			sprintf(tb,"Box %d %s COL [%d] elim ", i + 1, Get_RC_RCBS_Stg(prc), tcol + 1);
+			sprintf(tb,"Box %d %s COL [%d] elim ", (int)(i + 1), Get_RC_RCBS_Stg(prc), tcol + 1);
             // Now does any candidate(s) for this slot ONLY exist in this ROW in THIS BOX
 			// and it MUST exist twice in this BOX
 			ZERO_SET(&tset2);
@@ -615,7 +615,7 @@ int Do_Locked_Excl2( PABOX2 pb, vRC *pelims, vRC *pelimby )
             }
             if (!cnt) {
                 cnt = 0;
-				sprintf(tb,"Box %d %s ROW [%d] elim ", i + 1, Get_RC_RCBS_Stg(prc), trow + 1);
+				sprintf(tb,"Box %d %s ROW [%d] elim ", (int)(i + 1), Get_RC_RCBS_Stg(prc), trow + 1);
                 COPY_SET(&tset,&ps); // get the set of cand back
                 // Now does any candidate(s) for this slot ONLY exist in this ROW in THIS BOX
     			// and it MUST exist twice in this BOX

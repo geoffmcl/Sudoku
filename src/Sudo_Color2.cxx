@@ -701,7 +701,7 @@ int Mark_Color_Rule_2( PABOX2 pb, int setval, vRC &members, RCRCB &memrcb )
         pvbox = &memrcb.vboxs[i];
         max3 = pvrow->size(); // examine the ROW
         if (max3) {
-            sprintf(tb,"Examine ROW %d for %d cells", i + 1, max3);
+            sprintf(tb,"Examine ROW %d for %d cells", i + 1, (int)max3);
             OUTITCS2(tb);
         }
         *tb = 0;
@@ -718,7 +718,7 @@ int Mark_Color_Rule_2( PABOX2 pb, int setval, vRC &members, RCRCB &memrcb )
         OUTITCS2(tb);
         max3 = pvcol->size(); 
         if (max3) {
-            sprintf(tb,"Examine COL %d for %d cells", i + 1, max3);
+            sprintf(tb,"Examine COL %d for %d cells", i + 1, (int)max3);
             OUTITCS2(tb);
         }
         *tb = 0;
@@ -734,7 +734,7 @@ int Mark_Color_Rule_2( PABOX2 pb, int setval, vRC &members, RCRCB &memrcb )
         }
         max3 = pvbox->size();
         if (max3) {
-            sprintf(tb,"Examine BOX %d for %d cells", i + 1, max3);
+            sprintf(tb,"Examine BOX %d for %d cells", i + 1, (int)max3);
             OUTITCS2(tb);
         }
         for (k = 0; k < max3; k++) {

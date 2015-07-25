@@ -716,7 +716,8 @@ int AIC_Follow_Chain( PAICSTR paic )
             AIC_Follow_Chain( paic );
             if (add_debug_aic3) {
                 rcpair = pvrcp->back();
-                sprintf(tb,"AIC Drop: SS ",Get_RC_Stg(&rcpair.rowcol[0],setval), setval);
+                //sprintf(tb,"AIC Drop: SS ",Get_RC_Stg(&rcpair.rowcol[0],setval), setval);
+                strcpy(tb,"AIC Drop: SS ");
                 Append_RC_Stg(tb,&rcpair.rowcol[0],setval);
                 strcat(tb,"-");
                 Append_RC_Stg(tb,&rcpair.rowcol[1],setval2);

@@ -47,7 +47,7 @@ void Flag_SL_Pairs_and_Clear_Color( PABOX2 pb, int setval, vRCP *pp )
                 } else {
                     sprintf(tb,"Cells %s & %s, for setval %d do NOT APPEAR LINKED!",
                         Get_RC_setval_color_Stg(prc1,setval),
-                        Get_RC_setval_color_Stg(prc2,setval) );
+                        Get_RC_setval_color_Stg(prc2,setval), setval );
                     EXPLODE(tb);
                 }
             }

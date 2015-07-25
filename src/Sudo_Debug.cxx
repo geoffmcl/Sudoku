@@ -338,7 +338,11 @@ void Debug_Flag_Set(uint64_t flag)
         if (flag & test) {
             pfn = Flag2Name(test);
             if (strcmp(pfn,NoFlag) == 0) {
+#ifdef WIN32    // format for 64-bit value
                 sprintf(EndBuf(tb),"0x%I64X ",test);
+#else                
+                sprintf(EndBuf(tb),"%" PRIx64 " ",test);
+#endif
             }
         }
         test <<= 1;
