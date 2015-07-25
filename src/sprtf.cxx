@@ -4,12 +4,12 @@
 #include "Sudoku.hxx"
 #include "sprtf.hxx"
 #include "Sudo_Paint.hxx"
-#ifdef WIN32
+#ifdef WIN32    // include 'windows.h'
 #include <Windows.h>
-#else
+#else   // !WIN32 - include 'stdarg.h' and 'sys/time.h'
 #include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
 #include <sys/time.h>  /* gettimeofday() */
-#endif
+#endif  // WIN32 y/n
 
 // sprtf.cxx
 #ifndef _CRT_SECURE_NO_DEPRECATE
@@ -108,11 +108,11 @@ char * get_log_file( void )
    return logfile;
 }
 
-#ifdef WIN32
+#ifdef WIN32    // STRCMP macro = strcmpi
 #define STRCMP  strcmpi
-#else
+#else   // !WIN32 - STRCMP macro = strcmp
 #define STRCMP  strcmp
-#endif
+#endif  // WIN32 y/n
 
 void   set_log_file( char * nf )
 {
@@ -125,7 +125,7 @@ void   set_log_file( char * nf )
    }
 }
 
-#ifdef WIN32
+#ifdef WIN32    // use SYSTEMTIME for date,time string gen
 ///////////////////////////////////////////////////////////////////////
 void add_date_stg( char *ps, SYSTEMTIME *pst )
 {
@@ -173,7 +173,7 @@ char *get_date_time_stg()
     add_time_stg( EndBuf(ps), &st );
     return ps;
 }
-#else // !WIN32
+#else // !WIN32 - use struct timeval for date, time generation - need gettimeofday()
 
 void add_date_stg( char *ps, struct timeval *ptv )
 {
@@ -219,7 +219,7 @@ char *get_date_time_stg()
     return ps;
 }
 
-#endif  // WIN32
+#endif  // WIN32 y/n - different get date, time string
 
 static void oi( char * ps )
 {

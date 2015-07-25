@@ -8,16 +8,16 @@
 #include "Sudo_Menu.hxx"
 #include "Sudo_Ini.hxx"
 #include "sprtf.hxx"
-#ifdef WIN32
+#ifdef WIN32    // include 'direct.h' for _getcwd()
 #include <direct.h> // for _getcwd()
-#endif
+#endif  // WIN32 'direct.h'
 
 #ifndef STRCMPFIL
-#ifdef WIN32
+#ifdef WIN32    // windows STRCMPFIL macro = strcmpi
 #define STRCMPFIL  strcmpi
-#else
+#else   // !WIN32 - STRCMPFIL macro = strcmp
 #define STRCMPFIL  strcmp
-#endif
+#endif  // WIN32 y/n - compare file macro
 #endif
 
 
@@ -205,7 +205,7 @@ char szDbg[] = "Debug";
 char szStr[] = "Strategies";
 
 /////////////////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
+#ifdef WIN32    // INI file handling for windows
 /////////////////////////////////////////////////////////////////////////////////////////
 
 DWORD Add_INI_Files_to_Menu()
@@ -949,7 +949,7 @@ void WriteINI( void )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-#else // !#ifdef WIN32
+#else // !#ifdef WIN32 - TODO: INI file handling for not windows
 /////////////////////////////////////////////////////////////////////////////////////////
 void ReadINI( void )
 {
@@ -992,6 +992,6 @@ void Add_to_INI_File_List( char * pfile )
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
-#endif // #ifdef WIN32 y/n
+#endif // #ifdef WIN32 y/n - INI file handling
 
 // eof - Sudo_Ini.cxx

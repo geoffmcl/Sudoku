@@ -1,16 +1,16 @@
 // Sudo_Thread.cxx
 
 #include "Sudoku.hxx"
-#ifdef WIN32
+#ifdef WIN32    // include 'process.h'
 #include <process.h>
-#endif
+#endif  // WIN32 process.h
 #include "Sudo_Time.hxx"
 
 static PABOX2 pb_copy = 0;
 static int got_solution = 0;
 static int in_thread = 0;
 
-#ifdef WIN32
+#ifdef WIN32    // window THREAD handling
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 static HANDLE hThread = 0;
 static unsigned threadID = 0;
@@ -90,7 +90,7 @@ bool StartThread()
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-#else // #ifdef WIN32
+#else // !#ifdef WIN32 - TODO: Need alterative THREAD handling
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 int get_solution_value( int row, int col )
 {
@@ -100,6 +100,6 @@ int get_solution_value( int row, int col )
     return 0;
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-#endif // #ifdef WIN32
+#endif // #ifdef WIN32 y/n - THREAD handling
 
 // eof - Sudo_Thread.cxx

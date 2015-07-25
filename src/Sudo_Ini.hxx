@@ -1,7 +1,7 @@
 // Sudo_Ini.hxx
 #ifndef _SUDO_INI_HXX
 #define _SUDO_INI_HXX
-#ifdef WIN32
+#ifdef WIN32    // Windows.h include
 #include <Windows.h>
 #endif
 

@@ -8,11 +8,11 @@
 
 #include "Sudoku.hxx"
 
-#ifdef WIN32
+#ifdef WIN32    // windows STRICMP macro = stricmp
 #define STRICMP stricmp
-#else
+#else           // !WIN32  STRICMP macro = strcasecmp
 #define STRICMP strcasecmp
-#endif
+#endif  // WIN32 y/n - STRICMP macro
 
 #define EOL_CHRS "\r\n"
 #define NUL_VAL "0"
@@ -45,7 +45,7 @@ char *Get_Act_File() { return g_pAct_File; }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32
+#ifdef WIN32    // windows commctrl.h dialogs
 ///////////////////////////////////////////////////////////////////////////////////////////
 #include <CommCtrl.h>
 
@@ -2170,7 +2170,7 @@ VOID Do_ID_FILE_OPENDIRECTORY(HWND hWnd)
 // *********************************************
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-#else // !#ifdef WIN32
+#else // !#ifdef WIN32 - TODO: Need alternative dialog code like ID_FILE_OPEN,...
 ///////////////////////////////////////////////////////////////////////////////////////////
 VOID Do_ID_FILE_OPEN(HWND hWnd)
 {
@@ -2224,7 +2224,7 @@ void Auto_Load_file(HWND hWnd)
     sprtf("TODO: Auto_Load_file() not yet ported!\n");
 }
 ///////////////////////////////////////////////////////////////////////////////////////////
-#endif // #ifdef WIN32 y/n
+#endif // #ifdef WIN32 y/n - load and save file services
 
 bool Save_a_File2( HWND hWnd, char *pf, int flag )
 {

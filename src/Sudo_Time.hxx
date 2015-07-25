@@ -21,7 +21,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#ifdef WIN32   // Windows system specific
+#ifdef WIN32   // Windows system specific - include windows.h
 #include <windows.h>
 #else          // Unix based system specific
 #include <sys/time.h>
@@ -49,14 +49,14 @@ private:
     double startTimeInMicroSec;                 // starting time in micro-second
     double endTimeInMicroSec;                   // ending time in micro-second
     int    stopped;                             // stop flag 
-#ifdef WIN32
+#ifdef WIN32    // Use LARGE_INTEGER
     LARGE_INTEGER frequency;                    // ticks per second
     LARGE_INTEGER startCount;                   //
     LARGE_INTEGER endCount;                     //
-#else
+#else   // !WIN32 - Use 'timeval
     timeval startCount;                         //
     timeval endCount;                           //
-#endif
+#endif  // WIN32 y/n
     char _tm_buf[128];
 };
 

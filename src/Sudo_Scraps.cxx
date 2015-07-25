@@ -780,9 +780,9 @@ void run_test2(PABOX2 pb)
     msg.str("");
     vGrid.clear();
     sudo_main();
-#ifdef WIN32
+#ifdef WIN32 // windows MessageBox
     MessageBox( g_hWnd, msg.str().c_str(), "Test Solution", MB_OK | MB_ICONINFORMATION );
-#endif    
+#endif // WIN32 MessageBox - TODO: alternative    
     if (vGrid.size()) {
         Write_Solution_File();
     }

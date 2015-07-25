@@ -88,20 +88,20 @@ BOOL ChoosNewColor( HWND hWnd, COLORREF crCurrent, COLORREF *pcrChoice )
     pcc->lCustData      = 0;
     pcc->lpfnHook       = 0;
     pcc->lpTemplateName = 0;
-#ifdef WIN32
+#ifdef WIN32    // use windows ChooseColor( pcc ) service
     BOOL bRet = ChooseColor( pcc );
     if (bRet) {
         *pcrChoice = pcc->rgbResult;
     }
 
     return bRet;
-#else // #ifdef WIN32
-    sprtf("ChoosNewColor not yet implemented in unix\n");
+#else // #ifdef WIN32 - TODO: Need alternative choose-color
+    sprtf("TODO: ChoosNewColor not yet implemented in unix\n");
     return 0;
-#endif // WIN32 y.n
+#endif // WIN32 y/n - ChooseColor dialog
 }
 
-#ifdef WIN32
+#ifdef WIN32    // Windows Select color dialog
 INT_PTR Do_INIT_SelectColor(HWND hDlg)
 {
     PCLRSTR pcs = &clrstr[0];
@@ -282,14 +282,14 @@ VOID Do_ID_OPTIONS_SELECTCOLORS(HWND hWnd)
 
 }
 
-#else // #ifdef WIN32
+#else // !#ifdef WIN32 - TODO: Need alternative select color dialog
 
 VOID Do_ID_OPTIONS_SELECTCOLORS(HWND hWnd)
 {
-    sprtf("Select color not implmented in uxix\n");
+    sprtf("TODO: Select color not implmented in uxix\n");
 }
 
-#endif // #ifdef WIN32 y/n
+#endif // #ifdef WIN32 y/n for Do_ID_OPTIONS_SELECTCOLORS
 
 
 

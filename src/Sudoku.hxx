@@ -30,15 +30,15 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#ifdef WIN32
+#ifdef WIN32    // Include 'resource.h' and 'windows.h'
 #include "resource.h"
 // #define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
 // Windows Header Files:
 #include <windows.h>
-#else
+#else   // !WIN32 - Include special 'resourceu.h', and 'unixglue.hxx'
 #include "resourceu.h"
 #include "unixglue.hxx"
-#endif
+#endif  // WIN32 y/n
 
 // C RunTime Header Files
 #include <stdlib.h>
@@ -46,14 +46,14 @@
 #include <memory.h>
 #include <vector>
 #include <string>
-#ifdef WIN32
+#ifdef WIN32    // include 'tchar.h', and special 'unistd.h'
 #include <tchar.h>
 #include "unistd.h"
-#else
+#else   // !WIN32 - include 'stdint.h', 'unistd.h', 'inttypes.h'
 #include <stdint.h>
 #include <unistd.h>
 #include <inttypes.h> // for PRIx64, ...
-#endif
+#endif  // WIN32 y/n
 
 using namespace std;
 
@@ -293,15 +293,15 @@ extern BOOL res_scn_rect;
 #define MEOL "\r\n"
 #endif
 
-#ifdef WIN32
+#ifdef WIN32    // Use Windows 'MessgeBox'
 #define  MB(a) MessageBox( g_hWnd, a, "CRITICAL ERROR", MB_OK | MB_ICONINFORMATION )
 #define  MB2(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNO )
 #define  MB3(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNOCANCEL )
-#else // !#ifdef WIN32
+#else // !#ifdef WIN32 - TODO: Need 'MessageBox' replacement - presently just 'sprtf'
 #define  MB(a) sprtf("%s %s\n", "CRITICAL ERROR", a )
 #define  MB2(a,b) sprtf("%s %s\n", b, a )
 #define  MB3(a,b) sprtf("%s %s\n", b, a )
-#endif // #ifdef WIN32 y/n
+#endif // #ifdef WIN32 y/n - MessageBox or NOT
 
 #endif // #ifndef _SUDOKU_HXX_
 // eof - Sudoku.hxx

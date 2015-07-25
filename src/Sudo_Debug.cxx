@@ -189,7 +189,7 @@ DBGLIST DbgList[] = {
     { 0, 0, 0, 0, 0, 0, 0 }
 };
 
-#ifdef WIN32
+#ifdef WIN32    // windows select debug options dialog
 
 BOOL Do_INIT_DebugOptions(HWND hDlg)
 {
@@ -234,7 +234,7 @@ VOID Do_ALL_Dbg_OFF(HWND hDlg)
     }
 }
 
-#endif // #ifdef WIN32
+#endif // #ifdef WIN32 - select debug option dialog
 
 void Out_Debug_Set()
 {
@@ -338,11 +338,11 @@ void Debug_Flag_Set(uint64_t flag)
         if (flag & test) {
             pfn = Flag2Name(test);
             if (strcmp(pfn,NoFlag) == 0) {
-#ifdef WIN32    // format for 64-bit value
+#ifdef WIN32    // format for 64-bit value - I64
                 sprintf(EndBuf(tb),"0x%I64X ",test);
-#else                
+#else           // !WIN32 - use PRIx64      
                 sprintf(EndBuf(tb),"%" PRIx64 " ",test);
-#endif
+#endif          // WIN32 y/n
             }
         }
         test <<= 1;

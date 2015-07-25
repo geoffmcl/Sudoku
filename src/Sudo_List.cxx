@@ -2,7 +2,7 @@
 
 #include "Sudoku.hxx"
 
-#ifdef WIN32
+#ifdef WIN32 // windows LISTVIEW control
 #include <CommCtrl.h>
 
 #ifdef ADD_LISTVIEW
@@ -367,7 +367,7 @@ void LVAddExStyle(HWND hwndListView, DWORD dwNewStyle)
 
 }
 
-#endif // #ifdef WIN32
+#endif // #ifdef WIN32 // windows LISTVIEW control
 
 
 // eof - Sudo_List.cxx

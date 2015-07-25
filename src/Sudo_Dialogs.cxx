@@ -33,7 +33,7 @@ bool Show_SL_Value( int setval )
     return false;
 }
 
-#ifdef WIN32
+#ifdef WIN32    // window commctrl dialogs
 //////////////////////////////////////////////////////
 
 #ifndef _MSC_VERS
@@ -1736,7 +1736,7 @@ VOID Do_ID_OPTIONS_MISCOPTIONS(HWND hWnd)
 }
 
 //////////////////////////////////////////////////////
-#else // #ifdef WIN32
+#else // !#ifdef WIN32 - TODO: Need alternative dialogs
 //////////////////////////////////////////////////////
 VOID Do_ID_OPTIONS_ENABLESTRATEGIES(HWND hWnd)
 {
@@ -1749,7 +1749,7 @@ VOID Do_ID_OPTIONS_MISCOPTIONS(HWND hWnd)
 }
 
 //////////////////////////////////////////////////////
-#endif // #ifdef WIN32
+#endif // #ifdef WIN32 y/n - option dialogs
 //////////////////////////////////////////////////////
 
 // ====================================================================

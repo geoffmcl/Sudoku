@@ -3,7 +3,7 @@
 #include "Sudoku.hxx"
 
 // Sometimes is is just better to SEE the image ;=))
-#ifdef WIN32
+#ifdef WIN32    // use Windows BMP genration
 
 // WIDTHBYTES takes # of bits in a scan line and rounds up to nearest
 //  dword (32-bits). The # of bits in a scan line would typically be
@@ -303,14 +303,14 @@ Cleanup:
     set_repaint(false);
 }
 
-#else // !#ifdef WIN32
+#else // !#ifdef WIN32 - TODO: Need alternative to write an image, bmp or otherwise
 void Do_Write_BMP( HWND hWnd )
 {
-    sprtf("Write BMP file NOT implemented in unix yet!\n");
+    sprtf("TODO: Write BMP file NOT implemented in unix yet!\n");
     set_repaint2();
 }
 
-#endif // #ifdef WIN32 y/n
+#endif // #ifdef WIN32 y/n - write image file of GUI
 
 // eof - Sudo_BMP.cxx
 

@@ -2844,11 +2844,12 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
     mflags = 0;
     cflags = 0;
     char *tb = GetNxtBuf();
-#ifdef WIN32 // format 64-bit value
+#ifdef WIN32 // format 64-bit value - I64
     sprintf(tb,"%s eflg=%I64x mflg=%I64x cflg=%I64x ",type, eflg, mflg, cflg);
-#else    
+#else   // !WIN32 - use PRIx64    
     sprintf(tb,"%s eflg=%" PRIx64 " mflg=%" PRIx64 " cflg=%" PRIx64 " ",type, eflg, mflg, cflg);
-#endif
+#endif  // WIN32 y/n
+
     // do whole puzzle
     for (row = 0; row < 9; row++) {
         for (col = 0; col < 9; col++) {

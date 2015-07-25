@@ -7,9 +7,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include "Sudoku.hxx"
-#ifdef WIN32
+#ifdef WIN32 // windows - include 'shlwapi.h'
 #include <shlwapi.h>
-#endif
+#endif // WIN32 'shlwapi.h'
 
 typedef vector<FILLSERV> vFSS;
 
@@ -120,7 +120,7 @@ bool Col_in_RC_Vector( vRC & vrc, int row, int col )
 }
 
 
-#ifdef WIN32
+#ifdef WIN32 // windows - get DLL version
 ///////////////////////////////////////////////////////////////////////
 #define PACKVERSION(major,minor) MAKELONG(minor,major)
 
@@ -175,13 +175,13 @@ BOOL Got_Comm_Ctrl6()
     return FALSE;
 }
 ///////////////////////////////////////////////////////////////////////
-#endif // #ifdef WIN32
+#endif // #ifdef WIN32 - windows - get dll version
 
-#ifdef WIN32
+#ifdef WIN32    // M_IS_DIR macro = _S_IFDIR
 #define M_IS_DIR    _S_IFDIR
-#else
+#else           // !WIN32 - M_IS_DIR macro = S_IFDIR
 #define M_IS_DIR    S_IFDIR
-#endif
+#endif          // WIN32 - M_IS_DIR macro
 
 static struct stat _s_buf;
 struct stat *Get_Stat_Buf() { return &_s_buf; }

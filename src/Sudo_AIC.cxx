@@ -159,7 +159,7 @@ char *Get_AIC_RCPAIR_Stg(PRCPAIR prcp)
 
 void Pnt_Chain( vRCP *pvrcp )
 {
-#ifdef WIN32
+#ifdef WIN32    // windows HDC painting
     HDC hdc = GetDC(g_hWnd);
     HANDLE bitmap = 0;
     bool use_copy = false;
@@ -180,7 +180,9 @@ void Pnt_Chain( vRCP *pvrcp )
             BitBlt(hdc,0,0,RECTWIDTH(rc),RECTHEIGHT(rc),hdcmem,0,0,SRCCOPY);
         ReleaseDC(g_hWnd,hdc);
     }
-#endif 
+#else // !WIN32 - TODO: alternative sceen painting
+    // TODO: paint a chain to HDC
+#endif // WIN32 y/n
 }
 
 void Store_AIC_Chain( PAICSTR paic )

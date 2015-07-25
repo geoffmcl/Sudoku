@@ -2,7 +2,7 @@
 #ifndef _SUDO_LIST_HXX_
 #define _SUDO_LIST_HXX_
 
-#ifdef WIN32
+#ifdef WIN32    // Add COMCTL32 lib
 #pragma comment ( lib, "COMCTL32" )
 #endif
 

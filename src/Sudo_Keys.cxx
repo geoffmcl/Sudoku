@@ -19,7 +19,7 @@ bool Check_Exit()
 
 VOID Do_WM_KEYDOWN( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
-#ifdef WIN32
+#ifdef WIN32 // windows WM_KEYDOWN handling
 ///////////////////////////////////////////////////////////////////
     switch (wParam)
     {
@@ -123,12 +123,13 @@ VOID Do_WM_KEYDOWN( HWND hWnd, WPARAM wParam, LPARAM lParam )
         }
     }
 ///////////////////////////////////////////////////////////////////
-#endif // #ifdef WIN32
+#else  // !WIN32 - TODO: KEYDOWN handling
+#endif // WIN32 y/n - KEYDOWN handling
 }
 
 VOID Do_WM_KEYUP( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
-#ifdef WIN32
+#ifdef WIN32    // windows WM_KEYUP handling
 ///////////////////////////////////////////////////////////////////
    switch (wParam)
    {
@@ -163,7 +164,8 @@ VOID Do_WM_KEYUP( HWND hWnd, WPARAM wParam, LPARAM lParam )
        break;
    }
 ///////////////////////////////////////////////////////////////////
-#endif // #ifdef WIN32
+#else // !WIN32 - TODO: keyup handling
+#endif // WIN32 y/n - keyup handling
 }
 
 // WM_CHAR
