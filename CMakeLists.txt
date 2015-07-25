@@ -32,12 +32,10 @@ if(WIN32 AND MSVC)
     set(MSVC_FLAGS "-DNOMINMAX -D_USE_MATH_DEFINES -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS -D__CRT_NONSTDC_NO_WARNINGS")
     # turn off various warnings
     # foreach(warning 4244 4251 4267 4275 4290 4786 4305 4996)
-    #     set(MSVC_FLAGS "${MSVC_FLAGS} /wd${warning}")
-    # endforeach()
-    #if (${MSVC_VERSION} EQUAL 1600)
-    #    set( MSVC_LD_FLAGS "/FORCE:MULTIPLE" )
-    #endif ()
-    #set(NOMINMAX 1)
+    foreach(warning 4996)
+        set(MSVC_FLAGS "${MSVC_FLAGS} /wd${warning}")
+    endforeach()
+    
     # to distinguish between debug and release lib in windows
     set( CMAKE_DEBUG_POSTFIX "d" ) # little effect in unix
 else()
@@ -168,6 +166,9 @@ target_Link_libraries(${name} ${add_LIBS} )
 endif ()
 if (MSVC)
     set_target_properties(${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+if (NOT BUILD_WIN32_EXE)
+    set_target_properties(${name} PROPERTIES OUTPUT_NAME Sudo-con)
 endif ()
 
 # deal with install, if required

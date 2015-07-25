@@ -21,6 +21,8 @@
 
 #include "Sudoku.hxx"
 
+static const char *module = "Sudoku";
+
 // Global Variables:
 BOOL        g_bChanged = FALSE;
 HWND        g_hWnd = 0;
@@ -53,6 +55,31 @@ BOOL res_scn_rect = FALSE;
 #ifdef ADD_LIST_VIEW
 HWND g_hListBox = 0;
 #endif
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// general services
+int Get_Spots(PABOX2 pb)
+{
+    int spots = 0;
+    int row, col, val;
+    for (row = 0; row < 9; row++) {
+        for (col = 0; col < 9; col++) {
+            val = pb->line[row].val[col];
+            if (val)
+                spots++;
+        }
+    }
+    return spots;
+}
+
+
+int Get_Spot_Count()
+{
+    int spots = 0;
+    PABOX2 pb = get_curr_box();
+    return Get_Spots(pb);
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
@@ -309,28 +336,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 void Post_Command( WPARAM cmd )
 {
     PostMessage(g_hWnd, WM_COMMAND, cmd, 0);
-}
-
-int Get_Spots(PABOX2 pb)
-{
-    int spots = 0;
-    int row, col, val;
-    for (row = 0; row < 9; row++) {
-        for (col = 0; col < 9; col++) {
-            val = pb->line[row].val[col];
-            if (val)
-                spots++;
-        }
-    }
-    return spots;
-}
-
-
-int Get_Spot_Count()
-{
-    int spots = 0;
-    PABOX2 pb = get_curr_box();
-    return Get_Spots(pb);
 }
 
 bool Check_Clear() 
@@ -799,10 +804,70 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 ////////////////////////////////////////////////////////////////////////////////////////////
 #else // !#ifdef WIN32 - standard console app using main()
 ////////////////////////////////////////////////////////////////////////////////////////////
+
+void Post_Command( WPARAM cmd )
+{
+    sprtf("TODO: Post_Command( %d ) to be done...\n", (int)cmd );
+}
+
+static const char *usr_input = 0;
+
+void give_help( char *name )
+{
+    printf("%s: usage: [options] usr_input\n", module);
+    printf("Options:\n");
+    printf(" --help  (-h or -?) = This help and exit(2)\n");
+    // TODO: More help
+}
+
+int parse_args( int argc, char **argv )
+{
+    int i,i2,c;
+    char *arg, *sarg;
+    for (i = 1; i < argc; i++) {
+        arg = argv[i];
+        i2 = i + 1;
+        if (*arg == '-') {
+            sarg = &arg[1];
+            while (*sarg == '-')
+                sarg++;
+            c = *sarg;
+            switch (c) {
+            case 'h':
+            case '?':
+                give_help(argv[0]);
+                return 2;
+                break;
+            // TODO: Other arguments
+            default:
+                printf("%s: Unknown argument '%s'. Try -? for help...\n", module, arg);
+                return 1;
+            }
+        } else {
+            // bear argument
+            if (usr_input) {
+                printf("%s: Already have input '%s'! What is this '%s'?\n", module, usr_input, arg );
+                return 1;
+            }
+            usr_input = strdup(arg);
+        }
+    }
+    if (!usr_input) {
+        printf("%s: No user input found in command!\n", module);
+        return 1;
+    }
+    return 0;
+}
+
+
 int main( int argc, char **argv )
 {
-    printf("Only run in Windows for now...\n");
-    return 1;
+    int iret = parse_args( argc, argv );
+    if (iret) 
+        return iret;
+    // TODO: Add actions of app
+
+    return iret;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
