@@ -41,6 +41,7 @@ public:
     double getElapsedTimeInMilliSec();          // get elapsed time in milli-second
     double getElapsedTimeInMicroSec();          // get elapsed time in micro-second
     char  *getTimeStg();
+    char  *setTimeStg(char *cp,double secs);    // set time string in users buffer
 
 protected:
 

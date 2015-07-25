@@ -132,10 +132,8 @@ double Timer::getElapsedTime()
     return this->getElapsedTimeInSec();
 }
 
-char *Timer::getTimeStg()
+char  *Timer::setTimeStg(char *cp,double elap)
 {
-    char *cp = _tm_buf;
-    double elap = this->getElapsedTimeInSec();
     bool neg = false;
     char *units;
     if (elap < 0.0) {
@@ -202,6 +200,14 @@ char *Timer::getTimeStg()
         res = "-";
     }
     sprintf(cp,"%s%0.1f %s",res,elap,units);
+    return cp;
+}
+
+char *Timer::getTimeStg()
+{
+    char *cp = _tm_buf;
+    double elap = this->getElapsedTimeInSec();
+    setTimeStg(cp,elap);
     return cp;
 }
 
