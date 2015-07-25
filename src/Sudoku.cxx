@@ -20,8 +20,20 @@
    ================================================== */
 
 #include "Sudoku.hxx"
+#include "Sudo_Time.hxx"
 
 static const char *module = "Sudoku";
+#ifndef SPRTF
+#define SPRTF printf
+#endif
+
+#ifndef DEF_FILE
+#ifdef WIN32    // windows default debug file - TODO: Add to CMakeLists.txt
+#define DEF_FILE    "C:\\GTools\\tools\\Sudoku\\examples\\y-wing.txt"
+#else // !WIN32 // unix default debug file
+#define DEF_FILE    "/home/geoff/projects/Sudoku/examples/y-wing.txt"
+#endif // WIN32 y/n - def dbg file
+#endif
 
 // Global Variables:
 BOOL        g_bChanged = FALSE;
@@ -80,6 +92,26 @@ int Get_Spot_Count()
     return Get_Spots(pb);
 }
 
+void add_app_begin()
+{
+    int curr = add_sys_time(1);
+    sprtf("Begin Application\n");
+    add_sys_time(curr);
+#ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
+    if (res_scn_rect) {
+        sprtf("Screen Workarea [%s]\n", Get_Rect_Stg(&g_sRect));
+    } else {
+        sprtf("Get workarea FAILED!\n");
+    }
+#endif // #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
+}
+
+void add_app_end()
+{
+    int curr = add_sys_time(1);
+    sprtf("End Application\n");
+    add_sys_time(curr);
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
@@ -234,24 +266,6 @@ int ParseArgs(int argc, char **argv)
     return 0;
 }
 
-void add_app_begin()
-{
-    int curr = add_sys_time(1);
-    sprtf("Begin Application\n");
-    add_sys_time(curr);
-    if (res_scn_rect) {
-        sprtf("Screen Workarea [%s]\n", Get_Rect_Stg(&g_sRect));
-    } else {
-        sprtf("Get workarea FAILED!\n");
-    }
-}
-
-void add_app_end()
-{
-    int curr = add_sys_time(1);
-    sprtf("End Application\n");
-    add_sys_time(curr);
-}
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
@@ -849,9 +863,25 @@ int parse_args( int argc, char **argv )
                 printf("%s: Already have input '%s'! What is this '%s'?\n", module, usr_input, arg );
                 return 1;
             }
+            if (is_file_or_directory(arg) == 1)
+                Reset_Active_File(arg);
+            else {
+                char * tb = GetNxtBuf();
+                sprintf(tb,"ERROR: Unable to 'stat' file\n%s\nCheck file name and location\nWill abort on OK",arg);
+                MB(tb);
+                return 1;
+            }
             usr_input = strdup(arg);
         }
     }
+#ifndef NDEBUG
+    if (!usr_input) {
+        const char *def_file = DEF_FILE;
+        if (is_file_or_directory((char *)def_file) == 1) {
+            usr_input = strdup(def_file);
+        }
+    }
+#endif
     if (!usr_input) {
         printf("%s: No user input found in command!\n", module);
         return 1;
@@ -859,14 +889,152 @@ int parse_args( int argc, char **argv )
     return 0;
 }
 
+DWORD msSleep = 55; // a very short time
+static int iSolveStage = -1;
+
+void set_total_count()
+{
+    int row, col, val;
+    uint64_t cellflg;
+    PABOX2 pb = get_curr_box();
+    int len;
+    SET set;
+    int offset = 2;
+    PSET ps;
+
+    total_empty_count = 0;
+    // Keep list of TWO types of CELLS with NO VALUE
+    // 1. Cells that have NO potential possibilities - this means the puzzle is LOCKED, BAD, FAILING
+    // 2. Cells that have just ONE potential value - maybe have key to fill these in...
+    for (row = 0; row < 9; row++) {
+        Fill_SET(&set); // start with ALL values ON for this ROW
+        // process COL by COL
+        for (col = 0; col < 9; col++) {
+            val = pb->line[row].val[col];
+            ps = &pb->line[row].set[col];
+            cellflg = pb->line[row].set[col].cellflg;
+            if (val) {
+                // PAINT A VALUE
+                set.val[val - 1] = 0;   // clear potential values
+                Zero_SET(ps);           // MAYBE should NOT do this, but for now...
+            } else {
+                total_empty_count++;
+            }
+        }   // for (col = 0; col < 9; col++)
+        // Done all columns
+    }   // for each row
+}
+
+// now it is loaded, and analyses, or in the process of doing that,
+// we could ID_OPTIONS_ONESTEP, or an outright ID_OPTIONS_SOLVE
+// TODO: A user option to choose this, but heer choose one step, since I think this gives more informat
+// if (total_empty_count == 0) { Do_Solved_Message(); } else {
+//    Do_ID_OPTIONS_ONESTEP(hWnd); }
+// OR case ID_OPTIONS_SOLVE: Start_Auto_Solve();
+int solve_the_Sudoku()
+{
+    int iret = 0;
+    bool ok = true;
+    HWND hWnd = 0;
+    static Timer *pAutoTime = 0;
+    static double last_seconds = -1.0;
+    static Timer *pSleep = 0;
+    double secs_in_sleep = 0.0;
+    if (!pAutoTime)
+        pAutoTime = new Timer;
+    if (!pSleep)
+        pSleep = new Timer;
+
+    SPRTF("\n%s: Commencing step by step solution...\n", module);
+    pAutoTime->start();
+    last_seconds = -1.0;
+    last_seconds = pAutoTime->getElapsedTime();
+    g_bAutoSolve = true;    // repeat steps
+    set_total_count();
+
+    while(ok)
+    {
+        PABOX2 pb = get_curr_box();
+        if (pb->iStage != iSolveStage) {
+            iSolveStage = pb->iStage;
+            // take a STEP
+            Do_ID_OPTIONS_ONESTEP( hWnd );
+            set_total_count();
+            // if no change in 'stage' then failed or finished
+            if (pb->iStage == iSolveStage) {
+                g_bAutoSolve = false;
+                pAutoTime->stop();
+                char *tb = pAutoTime->getTimeStg();
+                char *tb2 = GetNxtBuf();
+                pSleep->setTimeStg(tb2,secs_in_sleep);
+                sprtf("\nNo stage change! Ended Autosolve after %s, but slept for %s\n", tb, tb2);
+                if (total_empty_count == 0) {
+                    if (!done_end_dialog) {
+                        done_end_dialog = true;
+                        Do_Solved_Message();
+                    }
+                }
+                ok = false;
+            }
+        }
+        // if stage changed, then maybe solved (or stuck!)
+        if ( ok && (total_empty_count == 0) ) {
+            pAutoTime->stop();
+            g_bAutoSolve = FALSE;
+            g_bAutoComplete = false;
+            char *tb = pAutoTime->getTimeStg();
+            char *tb2 = GetNxtBuf();
+            pSleep->setTimeStg(tb2,secs_in_sleep);
+            sprtf("\nSolved after %s, but slept for %s\n", tb, tb2);
+            if (!done_end_dialog) {
+                done_end_dialog = true;
+                Do_Solved_Message();
+            }
+            ok = false;
+        }
+
+        ok = g_bAutoSolve;
+        if (ok) {
+            bool wait = true;
+            // could add a user delay, say if user wanted to read the console ouput quietly...
+            while (wait) {
+                double new_secs = pAutoTime->getElapsedTime();
+                double new_time = last_seconds + g_AutoDelay;
+                if (new_secs >= new_time) {
+                    last_seconds = new_secs;
+                    wait = false;
+                } else {
+                    pSleep->start();
+                    Sleep(msSleep); // waste time
+                    pSleep->stop();
+                    secs_in_sleep += pSleep->getElapsedTimeInSec();
+                }
+            }
+        }
+    }
+    return iret;
+}
+
 
 int main( int argc, char **argv )
 {
-    int iret = parse_args( argc, argv );
+    int iret = 0;
+    add_std_out(1);
+    iret = parse_args( argc, argv );
     if (iret) 
         return iret;
-    // TODO: Add actions of app
-
+    add_app_begin();
+    SPRTF("%s: Will read input file '%s', and begin a thread to\n"
+        "analyse the puzzle by BRUTE FORCE. By that I mean try every possible\n"
+        "value for each blank cell, and report if the solution is UNIQUE!\n", module, usr_input );
+    if (Load_a_file( 0, (LPTSTR)usr_input )) {
+        Sleep(msSleep);
+        iret = solve_the_Sudoku(); // action of the app
+    } else {
+        sprtf("Error: Failed to load '%s'\n", usr_input);
+        iret = 1;
+    }
+    add_app_end();
     return iret;
 }
 
