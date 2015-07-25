@@ -8,9 +8,12 @@ cmake_minimum_required (VERSION 2.8.8)
 
 project (Sudoku)
 
+# Set EXE type
+set( EXE_TYPE WIN32 )   # set default WIN32 GUI (Uses WinMain() instead of main())
+option( BUILD_WIN32_EXE   "Set OFF to build a console app, using main()"  ON  )
 # Allow developer to select is Dynamic or static library built
 set( LIB_TYPE STATIC )  # set default static
-option( BUILD_SHARED_LIB  "Set ON to build shared (DLL) Libraries" OFF )
+option( BUILD_SHARED_LIB  "Set ON to build shared (DLL) Libraries"        OFF )
 
 # Setup MSVC 3rd party directories if available and needed
 # include( ConfigureMsvc3rdParty )
@@ -39,6 +42,7 @@ if(WIN32 AND MSVC)
     set( CMAKE_DEBUG_POSTFIX "d" ) # little effect in unix
 else()
     set(MSVC_FLAGS "${MSVC_FLAGS} -Wno-write-strings -Wno-unused-variable -Wno-unused-but-set-variable")
+    set(BUILD_WIN32_EXE NO)
 endif()
 
 # Uncomment to REDUCE the Windows configurations buildable
@@ -48,6 +52,15 @@ set (BOOST_CXX_FLAGS "-DBOOST_MULTI_INDEX_DISABLE_SERIALIZATION -DBOOST_BIMAP_DI
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${WARNING_FLAGS_C} ${MSVC_FLAGS} -D_REENTRANT")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${WARNING_FLAGS_CXX} ${MSVC_FLAGS} -D_REENTRANT ${BOOST_CXX_FLAGS}")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${MSVC_LD_FLAGS}")
+
+if (BUILD_WIN32_EXE)
+    set( EXE_TYPE WIN32 )
+    add_definitions( -DBUILD_WIN32_EXE )
+    message(STATUS "*** Building WIN32 GUI EXE - EXE_TYPE=${EXE_TYPE}")
+else ()
+    set( EXE_TYPE )
+    message(STATUS "*** Building console binary (uses main())")
+endif ()
 
 if (BUILD_SHARED_LIB)
     set( LIB_TYPE SHARED )
@@ -149,7 +162,7 @@ else ()
     list(APPEND ${name}_SRCS ${dir}/unixglue.cxx)
     list(APPEND ${name}_HDRS ${dir}/unixglue.hxx)
 endif ()
-add_executable( ${name} WIN32 ${${name}_SRCS} ${${name}_HDRS} )
+add_executable( ${name} ${EXE_TYPE} ${${name}_SRCS} ${${name}_HDRS} )
 if (add_LIBS)
 target_Link_libraries(${name} ${add_LIBS} )
 endif ()
