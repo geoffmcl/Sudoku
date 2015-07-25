@@ -11,7 +11,6 @@ project (Sudoku)
 # Allow developer to select is Dynamic or static library built
 set( LIB_TYPE STATIC )  # set default static
 option( BUILD_SHARED_LIB  "Set ON to build shared (DLL) Libraries" OFF )
-option( BUILD_ONE_LIBRARY "Set ON to combine ALL library sources"  ON  )
 
 # Setup MSVC 3rd party directories if available and needed
 # include( ConfigureMsvc3rdParty )
