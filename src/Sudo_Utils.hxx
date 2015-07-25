@@ -15,6 +15,7 @@ typedef vTIMET::iterator vTIMETi;
 extern bool Is_Value_in_vTIMET( time_t i, vTIMET & vtt );
 
 extern int is_file_or_directory( char * file ); // 1 = file, 2 = dir, 0 = neither!
+extern size_t get_last_file_size(); // must follow the above
 
 extern char *Get_Rect_Stg(PRECT pr);
 extern BOOL Got_Comm_Ctrl6();

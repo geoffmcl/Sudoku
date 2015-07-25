@@ -196,7 +196,11 @@ int is_file_or_directory( char * file )
     }
     return 0;
 }
-
+size_t get_last_file_size() 
+{
+    struct stat *psb = Get_Stat_Buf();
+    return psb->st_size;
+}
 
 char *Get_Rect_Stg(PRECT pr)
 {
