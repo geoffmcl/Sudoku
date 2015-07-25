@@ -22,6 +22,7 @@ extern char *get_date_stg();
 extern char *get_time_stg();
 extern char *get_date_time_stg();
 
+#define SPRTF   sprtf
 
 #endif // #ifndef _SPRTF_HXX_
 // oef - sprtf.hxx
