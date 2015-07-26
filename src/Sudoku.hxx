@@ -293,6 +293,8 @@ extern BOOL res_scn_rect;
 #define MEOL "\r\n"
 #endif
 
+#ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
+////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32    // Use Windows 'MessgeBox'
 #define  MB(a) MessageBox( g_hWnd, a, "CRITICAL ERROR", MB_OK | MB_ICONINFORMATION )
 #define  MB2(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNO )
@@ -302,6 +304,22 @@ extern BOOL res_scn_rect;
 #define  MB2(a,b) sprtf("%s %s\n", b, a )
 #define  MB3(a,b) sprtf("%s %s\n", b, a )
 #endif // #ifdef WIN32 y/n - MessageBox or NOT
+////////////////////////////////////////////////////////////////////////////////////////////
+#else   // !#ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
+////////////////////////////////////////////////////////////////////////////////////////////
+// Since these are usually to pause execution, probably not needed
+#ifdef ADD_MSGBOX_IO
+// output to log file, and screen...
+#define  MB(a) sprtf("%s %s\n", "CRITICAL ERROR", a )
+#define  MB2(a,b) sprtf("%s %s\n", b, a )
+#define  MB3(a,b) sprtf("%s %s\n", b, a )
+#else // these should do nothing
+#define  MB(a)      1
+#define  MB2(a,b)   1
+#define  MB3(a,b)   1
+#endif // ADD_MSGBOX_IO y/n
+
+#endif // #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
 
 #endif // #ifndef _SUDOKU_HXX_
 // eof - Sudoku.hxx

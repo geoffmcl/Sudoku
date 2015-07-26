@@ -836,6 +836,12 @@ void Post_Command( WPARAM cmd )
 }
 
 static const char *usr_input = 0;
+static int verbosity = 1;
+
+#define VERB1 (verbosity >= 1)
+#define VERB2 (verbosity >= 2)
+#define VERB5 (verbosity >= 5)
+#define VERB9 (verbosity >= 9)
 
 void give_help( char *name )
 {
@@ -843,6 +849,7 @@ void give_help( char *name )
     printf("Options:\n");
     printf(" --help  (-h or -?) = This help and exit(2)\n");
     // char szASD[] = "Auto_Solve_Delay_Seconds_as_float";
+    printf(" --verb[n]     (-v) = Bump or set verbosity. (def=%d)\n", verbosity);
     printf(" --delay float (-d) = Set Auto_Solve_Delay_Seconds_as_float. (def=%lf)\n", g_AutoDelay);
     // TODO: More help
 }
@@ -873,6 +880,19 @@ int parse_args( int argc, char **argv )
                 } else {
                     printf("%s: Expected a float value to follow '%s'!\n", module, arg);
                     return 1;
+                }
+                break;
+            case 'v':
+                verbosity++;    // bump
+                sarg++;         // and get to next
+                while (*sarg) { // what have we got
+                    if (*sarg == 'v') {
+                        verbosity++;    // allow lazy -vvvvvvvvvvvvvvvvvvv to work
+                    } else if (ISDIGIT(*sarg)) {
+                        verbosity = atoi(sarg); // if a digit, like -v5, set 5
+                        break;
+                    }
+                    sarg++;
                 }
                 break;
             // TODO: Other arguments
@@ -980,7 +1000,12 @@ int solve_the_Sudoku()
         if (pb->iStage != iSolveStage) {
             iSolveStage = pb->iStage;
             // take a STEP
-            Do_ID_OPTIONS_ONESTEP( hWnd );
+            //////////////////////////////////////////////////////////
+            int savestdout = add_std_out(0);    // set none, well maybe log file...
+            if (VERB5) add_std_out(1);          // -v5 show it all
+            Do_ID_OPTIONS_ONESTEP( hWnd );      // take a step
+            add_std_out(savestdout);            // resore stdout io setting
+            //////////////////////////////////////////////////////////
             get_empty_count();
             // if no change in 'stage' then failed or finished
             if (pb->iStage == iSolveStage) {
