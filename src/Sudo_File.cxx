@@ -65,9 +65,6 @@ enum FileType {
 };
 
 
-// TCHAR g_filter[_MAX_PATH] = _T("CSV Files\0*.csv\0XML Files\0*.xml\0TXT FIles\0*.txt\0All Files\0*.*\0\0");
-TCHAR g_filter[_MAX_PATH] = _T("CSV Files\0*.csv\0XML Files\0*.xml\0TXT Files\0*.txt\0SDK Files\0*.sdk\0All Files\0*.*\0\0");
-
 //char *g_pAct_File = 0;          // current ACTIVE file
 //char *g_pSpecial = "Untitled";  // when a box is say generated
 
@@ -688,6 +685,9 @@ VOID Do_ID_FILE_RE(HWND hwnd)
 
 #ifdef WIN32    // windows commctrl.h dialogs
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+// TCHAR g_filter[_MAX_PATH] = _T("CSV Files\0*.csv\0XML Files\0*.xml\0TXT FIles\0*.txt\0All Files\0*.*\0\0");
+TCHAR g_filter[_MAX_PATH] = _T("CSV Files\0*.csv\0XML Files\0*.xml\0TXT Files\0*.txt\0SDK Files\0*.sdk\0All Files\0*.*\0\0");
 
 //char szLIndOpn[] = "LastOpnFilterIndex";
 //int g_iLIndOpn = 1; // 0=custom-filter, else 1, 2, ... for each pair in filter
