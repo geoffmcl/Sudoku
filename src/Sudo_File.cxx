@@ -1218,7 +1218,7 @@ bool Save_a_File( HWND hWnd, char *pf, int flag )
             sprintf(ps,"WARNING: Writing to file [%s] FAILED!\nRequested write %d, but written %d\nCheck the FILE!\n",
                 pf, len, wtn);
             sprtf("%s\n",ps);
-            MB2(ps,"File Write Failed");
+            wtn = MB2(ps,"File Write Failed");
         } else {
             ok = true;
         }
@@ -1279,7 +1279,7 @@ bool Save_SDK_File( HWND hWnd, char *pf, int flag )
             sprintf(ps,"WARNING: Writing to file [%s] FAILED!\nRequested write %d, but written %d\nCheck the FILE!\n",
                 pf, len, wtn);
             sprtf("%s\n",ps);
-            MB2(ps,"File Write Failed");
+            wtn = MB2(ps,"File Write Failed");
         } else {
             ok = true;
         }

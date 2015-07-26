@@ -314,9 +314,9 @@ extern BOOL res_scn_rect;
 #define  MB2(a,b) sprtf("%s %s\n", b, a )
 #define  MB3(a,b) sprtf("%s %s\n", b, a )
 #else // these should do nothing
-#define  MB(a)      1
+#define  MB(a)
 #define  MB2(a,b)   1
-#define  MB3(a,b)   1
+#define  MB3(a,b)   IDCANCEL
 #endif // ADD_MSGBOX_IO y/n
 
 #endif // #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
