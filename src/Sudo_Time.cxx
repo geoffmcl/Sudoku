@@ -15,6 +15,7 @@
 #include "Sudo_Time.hxx"
 #include <stdlib.h>
 #include <stdio.h>  // for sprintf()
+#include "sprtf.hxx"
 
 ///////////////////////////////////////////////////////////////////////////////
 // constructor
@@ -29,7 +30,7 @@ Timer::Timer()
     startCount.tv_sec = startCount.tv_usec = 0;
     endCount.tv_sec = endCount.tv_usec = 0;
 #endif  // WIN32 y/n - timer
-
+    _tm_buf[0] = 0;
     stopped = 0;
     startTimeInMicroSec = 0;
     endTimeInMicroSec = 0;
@@ -140,8 +141,10 @@ char  *Timer::setTimeStg(char *cp,double elap)
         neg = true;
         elap *= -1.0;
     }
-    if ( !(elap > 0.0) )
-        return "0.0 s";
+    if ( !(elap > 0.0) ) {
+        strcpy(cp,"0.0 s");
+        return cp;
+    }
     if (elap < 1e-21) {
         // yoto = 10^-24
         elap *= 1e+21;

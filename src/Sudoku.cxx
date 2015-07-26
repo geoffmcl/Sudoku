@@ -1032,11 +1032,16 @@ int solve_the_Sudoku()
         // if stage changed, then maybe solved (or stuck!)
         if ( ok && (total_empty_count == 0) ) {
             pAutoTime->stop();
+            double elap = pAutoTime->getElapsedTimeInSec();
             g_bAutoSolve = FALSE;
             g_bAutoComplete = false;
-            char *tb = pAutoTime->getTimeStg();
+            char *tb  = GetNxtBuf();
             char *tb2 = GetNxtBuf();
             char *tb3 = GetNxtBuf();
+            *tb = 0;
+            *tb2 = 0;
+            *tb3 = 0;
+            pAutoTime->setTimeStg(tb,elap);
             pSleep->setTimeStg(tb2,secs_in_sleep);
             pSleep->setTimeStg(tb3,g_Secs_in_SPRTF);
             sprtf("\nSolved after %d steps in %s, slept %s, format and IO %s\n", steps_taken, tb, tb2, tb3);
