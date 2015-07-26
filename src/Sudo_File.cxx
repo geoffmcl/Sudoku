@@ -2183,10 +2183,6 @@ VOID Do_VIEW_FILELIST( HWND hWnd, vSTG *plist )
     sprtf("Do_VIEW_FILELIST not yet implemented in unix\n");
 
 }
-void Set_Window_Title()
-{
-
-}
 
 bool Save_a_File2( HWND hWnd, char *pf, int flag );
 
