@@ -839,6 +839,8 @@ void give_help( char *name )
     printf("%s: usage: [options] usr_input\n", module);
     printf("Options:\n");
     printf(" --help  (-h or -?) = This help and exit(2)\n");
+    // char szASD[] = "Auto_Solve_Delay_Seconds_as_float";
+    printf(" --delay float (-d) = Set Auto_Solve_Delay_Seconds_as_float. (def=%lf)\n", g_AutoDelay);
     // TODO: More help
 }
 
@@ -859,6 +861,16 @@ int parse_args( int argc, char **argv )
             case '?':
                 give_help(argv[0]);
                 return 2;
+                break;
+            case 'd':
+                if (i2 < argc) {
+                    i++;
+                    sarg = argv[i];
+                    g_AutoDelay = atof(sarg);
+                } else {
+                    printf("%s: Expected a float value to follow '%s'!\n", module, arg);
+                    return 1;
+                }
                 break;
             // TODO: Other arguments
             default:
@@ -900,37 +912,36 @@ int parse_args( int argc, char **argv )
 DWORD msSleep = 55; // a very short time
 static int iSolveStage = -1;
 
-void set_total_count()
+int get_empty_count()
 {
     int row, col, val;
-    uint64_t cellflg;
+    // uint64_t cellflg;
     PABOX2 pb = get_curr_box();
-    int len;
-    SET set;
-    int offset = 2;
-    PSET ps;
+    int len = 0;
+    // SET set;
+    // PSET ps;
 
-    total_empty_count = 0;
     // Keep list of TWO types of CELLS with NO VALUE
     // 1. Cells that have NO potential possibilities - this means the puzzle is LOCKED, BAD, FAILING
     // 2. Cells that have just ONE potential value - maybe have key to fill these in...
     for (row = 0; row < 9; row++) {
-        Fill_SET(&set); // start with ALL values ON for this ROW
+        // Fill_SET(&set); // start with ALL values ON for this ROW
         // process COL by COL
         for (col = 0; col < 9; col++) {
             val = pb->line[row].val[col];
-            ps = &pb->line[row].set[col];
-            cellflg = pb->line[row].set[col].cellflg;
-            if (val) {
-                // PAINT A VALUE
-                set.val[val - 1] = 0;   // clear potential values
-                Zero_SET(ps);           // MAYBE should NOT do this, but for now...
+            // ps = &pb->line[row].set[col];
+            // cellflg = pb->line[row].set[col].cellflg;
+            if (val) {                  // PAINT A VALUE
+                //set.val[val - 1] = 0;   // clear potential values
+                //Zero_SET(ps);           // MAYBE should NOT do this, but for now...
             } else {
-                total_empty_count++;
+                len++;
             }
         }   // for (col = 0; col < 9; col++)
         // Done all columns
     }   // for each row
+    total_empty_count = len;
+    return len;
 }
 
 // now it is loaded, and analyses, or in the process of doing that,
@@ -958,7 +969,7 @@ int solve_the_Sudoku()
     last_seconds = -1.0;
     last_seconds = pAutoTime->getElapsedTime();
     g_bAutoSolve = true;    // repeat steps
-    set_total_count();
+    get_empty_count();
 
     while(ok)
     {
@@ -967,7 +978,7 @@ int solve_the_Sudoku()
             iSolveStage = pb->iStage;
             // take a STEP
             Do_ID_OPTIONS_ONESTEP( hWnd );
-            set_total_count();
+            get_empty_count();
             // if no change in 'stage' then failed or finished
             if (pb->iStage == iSolveStage) {
                 g_bAutoSolve = false;
@@ -1028,6 +1039,7 @@ int main( int argc, char **argv )
 {
     int iret = 0;
     add_std_out(1);
+    g_AutoDelay = 0.02;
     iret = parse_args( argc, argv );
     if (iret) 
         return iret;
