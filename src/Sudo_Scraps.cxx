@@ -939,7 +939,7 @@ int Get_Solution( PABOX2 pb, bool test_unique )
         x = 2;
     }
     tb = GetNxtBuf();
-    sprintf(tb,"solve cycs %d, dep %d %s ",
+    sprintf(tb,"solved cycs %d, dep %d %s ",
         solve_iter, max_depths,
         (x ? "ok" : "FAILED"));
         //(x ? "SUCCEEDED" : "FAILED"));

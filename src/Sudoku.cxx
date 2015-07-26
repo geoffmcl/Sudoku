@@ -1050,7 +1050,7 @@ int solve_the_Sudoku()
             pSleep->setTimeStg(tb3,g_Secs_in_SPRTF);
             if (VERB5)
                 strcpy(tb,"\n");
-            sprintf(EndBuf(tb),"Solved after %d steps in %s", steps_taken, tb1);
+            sprintf(EndBuf(tb),"Solved in %d steps in %s", steps_taken, tb1);
             if (secs_in_sleep > 0.0) {
                 sprintf(EndBuf(tb),", slept %s", tb2);
             }
@@ -1090,7 +1090,7 @@ int main( int argc, char **argv )
 {
     int iret = 0;
     add_std_out(1);
-    g_AutoDelay = 0.0;  // was 0.02;
+    g_AutoDelay = 0.0001;  // was 0.02;
     iret = parse_args( argc, argv );
     if (iret) 
         return iret;
