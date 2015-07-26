@@ -653,11 +653,11 @@ char *Get_Active_File_Dupe()
     char *pf = 0;
     char *cp = Get_Act_File();
     if (cp)
-        pf = _strdup(cp);
+        pf = strdup(cp);
     else {
         cp = Get_First_INI_File();
         if (cp)
-            pf = _strdup(cp);
+            pf = strdup(cp);
     }
     return pf;
 }
