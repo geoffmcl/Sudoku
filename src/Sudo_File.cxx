@@ -838,10 +838,111 @@ VOID Do_ID_FILE_SAVE(HWND hWnd)
 
 }
 
+// Browse for folder
+
+// (a) lpIDList = SHBrowseForFolder(tBrowseInfo)
+#if 0 // This FAILED - missing the definition OFN_PROJECT
+// (b) GetOpenFileName()/GetSaveFileName() using OFN_PROJECT 
+BOOL Get_Directory_Name(HWND hWnd, char *lpstrFile)
+{
+    BOOL bRet = FALSE;
+    OPENFILENAME ofn;
+    memset(&ofn,0,sizeof(OPENFILENAME));
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = hWnd;
+    ofn.hInstance = hInst;
+    // ofn.lpstrFilter = lpstrFilter;
+    ofn.lpstrFile = lpstrFile;
+    ofn.nMaxFile = _MAX_PATH;
+    ofn.Flags = OFN_PROJECT; // OFN_PROJECT;    // OFN_SHOWHELP | OFN_OVERWRITEPROMPT; 
+    ofn.lpstrTitle = _T("Sudoku Open Directory");
+
+    //if (GetSaveFileName( &ofn )) {
+    //    bRet = TRUE;
+    //}
+    if (GetOpenFileName( &ofn )) {
+        bRet = TRUE;
+    }
+    return bRet;
+}
+#endif // 0 - missing a definition
+
+/* ====================================
+typedef struct _browseinfo {
+  HWND              hwndOwner;
+  PCIDLIST_ABSOLUTE pidlRoot;
+  LPTSTR            pszDisplayName;
+  LPCTSTR           lpszTitle;
+  UINT              ulFlags;
+  BFFCALLBACK       lpfn;
+  LPARAM            lParam;
+  int               iImage;
+} BROWSEINFO, *PBROWSEINFO, *LPBROWSEINFO;
+   ==================================== */
+// For Windows Vista or later, it is recommended that you use IFileDialog with 
+// the FOS_PICKFOLDERS option rather than the SHBrowseForFolder function. 
+// This uses the Open Files dialog in pick folders mode and is the preferred 
+// implementation.
+#if 0 // This worked FINE, but no intial folder - quite important
+#include <Shlobj.h>
+static BROWSEINFO sBI;
+bool dn_one = false;
+bool dn_coinit = false;
+BOOL Get_Directory_Name(HWND hWnd, char *lpstrFile)
+{
+    BOOL bRet = FALSE;
+    if (!dn_coinit) {
+        DWORD dwCoInit = COINIT_APARTMENTTHREADED;
+        HRESULT res = CoInitializeEx( NULL, dwCoInit );
+        if (!SUCCEEDED(res)) {
+            sprtf("WARNING: CoInitializEx(COINIT_APARTMENTTHREADED) FAILED\n");
+        }
+        dn_coinit = true;
+    }
+    if (!dn_one) {
+        memset(&sBI,0,sizeof(BROWSEINFO));
+        dn_one = true;
+    }
+
+    sBI.hwndOwner = hWnd;
+    sBI.pszDisplayName = lpstrFile;
+    sBI.lpszTitle = "Select a Directory";
+    sBI.ulFlags = BIF_NONEWFOLDERBUTTON | BIF_USENEWUI;
+
+    PIDLIST_ABSOLUTE lpIDList = SHBrowseForFolder(&sBI);
+    if (lpIDList) {
+        bRet = TRUE;
+       // free memory used
+        IMalloc * imalloc = 0;
+        if ( SUCCEEDED( SHGetMalloc ( &imalloc )) )
+        {
+            imalloc->Free ( lpIDList );
+            imalloc->Release ( );
+        }
+    }
+    return bRet;
+}
+#endif // 0
+
+BOOL Get_Directory_Name(HWND hWnd, char *lpstrFile)
+{
+    char *tb = GetNxtBuf();
+    BOOL bRet = XBrowseForFolder( hWnd,
+					  lpstrFile,
+                      "Select Folder to Scan for Sudoku files",
+                      tb,
+                      264 );
+    if (bRet) {
+        strcpy(lpstrFile,tb);
+
+    }
+    return bRet;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 #else // !WIN32 // TODO: portable replacment of windows commctrl.h dialogs
 ////////////////////////////////////////////////////////////////////////////////////////////
-// is this needed in console app?
+// are any of these needed in console app?
 ////////////////////////////////////////////////////////////////////////////////////////////
 #endif // WIN32 // windows commctrl.h dialogs
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1303,107 +1404,6 @@ bool Save_XML_File(HWND hWnd, char *pf, int flag)
     return ok;
 }
 
-
-// Browse for folder
-
-// (a) lpIDList = SHBrowseForFolder(tBrowseInfo)
-#if 0 // This FAILED - missing the definition OFN_PROJECT
-// (b) GetOpenFileName()/GetSaveFileName() using OFN_PROJECT 
-BOOL Get_Directory_Name(HWND hWnd, char *lpstrFile)
-{
-    BOOL bRet = FALSE;
-    OPENFILENAME ofn;
-    memset(&ofn,0,sizeof(OPENFILENAME));
-    ofn.lStructSize = sizeof(OPENFILENAME);
-    ofn.hwndOwner = hWnd;
-    ofn.hInstance = hInst;
-    // ofn.lpstrFilter = lpstrFilter;
-    ofn.lpstrFile = lpstrFile;
-    ofn.nMaxFile = _MAX_PATH;
-    ofn.Flags = OFN_PROJECT; // OFN_PROJECT;    // OFN_SHOWHELP | OFN_OVERWRITEPROMPT; 
-    ofn.lpstrTitle = _T("Sudoku Open Directory");
-
-    //if (GetSaveFileName( &ofn )) {
-    //    bRet = TRUE;
-    //}
-    if (GetOpenFileName( &ofn )) {
-        bRet = TRUE;
-    }
-    return bRet;
-}
-#endif // 0 - missing a definition
-
-/* ====================================
-typedef struct _browseinfo {
-  HWND              hwndOwner;
-  PCIDLIST_ABSOLUTE pidlRoot;
-  LPTSTR            pszDisplayName;
-  LPCTSTR           lpszTitle;
-  UINT              ulFlags;
-  BFFCALLBACK       lpfn;
-  LPARAM            lParam;
-  int               iImage;
-} BROWSEINFO, *PBROWSEINFO, *LPBROWSEINFO;
-   ==================================== */
-// For Windows Vista or later, it is recommended that you use IFileDialog with 
-// the FOS_PICKFOLDERS option rather than the SHBrowseForFolder function. 
-// This uses the Open Files dialog in pick folders mode and is the preferred 
-// implementation.
-#if 0 // This worked FINE, but no intial folder - quite important
-#include <Shlobj.h>
-static BROWSEINFO sBI;
-bool dn_one = false;
-bool dn_coinit = false;
-BOOL Get_Directory_Name(HWND hWnd, char *lpstrFile)
-{
-    BOOL bRet = FALSE;
-    if (!dn_coinit) {
-        DWORD dwCoInit = COINIT_APARTMENTTHREADED;
-        HRESULT res = CoInitializeEx( NULL, dwCoInit );
-        if (!SUCCEEDED(res)) {
-            sprtf("WARNING: CoInitializEx(COINIT_APARTMENTTHREADED) FAILED\n");
-        }
-        dn_coinit = true;
-    }
-    if (!dn_one) {
-        memset(&sBI,0,sizeof(BROWSEINFO));
-        dn_one = true;
-    }
-
-    sBI.hwndOwner = hWnd;
-    sBI.pszDisplayName = lpstrFile;
-    sBI.lpszTitle = "Select a Directory";
-    sBI.ulFlags = BIF_NONEWFOLDERBUTTON | BIF_USENEWUI;
-
-    PIDLIST_ABSOLUTE lpIDList = SHBrowseForFolder(&sBI);
-    if (lpIDList) {
-        bRet = TRUE;
-       // free memory used
-        IMalloc * imalloc = 0;
-        if ( SUCCEEDED( SHGetMalloc ( &imalloc )) )
-        {
-            imalloc->Free ( lpIDList );
-            imalloc->Release ( );
-        }
-    }
-    return bRet;
-}
-#endif // 0
-
-BOOL Get_Directory_Name(HWND hWnd, char *lpstrFile)
-{
-    char *tb = GetNxtBuf();
-    BOOL bRet = XBrowseForFolder( hWnd,
-					  lpstrFile,
-                      "Select Folder to Scan for Sudoku files",
-                      tb,
-                      264 );
-    if (bRet) {
-        strcpy(lpstrFile,tb);
-
-    }
-    return bRet;
-}
 
 int Test_Extract_ASCII_Info( PABOX2 pb, char *pbuf, int len )
 {
