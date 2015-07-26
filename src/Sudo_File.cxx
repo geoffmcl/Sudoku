@@ -566,28 +566,23 @@ bool Load_XML_Buffer( char *buf, int len )
 
 bool Load_XML_File( HWND hWnd, char *file )
 {
+    FILE *hfile = 0;
     bool ok = false;
     //size_t len = _tcslen(file);
-    char *pf2 = _strdup(file);
+    char *pf2 = strdup(file);
     if (pf2)
         file = pf2;
-    HANDLE hfile = CreateFile(file,
-        GENERIC_READ,
-        0,
-        NULL,
-        OPEN_EXISTING,
-        FILE_ATTRIBUTE_NORMAL,
-        NULL );
-    if (VFH(hfile)) {
-        DWORD size_hi = 0;
-        DWORD size_low = GetFileSize(hfile, &size_hi);
-        if (size_hi == 0) {
-            char *buf = (char *)malloc(size_low+16);
+    if (is_file_or_directory(file) == 1) {
+        hfile = fopen(file,"rb");   // without this read may not equal size
+    }
+    if (hfile) {
+        size_t res, size = get_last_file_size();
+        if (size) {
+            char *buf = (char *)malloc(size+16);
             if (buf) {
-                if (ReadFile(hfile,buf,size_low,&size_hi,NULL)&&
-                    (size_low == size_hi)) {
-                        buf[size_low] = 0;
-                    Load_XML_Buffer( buf, size_low );
+                res = fread(buf,1,size,hfile);
+                if (size == res) {
+                    Load_XML_Buffer( buf, size );
                     if (is_curr_box_valid_for_paint()) {
                         ok = true;
                     }
@@ -595,9 +590,9 @@ bool Load_XML_File( HWND hWnd, char *file )
                 free(buf);
             }
         } else {
-            sprtf("ERROR: File TOO large!\n");
+            sprtf("ERROR: File empty!\n");
         }
-        CloseHandle(hfile);
+        fclose(hfile);
     }
     if (ok) {
         Reset_Active_File(file);
@@ -614,7 +609,7 @@ bool Load_a_file( HWND hWnd, char *file )
 {
     bool ok = false;
     FILE *hfile = 0;
-    char *pf2 = _strdup(file);
+    char *pf2 = strdup(file);
     if (pf2)
         file = pf2;
     if (is_file_or_directory(file) == 1) {
