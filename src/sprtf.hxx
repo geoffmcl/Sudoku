@@ -13,7 +13,14 @@ extern void close_log_file( void );
 extern void   set_log_file( char * nf );
 extern char * get_log_file( void );
 
-extern int _cdecl sprtf( char * pf, ... );
+#ifdef _MSC_VER // windows MCDECL macro = _cdecl
+#define MCDECL _cdecl
+#else // !#ifdef _MSC_VER // MCDECL macro = ""
+#define MCDECL
+#endif  // _MSC_VER y/n - MCDECL macro
+
+
+extern int MCDECL sprtf( char * pf, ... );
 
 extern char *GetNxtBuf();
 
