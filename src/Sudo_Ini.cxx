@@ -204,16 +204,6 @@ BOOL gChgLPath = FALSE;
 char szDbg[] = "Debug";
 char szStr[] = "Strategies";
 
-/////////////////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32    // INI file handling for windows
-/////////////////////////////////////////////////////////////////////////////////////////
-
-DWORD Add_INI_Files_to_Menu()
-{
-    DWORD res = SetFileMRU( g_hWnd, load_files );
-    return res;
-}
-
 char *Get_INI_File( int off )
 {
     int cnt = 0;
@@ -233,6 +223,16 @@ char *Get_INI_File( int off )
 
 char *Get_First_INI_File() { return Get_INI_File(0); }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////
+#ifdef WIN32    // INI file handling for windows
+/////////////////////////////////////////////////////////////////////////////////////////
+
+DWORD Add_INI_Files_to_Menu()
+{
+    DWORD res = SetFileMRU( g_hWnd, load_files );
+    return res;
+}
 
 void Add_to_INI_File_List( char * pfile )
 {
