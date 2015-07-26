@@ -13,7 +13,12 @@ static int got_solution = 0;
 static int in_thread = 0;
 
 static HANDLE hThread = 0;
+#ifdef WIN32 // windows threadID
 static unsigned threadID = 0;
+#else // !WIN32 pthread_t
+static pthread_t threadID = 0;
+#endif // WIN32 y/n - threadID
+
 //static DWORD dwMilliseconds = INFINITE;
 static DWORD dwMilliseconds = 10000;    // ten secs
 static int use_endthreadex = 0;     // this causes the thread to EXIT immediately
