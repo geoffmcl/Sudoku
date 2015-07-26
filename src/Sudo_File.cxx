@@ -87,7 +87,9 @@ void Set_Window_Title()
     } else {
         strcpy(tb,szTitle);
     }
+#ifdef WIN32 // windows SetWindowText
     SetWindowText(g_hWnd,tb);
+#endif // #ifdef WIN32 // windows SetWindowText
 }
 
 void File_Reset()
