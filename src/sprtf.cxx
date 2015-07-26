@@ -2,6 +2,7 @@
 
 #include <stdio.h> // fopen()...
 #include "Sudoku.hxx"
+#include "Sudo_Time.hxx"    // fast elapse timer
 #include "sprtf.hxx"
 #include "Sudo_Paint.hxx"
 #ifdef WIN32    // include 'windows.h'
@@ -47,6 +48,9 @@ static int addstdout = 0;
 static int addflush = 1;
 static int add2screen = 1;
 static int add2listview = 1;
+static Timer tmr;
+
+double g_Secs_in_SPRTF = 0.0;
 
 #ifndef VFP
 #define VFP(a) ( a && ( a != (FILE *)-1 ) )
@@ -325,9 +329,12 @@ int _cdecl sprtf( char * pf, ... )
    int   i;
    va_list arglist;
    va_start(arglist, pf);
+   tmr.start();
    i = vsprintf( pb, pf, arglist );
    va_end(arglist);
    prt(pb);
+   tmr.stop();
+   g_Secs_in_SPRTF += tmr.getElapsedTime();
    return i;
 }
 

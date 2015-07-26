@@ -1003,8 +1003,10 @@ int solve_the_Sudoku()
             g_bAutoComplete = false;
             char *tb = pAutoTime->getTimeStg();
             char *tb2 = GetNxtBuf();
+            char *tb3 = GetNxtBuf();
             pSleep->setTimeStg(tb2,secs_in_sleep);
-            sprtf("\nSolved after %s, but slept for %s\n", tb, tb2);
+            pSleep->setTimeStg(tb3,g_Secs_in_SPRTF);
+            sprtf("\nSolved after %s, slept %s, format and IO %s\n", tb, tb2, tb3);
             if (!done_end_dialog) {
                 done_end_dialog = true;
                 Do_Solved_Message();

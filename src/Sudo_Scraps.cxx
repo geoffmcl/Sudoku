@@ -939,7 +939,7 @@ int Get_Solution( PABOX2 pb, bool test_unique )
         x = 2;
     }
     tb = GetNxtBuf();
-    sprintf(tb,"cyc %d dep %d %s ",
+    sprintf(tb,"solve_iter %d, dep %d %s ",
         solve_iter, max_depths,
         (x ? "ok" : "FAILED"));
         //(x ? "SUCCEEDED" : "FAILED"));
@@ -948,7 +948,7 @@ int Get_Solution( PABOX2 pb, bool test_unique )
     tm.stop();
     solution_time = tm.getElapsedTime();
     sprintf(EndBuf(tb)," in %s.",tm.getTimeStg());
-    sprtf("%s\n",tb);
+    sprtf("%s\n",tb);   // SHOW some results after running a brute force solution
     if (x) {
         pb->bflag |= bf_DnTest;
         if (r == Unique)

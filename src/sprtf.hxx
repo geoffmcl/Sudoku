@@ -22,6 +22,8 @@ extern char *get_date_stg();
 extern char *get_time_stg();
 extern char *get_date_time_stg();
 
+extern double g_Secs_in_SPRTF;  // formatting output strings, and IO (file,screen,...)
+
 #define SPRTF   sprtf
 
 #endif // #ifndef _SPRTF_HXX_
