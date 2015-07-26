@@ -27,6 +27,14 @@ static const char *module = "Sudoku";
 #define SPRTF printf
 #endif
 
+#ifndef SLEEP
+#ifdef WIN32    // windows SLEEP macro = Sleep(ms)
+#define SLEEP(x) Sleep(x)
+#else           // !#ifdef WIN32 SLEEP macro = usleep(1000*ms)
+#define SLEEP(x) usleep(1000 * x)
+#endif          // #ifdef WIN32 y/n - SLEEP macro
+#endif
+
 #ifndef DEF_FILE
 #ifdef WIN32    // windows default debug file - TODO: Add to CMakeLists.txt
 #define DEF_FILE    "C:\\GTools\\tools\\Sudoku\\examples\\y-wing.txt"
@@ -1005,7 +1013,7 @@ int solve_the_Sudoku()
                     wait = false;
                 } else {
                     pSleep->start();
-                    Sleep(msSleep); // waste time
+                    SLEEP(msSleep); // waste time
                     pSleep->stop();
                     secs_in_sleep += pSleep->getElapsedTimeInSec();
                 }
@@ -1028,7 +1036,7 @@ int main( int argc, char **argv )
         "analyse the puzzle by BRUTE FORCE. By that I mean try every possible\n"
         "value for each blank cell, and report if the solution is UNIQUE!\n", module, usr_input );
     if (Load_a_file( 0, (LPTSTR)usr_input )) {
-        Sleep(msSleep);
+        SLEEP(msSleep);
         iret = solve_the_Sudoku(); // action of the app
     } else {
         sprtf("Error: Failed to load '%s'\n", usr_input);
