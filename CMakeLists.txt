@@ -41,6 +41,9 @@ if(WIN32 AND MSVC)
 else()
     set(MSVC_FLAGS "${MSVC_FLAGS} -Wno-write-strings -Wno-unused-variable -Wno-unused-but-set-variable")
     set(BUILD_WIN32_EXE NO)
+    #  CMAKE_THREAD_LIBS_INIT     - the thread library
+    find_package(Threads REQUIRED)
+    list( APPEND add_LIBS ${CMAKE_THREAD_LIBS_INIT} )
 endif()
 
 # Uncomment to REDUCE the Windows configurations buildable
