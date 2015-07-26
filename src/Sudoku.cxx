@@ -100,8 +100,10 @@ int Get_Spot_Count()
     return Get_Spots(pb);
 }
 
+static Timer InApptmr;
 void add_app_begin()
 {
+    InApptmr.start();
     int curr = add_sys_time(1);
     sprtf("Begin Application\n");
     add_sys_time(curr);
@@ -117,7 +119,8 @@ void add_app_begin()
 void add_app_end()
 {
     int curr = add_sys_time(1);
-    sprtf("End Application\n");
+    InApptmr.stop();
+    sprtf("End Application. Ran for %s.\n", InApptmr.getTimeStg());
     add_sys_time(curr);
 }
 
