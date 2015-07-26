@@ -320,9 +320,15 @@ static void	prt( char * ps )
 	}
 }
 
+#ifdef _MSC_VER // windows MCDECL macro = _cdecl
+#define MCDECL _cdecl
+#else // !#ifdef _MSC_VER // MCDECL macro = ""
+#define MCDECL
+#endif  // _MSC_VER y/n - MCDECL macro
+
 // STDAPI StringCchVPrintf( OUT LPTSTR  pszDest,
 //   IN  size_t  cchDest, IN  LPCTSTR pszFormat, IN  va_list argList );
-int _cdecl sprtf( char * pf, ... )
+int MCDECL sprtf( char * pf, ... )
 {
    static char _s_sprtfbuf[1024];
    char * pb = _s_sprtfbuf;
