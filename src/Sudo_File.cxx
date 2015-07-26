@@ -48,6 +48,7 @@ char *Get_Act_File() { return g_pAct_File; }
 #ifdef WIN32    // windows commctrl.h dialogs
 ///////////////////////////////////////////////////////////////////////////////////////////
 #include <CommCtrl.h>
+#endif // #ifdef WIN32    // windows commctrl.h dialogs
 
 using namespace std;
 
@@ -684,6 +685,9 @@ VOID Do_ID_FILE_RE(HWND hwnd)
         free(pf);
     }
 }
+
+#ifdef WIN32    // windows commctrl.h dialogs
+///////////////////////////////////////////////////////////////////////////////////////////
 
 //char szLIndOpn[] = "LastOpnFilterIndex";
 //int g_iLIndOpn = 1; // 0=custom-filter, else 1, 2, ... for each pair in filter
