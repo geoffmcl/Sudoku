@@ -982,6 +982,8 @@ int solve_the_Sudoku()
     static double last_seconds = -1.0;
     static Timer *pSleep = 0;
     double secs_in_sleep = 0.0;
+    int steps_taken = 0;
+
     if (!pAutoTime)
         pAutoTime = new Timer;
     if (!pSleep)
@@ -989,7 +991,6 @@ int solve_the_Sudoku()
 
     SPRTF("\n%s: Commencing step by step solution...\n", module);
     pAutoTime->start();
-    last_seconds = -1.0;
     last_seconds = pAutoTime->getElapsedTime();
     g_bAutoSolve = true;    // repeat steps
     get_empty_count();
@@ -1007,6 +1008,7 @@ int solve_the_Sudoku()
             add_std_out(savestdout);            // resore stdout io setting
             //////////////////////////////////////////////////////////
             get_empty_count();
+            steps_taken++;
             // if no change in 'stage' then failed or finished
             if (pb->iStage == iSolveStage) {
                 g_bAutoSolve = false;
@@ -1034,7 +1036,7 @@ int solve_the_Sudoku()
             char *tb3 = GetNxtBuf();
             pSleep->setTimeStg(tb2,secs_in_sleep);
             pSleep->setTimeStg(tb3,g_Secs_in_SPRTF);
-            sprtf("\nSolved after %s, slept %s, format and IO %s\n", tb, tb2, tb3);
+            sprtf("\nSolved after %d steps in %s, slept %s, format and IO %s\n", steps_taken, tb, tb2, tb3);
             if (!done_end_dialog) {
                 done_end_dialog = true;
                 Do_Solved_Message();
@@ -1074,8 +1076,8 @@ int main( int argc, char **argv )
     if (iret) 
         return iret;
     add_app_begin();
-    SPRTF("%s: Will read input file '%s', and begin a thread to\n"
-        "analyse the puzzle by BRUTE FORCE. By that I mean try every possible\n"
+    SPRTF("%s: Will read input file '%s',\n"
+        "and begin a thread to analyse the puzzle by BRUTE FORCE. Try each possible\n"
         "value for each blank cell, and report if the solution is UNIQUE!\n", module, usr_input );
     if (Load_a_file( 0, (LPTSTR)usr_input )) {
         SLEEP(msSleep);
