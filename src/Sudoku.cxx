@@ -992,7 +992,9 @@ int solve_the_Sudoku()
     pSleep->start();
     pSleep->stop();
 
-    SPRTF("\n%s: Commencing step by step solution...\n", module);
+    if (VERB5) {
+        SPRTF("\n%s: Commencing step by step solution...\n", module);
+    }
     pAutoTime->start();
     last_seconds = pAutoTime->getElapsedTime();
     g_bAutoSolve = true;    // repeat steps
@@ -1036,15 +1038,24 @@ int solve_the_Sudoku()
             g_bAutoSolve = FALSE;
             g_bAutoComplete = false;
             char *tb  = GetNxtBuf();
+            char *tb1 = GetNxtBuf();
             char *tb2 = GetNxtBuf();
             char *tb3 = GetNxtBuf();
             *tb = 0;
+            *tb1 = 0;
             *tb2 = 0;
             *tb3 = 0;
-            pAutoTime->setTimeStg(tb,elap);
+            pAutoTime->setTimeStg(tb1,elap);
             pSleep->setTimeStg(tb2,secs_in_sleep);
             pSleep->setTimeStg(tb3,g_Secs_in_SPRTF);
-            sprtf("\nSolved after %d steps in %s, slept %s, format and IO %s\n", steps_taken, tb, tb2, tb3);
+            if (VERB5)
+                strcpy(tb,"\n");
+            sprintf(EndBuf(tb),"Solved after %d steps in %s", steps_taken, tb1);
+            if (secs_in_sleep > 0.0) {
+                sprintf(EndBuf(tb),", slept %s", tb2);
+            }
+            sprintf(EndBuf(tb),", format and IO %s", tb3);
+            SPRTF("%s\n",tb);
             if (!done_end_dialog) {
                 done_end_dialog = true;
                 Do_Solved_Message();
@@ -1079,7 +1090,7 @@ int main( int argc, char **argv )
 {
     int iret = 0;
     add_std_out(1);
-    g_AutoDelay = 0.02;
+    g_AutoDelay = 0.0;  // was 0.02;
     iret = parse_args( argc, argv );
     if (iret) 
         return iret;
