@@ -11,6 +11,8 @@ extern int add_list_out( int val );
 extern int open_log_file( void );
 extern void close_log_file( void );
 extern void   set_log_file( char * nf );
+extern char * get_log_file( void );
+
 extern int _cdecl sprtf( char * pf, ... );
 
 extern char *GetNxtBuf();

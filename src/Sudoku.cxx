@@ -120,7 +120,8 @@ void add_app_end()
 {
     int curr = add_sys_time(1);
     InApptmr.stop();
-    sprtf("End Application. Ran for %s.\n", InApptmr.getTimeStg());
+    char *log = get_log_file();
+    sprtf("End Application. Ran for %s. log %s\n", InApptmr.getTimeStg(), log);
     add_sys_time(curr);
 }
 
