@@ -988,6 +988,8 @@ int solve_the_Sudoku()
         pAutoTime = new Timer;
     if (!pSleep)
         pSleep = new Timer;
+    pSleep->start();
+    pSleep->stop();
 
     SPRTF("\n%s: Commencing step by step solution...\n", module);
     pAutoTime->start();
