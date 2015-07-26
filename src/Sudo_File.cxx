@@ -26,6 +26,11 @@ static char _s_buf[MAX_STRING*16];
 char *g_pAct_File = 0;          // current ACTIVE file
 char *g_pSpecial = "Untitled";  // when a box is say generated
 
+// foward refs
+bool Save_XML_File(HWND hWnd, char *pf, int flag = 0);
+
+
+
 // ****************************
 // Reset the SINGLE ACTIVE FILE
 void Reset_Active_File(char *file)
@@ -754,6 +759,85 @@ VOID Do_ID_FILE_OPEN(HWND hWnd)
     }
 }
 
+VOID Do_ID_FILE_SAVE(HWND hWnd)
+{
+    OPENFILENAME ofn;
+    char _buf[_MAX_PATH+16];
+    LPTSTR        lpstrFile = _buf;
+    LPCTSTR       lpstrFilter = g_filter;
+    char *cp = Get_Act_File();
+
+    *lpstrFile = 0;
+    if (cp)
+        strcpy(lpstrFile,cp);
+
+    memset(&ofn,0,sizeof(OPENFILENAME));
+    ofn.lStructSize = sizeof(OPENFILENAME);
+    ofn.hwndOwner = hWnd;
+    ofn.hInstance = hInst;
+    ofn.lpstrFilter = lpstrFilter;
+    ofn.nFilterIndex = g_iLIndOpn;  // TODO - Separate Open and Write FILTER indexes
+    ofn.lpstrFile = lpstrFile;
+    ofn.nMaxFile = _MAX_PATH;
+    ofn.Flags = OFN_SHOWHELP | OFN_OVERWRITEPROMPT; 
+    ofn.lpstrTitle = _T("Sudoku Save File");
+
+    bool ok = false;
+    LPTSTR lp = 0;
+    char *tb = GetNxtBuf();
+    DWORD dwi;
+    if (GetSaveFileName( &ofn )) {
+        // ==============================================================
+        dwi = 0;
+        if (g_bUseFullFN) {
+            *tb = 0;
+            dwi = GetFullPathName(lpstrFile, //  _In_   LPCTSTR lpFileName,
+                264, // _In_   DWORD nBufferLength,
+                tb,  // _Out_  LPTSTR lpBuffer,
+                &lp );  // _Out_  LPTSTR *lpFilePart
+            if (dwi && *tb && strcmp(lpstrFile,tb)) {
+                lpstrFile = tb; // switch to using FULL PATH
+            }
+            
+        }
+        // ==============================================================
+        size_t len = strlen(lpstrFile);
+        if ((len > 4) && (STRICMP(&lpstrFile[len-4],".xml") == 0)) {
+            ok = Save_XML_File(hWnd, lpstrFile);
+        } if ((len > 4) && (STRICMP(&lpstrFile[len-4],".sdk") == 0)) {
+            ok = Save_SDK_File(hWnd, lpstrFile);
+        } else {
+            ok = Save_a_File(hWnd, lpstrFile);
+        }
+        if (ok) {
+            // SUCCESSFUL WRITE - Reset FILE NAME, etc
+            // When the user selects a file, nFilterIndex returns the index of the currently displayed filter. 
+            if (ofn.nFilterIndex != g_iLIndOpn) {
+                // User CHANGED the index of the FILTER
+                g_iLIndOpn = ofn.nFilterIndex;
+                gChgLIO = TRUE;
+            }
+            //char szLPath[] = "LastPath";  // TODO - separate last path read and write
+            if (dwi && g_bUseFullFN && lp) {
+                char *tb2 = GetNxtBuf();
+                dwi = lp - tb;
+                strcpy(tb2,tb);
+                tb2[dwi] = 0;
+                if (dwi && strcmp(tb2, g_szLastPath)) {
+                    strcpy(g_szLastPath,tb2);
+                    gChgLPath = TRUE;
+                }
+            }
+            Reset_Active_File(lpstrFile);
+            File_Reset();
+        } else {
+            // WRITE FAILED - Offer to TRY AGAIN
+
+        }
+    }
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 #else // !WIN32 // TODO: portable replacment of windows commctrl.h dialogs
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1129,7 +1213,7 @@ void Write_Temp_File()
     DWORD opts = g_dwSvOptBits;
     bool ok = Save_a_File( NULL, pf, opts );
     size_t st = strlen(pf);
-    if ((st < 4) || stricmp(&pf[st-4],".csv")) {
+    if ((st < 4) || STRICMP(&pf[st-4],".csv")) {
         // NO CSV output if NOT .csv extension
         opts |= sff_NO_ADD_CSV;
     }
@@ -1156,8 +1240,6 @@ char xml_head[] = "<NewDataSet>\n"
 "      </xs:complexType>\n"
 "    </xs:element>\n"
 "  </xs:schema>\n";
-
-bool Save_XML_File(HWND hWnd, char *pf, int flag = 0);
 
 bool Save_XML_File(HWND hWnd, char *pf, int flag)
 {
@@ -1221,85 +1303,6 @@ bool Save_XML_File(HWND hWnd, char *pf, int flag)
     return ok;
 }
 
-
-VOID Do_ID_FILE_SAVE(HWND hWnd)
-{
-    OPENFILENAME ofn;
-    char _buf[_MAX_PATH+16];
-    LPTSTR        lpstrFile = _buf;
-    LPCTSTR       lpstrFilter = g_filter;
-    char *cp = Get_Act_File();
-
-    *lpstrFile = 0;
-    if (cp)
-        strcpy(lpstrFile,cp);
-
-    memset(&ofn,0,sizeof(OPENFILENAME));
-    ofn.lStructSize = sizeof(OPENFILENAME);
-    ofn.hwndOwner = hWnd;
-    ofn.hInstance = hInst;
-    ofn.lpstrFilter = lpstrFilter;
-    ofn.nFilterIndex = g_iLIndOpn;  // TODO - Separate Open and Write FILTER indexes
-    ofn.lpstrFile = lpstrFile;
-    ofn.nMaxFile = _MAX_PATH;
-    ofn.Flags = OFN_SHOWHELP | OFN_OVERWRITEPROMPT; 
-    ofn.lpstrTitle = _T("Sudoku Save File");
-
-    bool ok = false;
-    LPTSTR lp = 0;
-    char *tb = GetNxtBuf();
-    DWORD dwi;
-    if (GetSaveFileName( &ofn )) {
-        // ==============================================================
-        dwi = 0;
-        if (g_bUseFullFN) {
-            *tb = 0;
-            dwi = GetFullPathName(lpstrFile, //  _In_   LPCTSTR lpFileName,
-                264, // _In_   DWORD nBufferLength,
-                tb,  // _Out_  LPTSTR lpBuffer,
-                &lp );  // _Out_  LPTSTR *lpFilePart
-            if (dwi && *tb && strcmp(lpstrFile,tb)) {
-                lpstrFile = tb; // switch to using FULL PATH
-            }
-            
-        }
-        // ==============================================================
-        size_t len = strlen(lpstrFile);
-        if ((len > 4) && (STRICMP(&lpstrFile[len-4],".xml") == 0)) {
-            ok = Save_XML_File(hWnd, lpstrFile);
-        } if ((len > 4) && (STRICMP(&lpstrFile[len-4],".sdk") == 0)) {
-            ok = Save_SDK_File(hWnd, lpstrFile);
-        } else {
-            ok = Save_a_File(hWnd, lpstrFile);
-        }
-        if (ok) {
-            // SUCCESSFUL WRITE - Reset FILE NAME, etc
-            // When the user selects a file, nFilterIndex returns the index of the currently displayed filter. 
-            if (ofn.nFilterIndex != g_iLIndOpn) {
-                // User CHANGED the index of the FILTER
-                g_iLIndOpn = ofn.nFilterIndex;
-                gChgLIO = TRUE;
-            }
-            //char szLPath[] = "LastPath";  // TODO - separate last path read and write
-            if (dwi && g_bUseFullFN && lp) {
-                char *tb2 = GetNxtBuf();
-                dwi = lp - tb;
-                strcpy(tb2,tb);
-                tb2[dwi] = 0;
-                if (dwi && strcmp(tb2, g_szLastPath)) {
-                    strcpy(g_szLastPath,tb2);
-                    gChgLPath = TRUE;
-                }
-            }
-            Reset_Active_File(lpstrFile);
-            File_Reset();
-        } else {
-            // WRITE FAILED - Offer to TRY AGAIN
-
-        }
-    }
-
-}
 
 // Browse for folder
 
