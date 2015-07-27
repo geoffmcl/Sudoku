@@ -9,6 +9,13 @@
 
 #include "Sudoku.hxx"
 
+static const char *module = "Sudo_FIle2";
+
+void out_Sudo_FIle2()
+{
+    SPRTF("%s: Another windows file interface\n", module );
+}
+
 // WOW, NOT SURE I LIKE ALL, OR ANY OF THIS!!!
 // *******************************************
 // #define TRY_FILE2_INTERFACE

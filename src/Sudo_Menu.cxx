@@ -11,7 +11,6 @@ DWORD gdwMaxFiles = IDM_FILEMax - IDM_FILE1;
 #include "Sudo_Menu.hxx"
 #include "Sudo_Ini.hxx"
 #include "Sudo_File.hxx"
-#include "sprtf.hxx"
 
 DWORD gdwlMenuFlag = 0;
 #define M_Fil           1

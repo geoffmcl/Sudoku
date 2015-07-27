@@ -7,7 +7,6 @@
 #include "Sudo_Paint.hxx"
 #include "Sudo_Menu.hxx"
 #include "Sudo_Ini.hxx"
-#include "sprtf.hxx"
 #ifdef WIN32    // include 'direct.h' for _getcwd()
 #include <direct.h> // for _getcwd()
 #endif  // WIN32 'direct.h'

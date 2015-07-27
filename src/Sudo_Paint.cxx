@@ -5,7 +5,6 @@
 #include <vector>
 #include "Sudoku.hxx"
 #include "Sudo_Paint.hxx"
-#include "sprtf.hxx"
 #include "Sudo_File.hxx"
 
 // global variables

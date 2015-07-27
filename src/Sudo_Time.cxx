@@ -18,7 +18,6 @@
 #ifndef WIN32 // strcpy header
 #include <string.h> // for strcpy, ...
 #endif // !WIN32 - strcpy header
-#include "sprtf.hxx"
 
 ///////////////////////////////////////////////////////////////////////////////
 // constructor
