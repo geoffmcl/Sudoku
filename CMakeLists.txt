@@ -43,7 +43,7 @@ else()
     set(BUILD_WIN32_EXE NO)
     #  CMAKE_THREAD_LIBS_INIT     - the thread library
     find_package(Threads REQUIRED)
-    list( APPEND add_LIBS ${CMAKE_THREAD_LIBS_INIT} )
+    # list( APPEND add_LIBS ${CMAKE_THREAD_LIBS_INIT} )
 endif()
 
 # Uncomment to REDUCE the Windows configurations buildable
@@ -176,6 +176,9 @@ add_executable( ${name} ${EXE_TYPE} ${${name}_SRCS} ${${name}_HDRS} )
 if (add_LIBS)
     message(STATUS "*** Linking with libs ${add_LIBS}")
     target_Link_libraries(${name} ${add_LIBS} )
+endif ()
+if (NOT WIN32)
+    target_Link_libraries(${name} ${CMAKE_THREAD_LIBS_INIT})
 endif ()
 if (MSVC)
     set_target_properties(${name} PROPERTIES DEBUG_POSTFIX d )
