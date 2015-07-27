@@ -373,7 +373,7 @@ int Mark_All_Pairs_linked_with_this_pair3( PABOX2 pb, int setval, vRCP *pp,
         strcat(tb,MEOL "The COLOR should be 'A' or 'B'. If none will show otherwise");
         EXPLODE(tb); // Mark_All_Pairs_linked_with_this_pair3() - missing COLOR
     }
-    sprintf(tb,"marked ch#%d ", (int)ch_num);
+    sprintf(tb,"S%d: marked ch#%d ", pb->iStage, (int)ch_num);
     for (ii = 0; ii < max; ii++) {
         prcp = &pp->at(ii);
         if (Same_RC_Pair( prcp, prcp1 )) continue;

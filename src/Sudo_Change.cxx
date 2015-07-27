@@ -412,7 +412,7 @@ int OR_Row_Col_SetVal_with_Flag( PABOX2 pb, int row, int col, int setval,
         return SERR_ISMKD;
     }
     pb->line[row].set[col].flag[setval - 1] |= flag;
-    sprtf("Marked %d@%c%d with %s\n", setval, (char)(row + 'A'), col + 1, Flag2Name(flag));
+    sprtf("S%d: Marked %d@%c%d with %s\n", pb->iStage, setval, (char)(row + 'A'), col + 1, Flag2Name(flag));
     // set_error = SERR_NONE;
     // last_or_setval_error = "none";
     return SERR_NONE;

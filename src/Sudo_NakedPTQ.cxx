@@ -1669,7 +1669,7 @@ int Do_Naked_Pairs(PABOX2 pb)
         PROWCOL prc;
         max = elim.size();
         max2 = elimby.size();
-        sprintf(tb,"NP-Elim %d ",count);
+        sprintf(tb,"S%d: NP-Elim %d ", pb->iStage, count);
         for (ii = 0; ii < max; ii++) {
             prc = &elim[ii];
             Append_RC_setval_RC_Stg(tb,prc,prc->cnum);

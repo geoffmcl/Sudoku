@@ -881,7 +881,7 @@ int Do_Locked_Excl( PABOX2 pb )
         size_t max, ii;
         PROWCOL prc;
         max = elims.size();
-        sprintf(tb,"LE.Elim %d ", (int)max);
+        sprintf(tb,"S%d: LE.Elim %d ", pb->iStage, (int)max);
         for (ii = 0; ii < max; ii++) {
             prc = &elims[ii];
             sprintf(EndBuf(tb),"%s ", Get_RC_setval_RC_Stg(prc, prc->cnum));
