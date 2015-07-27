@@ -38,12 +38,11 @@ static const char *module = "Sudoku";
 #ifndef DEF_FILE
 #ifdef WIN32    // windows default debug file - TODO: Add to CMakeLists.txt
 #define DEF_DIR     "C:\\GTools\\tools\\Sudoku\\examples\\"
-//#define DEF_FILE    DEF_DIR "y-wing.txt"
-#define DEF_FILE    DEF_DIR "diabolical.txt"
 #else // !WIN32 // unix default debug file
 #define DEF_DIR     "/home/geoff/projects/Sudoku/examples/"
-#define DEF_FILE    DEF_DIR "y-wing.txt"
 #endif // WIN32 y/n - def dbg file
+//#define DEF_FILE    DEF_DIR "y-wing.txt"
+#define DEF_FILE    DEF_DIR "diabolical.txt"
 #endif
 
 // Global Variables:
