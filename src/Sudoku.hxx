@@ -252,7 +252,7 @@ extern RECT g_sRect;
 extern BOOL res_scn_rect;
 
 // local header files
-#include "sprtf.hxx"
+#include "Sudo_sprtf.hxx"
 #include "Sudo_File.hxx"
 #include "Sudo_Paint.hxx"
 #include "Sudo_Ini.hxx"

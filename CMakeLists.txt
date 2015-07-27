@@ -110,7 +110,7 @@ set( ${name}_SRCS
     ${dir}/Sudo_XCycles.cxx
     ${dir}/Sudo_XYChain.cxx
     ${dir}/Sudo_XYZWings.cxx
-    ${dir}/sprtf.cxx
+    ${dir}/Sudo_sprtf.cxx
     )
 set( ${name}_HDRS
     ${dir}/Sudo_AIC.hxx
@@ -148,7 +148,7 @@ set( ${name}_HDRS
     ${dir}/Sudo_XCycles.hxx
     ${dir}/Sudo_XYChain.hxx
     ${dir}/Sudo_XYZWings.hxx
-    ${dir}/sprtf.hxx
+    ${dir}/Sudo_sprtf.hxx
     ${dir}/targetver.h
     )
 add_library( ${name} ${LIB_TYPE} ${${name}_SRCS} ${${name}_HDRS} )

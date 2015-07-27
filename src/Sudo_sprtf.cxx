@@ -3,7 +3,7 @@
 #include <stdio.h> // fopen()...
 #include "Sudoku.hxx"
 #include "Sudo_Time.hxx"    // fast elapse timer
-#include "sprtf.hxx"
+#include "Sudo_sprtf.hxx"
 #include "Sudo_Paint.hxx"
 #ifdef WIN32    // include 'windows.h'
 #include <Windows.h>
