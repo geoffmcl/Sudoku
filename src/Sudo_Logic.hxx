@@ -88,6 +88,8 @@ extern int Mark_Hidden_Triple(PABOX2 pb);
 #define Equal_SET Same_SET
 extern bool Same_SET(PSET ps1, PSET ps2);
 
+extern const char *stage_to_text(int stage);    // get stage text mainly for debug
+
 
 #endif // #ifndef _SUDO_LOGIC_HXX_
 // Sudo_Logic.hxx
