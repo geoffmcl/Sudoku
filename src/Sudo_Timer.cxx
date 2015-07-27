@@ -132,7 +132,11 @@ void Do_WM_TIMER( HWND hWnd )
                     g_bAutoSolve = false;
                     pAutoTime->stop();
                     char *tb = pAutoTime->getTimeStg();
-                    sprtf("Ended Autosolve after %s\n", tb);
+                    if (total_empty_count == 0) {
+                        sprtf("Autosolve: ended after %s\n", tb);
+                    } else {
+                        sprtf("FAILED Autosolve: ended after %s\n", tb);
+                    }
                 }
             }
         }

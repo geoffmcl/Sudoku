@@ -544,6 +544,25 @@ void DoFileCommand( HWND hWnd, int wmId )
     }
 }
 
+void DoOneStepCommand( HWND hWnd )
+{
+    PABOX2 pb = get_curr_box();
+    int last_stage = pb->iStage;
+    int count = Do_ID_OPTIONS_ONESTEP(hWnd);
+    if (last_stage == pb->iStage) {
+        MB("Warning: One Step FAILED! Logic impaired!!\n"
+            "\n"
+            "Either unable to find solutions, or\n"
+            "perhaps some previous value was wrong.\n"
+            "Can only manually change the values,\n"
+            "or load a new puzzle.\n"
+            "\n"
+            "The adventurous could fix the problem\n"
+            "and post a PR on\n"
+            "https://github.com/geoffmcl/Sudoku/pulls\n");
+    }
+}
+
 
 LRESULT Do_WM_COMMAND(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -671,7 +690,7 @@ LRESULT Do_WM_COMMAND(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if (total_empty_count == 0) {
             Do_Solved_Message();
         } else {
-            Do_ID_OPTIONS_ONESTEP(hWnd);
+            DoOneStepCommand(hWnd); // Do_ID_OPTIONS_ONESTEP(hWnd);
         }
         break;
     case ID_OPTIONS_MARK:

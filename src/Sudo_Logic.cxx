@@ -4182,13 +4182,16 @@ int Do_ID_OPTIONS_ONESTEP( HWND hWnd )
         count = Do_Fill_XYZWing(pb);
         break;
     }
-    // Mark_HighLight_Cells(false);
-    //if (g_bShwStLnks) Do_Strong_Links(get_curr_box());
-    if (memcmp(pb,copy_box,sizeof(ABOX2)))
+
+    // has there been any change in the box
+    if (memcmp(pb,copy_box,sizeof(ABOX2))) {
         Stack_Box(copy_box);
-    else
+    } else {
         free(copy_box);
+    }
+
     set_repaint();
+
     return count;
 }
 

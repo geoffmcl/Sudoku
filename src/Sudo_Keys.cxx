@@ -259,8 +259,7 @@ void Do_WM_CHAR( HWND hWnd, WPARAM wParam )
         Post_Command(ID_EDIT_GENERATE);
         break;
     case 'o':
-        Post_Command(ID_OPTIONS_ONESTEP);
-        //Do_ID_OPTIONS_ONESTEP(hWnd);
+        Post_Command(ID_OPTIONS_ONESTEP);   // Do_ID_OPTIONS_ONESTEP(hWnd);
         break;
     case 'r':   // Reset candidate to ALL
         Reset_Candidates();
