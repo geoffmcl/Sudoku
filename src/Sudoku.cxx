@@ -935,6 +935,30 @@ int parse_args( int argc, char **argv )
 
 DWORD msSleep = 55; // a very short time
 static int iSolveStage = -1;
+typedef std::vector<int> vINT;
+
+// #define SHOW_STAGE_LIST
+#ifdef SHOW_STAGE_LIST
+static vINT vStages;
+
+void Show_Stage_List()
+{
+    if (vStages.size() > 0) {
+        size_t ii, max = vStages.size();
+        int i;
+        const char *st;
+        SPRTF("%d stages: ", (int)max);
+        for (ii = 0; ii < max; ii++) {
+            i = vStages[ii];
+            st = stage_to_text(i);
+            SPRTF("%s (%d) ", st, i );
+        }
+        SPRTF("\n");
+    }
+}
+
+#endif
+
 
 int get_empty_count()
 {
@@ -985,6 +1009,7 @@ int solve_the_Sudoku()
     double secs_in_sleep = 0.0;
     int steps_taken = 0;
 
+
     if (!pAutoTime)
         pAutoTime = new Timer;
     if (!pSleep)
@@ -1005,6 +1030,12 @@ int solve_the_Sudoku()
         PABOX2 pb = get_curr_box();
         if (pb->iStage != iSolveStage) {
             iSolveStage = pb->iStage;
+            steps_taken++;
+#ifdef SHOW_STAGE_LIST
+            vStages.push_back(iSolveStage);
+            //const char *st = stage_to_text(iSolveStage);
+            //SPRTF("Stage %s (%d)\n", st, (int)iSolveStage );
+#endif
             // take a STEP
             //////////////////////////////////////////////////////////
             int savestdout = add_std_out(0);    // set none, well maybe log file...
@@ -1013,7 +1044,6 @@ int solve_the_Sudoku()
             add_std_out(savestdout);            // resore stdout io setting
             //////////////////////////////////////////////////////////
             get_empty_count();
-            steps_taken++;
             // if no change in 'stage' then failed or finished
             if (pb->iStage == iSolveStage) {
                 g_bAutoSolve = false;
@@ -1065,7 +1095,7 @@ int solve_the_Sudoku()
 
         ok = g_bAutoSolve;
         if (ok) {
-            bool wait = true;
+            bool wait = (iSolveStage == sg_Begin) ? false : true;
             // could add a user delay, say if user wanted to read the console ouput quietly...
             while (wait) {
                 double new_secs = pAutoTime->getElapsedTime();
@@ -1082,6 +1112,9 @@ int solve_the_Sudoku()
             }
         }
     }
+#ifdef SHOW_STAGE_LIST
+    Show_Stage_List();
+#endif
     return iret;
 }
 
