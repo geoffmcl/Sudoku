@@ -71,10 +71,7 @@ else ()
     message(STATUS "*** Building static Library - LIB_TYPE=${LIB_TYPE}")
 endif ()
 
-### 1 executables #############################################
-# Project [Sudoku], type [Application], 39 C/C++, 40 Hdrs, 0 Other, 0 INCS, 5 DEFS
-# File dir [C:\GTools\tools\Sudoku\], out [C:\GTools\tools\Sudoku], rel = []
-set(name Sudoku)
+set(name OpenSudoku)
 set(dir src)
 set( ${name}_SRCS
     ${dir}/Sudo_AIC.cxx
@@ -113,7 +110,6 @@ set( ${name}_SRCS
     ${dir}/Sudo_XCycles.cxx
     ${dir}/Sudo_XYChain.cxx
     ${dir}/Sudo_XYZWings.cxx
-    ${dir}/Sudoku.cxx
     ${dir}/sprtf.cxx
     )
 set( ${name}_HDRS
@@ -152,9 +148,22 @@ set( ${name}_HDRS
     ${dir}/Sudo_XCycles.hxx
     ${dir}/Sudo_XYChain.hxx
     ${dir}/Sudo_XYZWings.hxx
-    ${dir}/Sudoku.hxx
     ${dir}/sprtf.hxx
     ${dir}/targetver.h
+    )
+add_library( ${name} ${LIB_TYPE} ${${name}_SRCS} ${${name}_HDRS} )
+list( APPEND add_LIBS ${name} )
+
+### 1 executables #############################################
+# Project [Sudoku], type [Application], 39 C/C++, 40 Hdrs, 0 Other, 0 INCS, 5 DEFS
+# File dir [C:\GTools\tools\Sudoku\], out [C:\GTools\tools\Sudoku], rel = []
+set(name Sudoku)
+set(dir src)
+set( ${name}_SRCS
+    ${dir}/Sudoku.cxx
+    )
+set( ${name}_HDRS
+    ${dir}/Sudoku.hxx
     )
 if (WIN32)
     list(APPEND ${name}_SRCS ${dir}/Sudoku.rc)
