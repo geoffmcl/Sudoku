@@ -18,4 +18,5 @@ Sudoku.ini
 Makefile
 bldlog-u.txt
 Sudo-con
+libOpenSudoku.a
 
