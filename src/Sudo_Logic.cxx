@@ -4004,7 +4004,7 @@ int Do_Simple_Scan(PABOX2 pb)
         sprtf("S%d: Elim same row,col,box [%d] To Fill\n", sg_One, count, sg_Fill_Simple);
         pb->iStage = sg_Fill_Simple;
     } else {
-        sprtf("S%d: NONE Elim same row,col,box To %d\n", sg_One, count, sg_Two);
+        sprtf("S%d: NONE Elim same row,col,box To %d\n", sg_One, sg_Two);
         pb->iStage = sg_Two;
     }
     return count;
