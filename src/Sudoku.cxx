@@ -37,9 +37,12 @@ static const char *module = "Sudoku";
 
 #ifndef DEF_FILE
 #ifdef WIN32    // windows default debug file - TODO: Add to CMakeLists.txt
-#define DEF_FILE    "C:\\GTools\\tools\\Sudoku\\examples\\y-wing.txt"
+#define DEF_DIR     "C:\\GTools\\tools\\Sudoku\\examples\\"
+//#define DEF_FILE    DEF_DIR "y-wing.txt"
+#define DEF_FILE    DEF_DIR "diabolical.txt"
 #else // !WIN32 // unix default debug file
-#define DEF_FILE    "/home/geoff/projects/Sudoku/examples/y-wing.txt"
+#define DEF_DIR     "/home/geoff/projects/Sudoku/examples/"
+#define DEF_FILE    DEF_DIR "y-wing.txt"
 #endif // WIN32 y/n - def dbg file
 #endif
 
@@ -959,6 +962,41 @@ void Show_Stage_List()
 
 #endif
 
+static Timer *pAutoTime = 0;
+static double last_seconds = -1.0;
+static Timer *pSleep = 0;
+static double secs_in_sleep = 0.0;
+static int steps_taken = 0;
+
+void do_message_block( double elap, const char *why )
+{
+    static char msg_blocks[4][1024];
+    char *tb  = msg_blocks[0];
+    char *tb1 = msg_blocks[1];
+    char *tb2 = msg_blocks[2];
+    char *tb3 = msg_blocks[3];
+    *tb = 0;
+    *tb1 = 0;
+    *tb2 = 0;
+    *tb3 = 0;
+    pAutoTime->setTimeStg(tb1,elap);
+    pSleep->setTimeStg(tb2,secs_in_sleep);
+    pSleep->setTimeStg(tb3,g_Secs_in_SPRTF);
+    if (VERB5)
+        strcpy(tb,"\n");
+    sprintf(EndBuf(tb),"%s in %d steps in %s", why, steps_taken, tb1);
+    if (secs_in_sleep > 0.0) {
+        sprintf(EndBuf(tb),", slept %s", tb2);
+    }
+    sprintf(EndBuf(tb),", form/IO %s", tb3);
+    SPRTF("%s\n",tb);
+    if (total_empty_count == 0) {
+        if (!done_end_dialog) {
+            done_end_dialog = true;
+            Do_Solved_Message();
+        }
+    }
+}
 
 int get_empty_count()
 {
@@ -1003,12 +1041,6 @@ int solve_the_Sudoku()
     int iret = 0;
     bool ok = true;
     HWND hWnd = 0;
-    static Timer *pAutoTime = 0;
-    static double last_seconds = -1.0;
-    static Timer *pSleep = 0;
-    double secs_in_sleep = 0.0;
-    int steps_taken = 0;
-
 
     if (!pAutoTime)
         pAutoTime = new Timer;
@@ -1048,16 +1080,7 @@ int solve_the_Sudoku()
             if (pb->iStage == iSolveStage) {
                 g_bAutoSolve = false;
                 pAutoTime->stop();
-                char *tb = pAutoTime->getTimeStg();
-                char *tb2 = GetNxtBuf();
-                pSleep->setTimeStg(tb2,secs_in_sleep);
-                sprtf("\nNo stage change! Ended Autosolve after %s, but slept for %s\n", tb, tb2);
-                if (total_empty_count == 0) {
-                    if (!done_end_dialog) {
-                        done_end_dialog = true;
-                        Do_Solved_Message();
-                    }
-                }
+                do_message_block( pAutoTime->getElapsedTime(), "Aborted" );
                 ok = false;
             }
         }
@@ -1067,29 +1090,7 @@ int solve_the_Sudoku()
             double elap = pAutoTime->getElapsedTimeInSec();
             g_bAutoSolve = FALSE;
             g_bAutoComplete = false;
-            char *tb  = GetNxtBuf();
-            char *tb1 = GetNxtBuf();
-            char *tb2 = GetNxtBuf();
-            char *tb3 = GetNxtBuf();
-            *tb = 0;
-            *tb1 = 0;
-            *tb2 = 0;
-            *tb3 = 0;
-            pAutoTime->setTimeStg(tb1,elap);
-            pSleep->setTimeStg(tb2,secs_in_sleep);
-            pSleep->setTimeStg(tb3,g_Secs_in_SPRTF);
-            if (VERB5)
-                strcpy(tb,"\n");
-            sprintf(EndBuf(tb),"Solved in %d steps in %s", steps_taken, tb1);
-            if (secs_in_sleep > 0.0) {
-                sprintf(EndBuf(tb),", slept %s", tb2);
-            }
-            sprintf(EndBuf(tb),", format and IO %s", tb3);
-            SPRTF("%s\n",tb);
-            if (!done_end_dialog) {
-                done_end_dialog = true;
-                Do_Solved_Message();
-            }
+            do_message_block( elap, "Solved" );
             ok = false;
         }
 
