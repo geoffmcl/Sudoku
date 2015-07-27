@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>
+   Sudoku Project C/C++
+  </title>
+  <style>
+  body {
+    margin:0cm 1cm 1cm 1cm;
+  }
+  h1{
+    font-size:200%;
+    text-align:center;
+  }
+  </style>
+ </head>
+ <body>
+  <h1>
+   Sudoku Project C/C++
+  </h1>
+
+  <p>
+   A WIN32 application to <strong>solve</strong> a 9x9 Sudoku puzzle. Not perfect, and
+   <strong>NOT</strong> complete...
+  </p>
+
+  <p>
+   A little history. Up until circa 2012, my only involvement in Sudoku was to occasionally do the
+   puzzle while sitting on the toilet ;=))
+  </p>
+
+  <p>
+   01/09/2012: So decide why not try to write an eduational type program in C/C++, to solve Sudoku
+   step by step. This was before I had found lots of sites, or done any other reading on
+   internet... I played with the code on and off for about 1.5 months, with the last then on
+   16/10/2012 with 1,011,516 Sudoku-48.zip
+  </p>
+
+  <p>
+   It is a windows app, and now it can solve a large number of puzzles. Of course by that I mean
+   using ONLY the same logic used by humans... Yes, it can solve every puzzle by brute force trial
+   and error, but that is NOT what it is all about...
+  </p>
+
+  <p>
+   So I started looking around for puzzles it can NOT solve, and then try to work out a strategy
+   to get through it...
+  </p>
+
+  <p>
+   20150723: Then there was a 2/3 year delay before I decided to revive the project by adding a
+   CMakeLists.txt, and a `build` folder to do the out-of-source build, and push it to a <a target=
+   "_blank"
+      href="https://github.com/geoffmcl/Sudoku">github repo</a>.
+  </p>
+
+  <p>
+   If you have your build tools setup, then the simple build steps are :-
+  </p>
+
+  <ul>
+   <li>$ cd build
+   </li>
+
+   <li>$ cmake ..
+   </li>
+
+   <li>$ cmake --build . --config Release
+   </li>
+  </ul>
+
+  <p>
+   Of course, alteratively the cmake GUI can be used, and then the MSVC IDE can also be used to
+   build the project.
+  </p>
+
+  <p>
+   The `examples` folder contains a considerable list of `sample` files which can be loaded. Or
+   you can manually setup the puzzle from say a magazine and try to solve it... using the menu
+   `-&gt;` Options `-&gt;` Solve!, or One Step, or simply selecting a square and entering a number
+   manually...
+  </p>
+
+  <p>
+   Added a cmake option, -DBUILD_WIN32_EXE:BOOL=OFF to build it as a console app, Sudo-con, which
+   when used will generate a console app which accepts an input file to auto-solve. This meant I
+   could also have a unix port, until I decide on which GUI code to use to build the same GUI app
+   there.
+  </p>
+
+  <p>
+   The main thing is <strong>have FUN!</strong>
+  </p>
+
+  <p>
+   Geoff.
+   <br>
+   20150723
+  </p>
+
+  <h2>
+   Images
+  </h2>
+
+  <table>
+   <tr>
+    <td>
+     <img src="images/color1.png"
+         alt="Colors used">
+    </td>
+   </tr>
+
+   <tr>
+    <td>
+     <img src="images/xcycle-01.png"
+         alt="xcycle">
+    </td>
+   </tr>
+  </table>
+
+  <h2>
+   Sites
+  </h2>
+
+  <p>
+   Just a list of some sites... my all time favorite <a href=
+   "http://www.sudokuwiki.org/sudoku.htm"
+      target="_blank">SudokuWiki.org</a>, but there are <strong>MANY</strong> ...
+  </p>
+
+  <ul>
+   <li>
+    <a target="_blank"
+        href="https://en.wikipedia.org/wiki/Sudoku">About Wiki</a>
+   </li>
+
+   <li>
+    <a target="_blank"
+        href="http://www.websudoku.com/">WebSudoku</a>
+   </li>
+
+   <li>
+    <a target="_blank"
+        href="http://www.sudoku.com/">Play Sudoku</a>
+   </li>
+
+   <li>
+    <a target="_blank"
+        href="http://www.sudokukingdom.com/">Sudoku Kingdom</a>
+   </li>
+
+   <li>
+    <a target="_blank"
+        href="http://www.dailysudoku.com/sudoku/">Daily Sudoku</a>
+   </li>
+
+   <li>
+    <a target="_blank"
+        href="http://mypuzzle.org/sudoku">mypuzzle.org</a>
+   </li>
+  </ul>
+
+  <p>
+   <a name="end"
+      id="end"></a> <a target="_blank"
+      href="http://tidy.sourceforge.net/"><img border="0"
+        src="images/checked_by_tidy.gif"
+        alt="checked by tidy"
+        width="32"
+        height="32"></a>&nbsp; <a href="http://validator.w3.org/check?uri=referer"
+      target="_blank"><img src="images/html5-logo.png"
+        alt="Valid HTML 5"
+        width="88"
+        height="31"></a>
+  </p>
+ </body>
+</html>
