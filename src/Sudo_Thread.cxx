@@ -33,6 +33,20 @@ int get_solution_value( int row, int col )
     return 0;
 }
 
+static void solve_on_thread()
+{
+    Timer tm;
+    in_thread++;
+    tm.start();
+    set_solution_valid(0);
+    //sprtf( "In second thread...\n" );
+    got_solution = Get_Solution(pb_copy, true);
+    //sprtf( "Thread exit... %d\n", got_solution );
+    tm.stop();
+    thread_time = tm.getElapsedTime();
+    in_thread--;
+}
+
 #ifdef WIN32    // window THREAD handling
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -45,20 +59,11 @@ void wait_thread_exit()
 
 unsigned __stdcall ThreadFunc( void* pArguments )
 {
-    Timer tm;
-    in_thread++;
-    tm.start();
-    set_solution_valid(0);
-    //sprtf( "In second thread...\n" );
-    got_solution = Get_Solution(pb_copy, true);
-    //sprtf( "Thread exit... %d\n", got_solution );
+    solve_on_thread();
     HANDLE hand = hThread;
     hThread = 0;
     if (hand)
         CloseHandle(hand);
-    tm.stop();
-    thread_time = tm.getElapsedTime();
-    in_thread--;
     if (use_endthreadex)
         _endthreadex( 0 );
     return 0;
@@ -103,24 +108,8 @@ bool StartThread()
 /* this function is run by the second thread */
 void *ThreadFunc(void *vp)
 {
-    Timer tm;
-    in_thread++;
-    tm.start();
-    set_solution_valid(0);
-    //sprtf( "In second thread...\n" );
-    got_solution = Get_Solution(pb_copy, true);
-    //sprtf( "Thread exit... %d\n", got_solution );
-    //HANDLE hand = hThread;
-    //hThread = 0;
-    //if (hand)
-    //    CloseHandle(hand);
-    tm.stop();
-    thread_time = tm.getElapsedTime();
-    in_thread--;
-    //if (use_endthreadex)
-    //    _endthreadex( 0 );
+    solve_on_thread();
     return 0;
-
 }
 
 bool StartThread()
