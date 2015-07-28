@@ -19,6 +19,32 @@
 #endif  // WIN32 y/n - compare file macro
 #endif
 
+/* ************************************************************************
+   *** port of INI file handling ***
+   =================================
+
+#define	GetStg( a, b )	\
+	GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
+
+SYNTAX:
+DWORD WINAPI GetPrivateProfileString(
+  _In_  LPCTSTR lpAppName,
+  _In_  LPCTSTR lpKeyName,
+  _In_  LPCTSTR lpDefault,
+  _Out_ LPTSTR  lpReturnedString,
+  _In_  DWORD   nSize,
+  _In_  LPCTSTR lpFileName
+);
+
+BOOL WINAPI WritePrivateProfileString(
+  _In_ LPCTSTR lpAppName,
+  _In_ LPCTSTR lpKeyName,
+  _In_ LPCTSTR lpString,
+  _In_ LPCTSTR lpFileName
+);
+
+==================================================================
+*/
 
 static char m_szTmpBuf[1024];
 static char g_szDefIni[] = "Sudoku.ini";
@@ -416,6 +442,16 @@ int Chk4Debug( char * lpd )
    }
    return bret;
 }
+
+/* SYNTAX:
+
+DWORD WINAPI GetModuleFileName(
+  _In_opt_ HMODULE hModule,
+  _Out_    LPTSTR  lpFilename,
+  _In_     DWORD   nSize
+);
+
+ */
 
 void  GetModulePath( char * lpb )
 {
