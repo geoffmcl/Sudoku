@@ -145,7 +145,11 @@ bool Same_SET(PSET ps1, PSET ps2)
     return true;
 }
 
-
+/*\
+ * Get remaining potential candidates for this cell,
+ * returning count, and if a ptr given, the first value.
+ * Use Get_Set_Cnt2(PSET,int *[9]) to get all values.
+\*/
 int Get_Set_Cnt( PSET ps, int *pnv )
 {
     int i, cnt, val, nval;
@@ -178,6 +182,7 @@ int Get_Set_Cnt2( PSET ps, int *pnv )
     return cnt;
 }
 
+// given two PSET, return the COMMON candidates in a PSET, and count.
 int Get_Common_SET_Cnt( PSET ps1, PSET ps2, PSET comm )
 {
     int cnt = 0;

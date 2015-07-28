@@ -3901,6 +3901,12 @@ int Do_Fill_Single( PABOX2 pb )
     return count;
 }
 
+/*\
+ * Not really a 'strategy'
+ * Go through each row,col, and where there is presently NO VALUE
+ * Count the reminaing candidates for the cell, and if only 1 remains count it.
+ * return count
+\*/
 int Do_Mark_Single( PABOX2 pb )
 {
     int count = 0;
