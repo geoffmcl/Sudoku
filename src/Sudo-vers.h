@@ -11,8 +11,8 @@
    of  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See 
    the GNU General Public License for more details.
    ================================================== */
-#ifndef _TARGETVER_H_
-#define _TARGETVER_H_
+#ifndef _SUDO_VERS_H_
+#define _SUDO_VERS_H_
 // #pragma once // prefer the above as croos platform compatible
 
 #ifdef WIN32    // include 'SDKDDKVer.h'
@@ -32,5 +32,5 @@
 // 20120917 - looking GOOD - // 20120914 - experimental
 #define USE_COLOR2_SCAN
 
-#endif // #ifndef _TARGETVER_H_
+#endif // #ifndef _SUDO_VERS_H_
 // eof targetver.h

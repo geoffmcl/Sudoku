@@ -26,7 +26,7 @@
 #define _CRT_SECURE_NO_WARNINGS
 #endif
 
-#include "targetver.h"
+#include "Sudo-vers.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 

@@ -149,7 +149,7 @@ set( ${name}_HDRS
     ${dir}/Sudo_XYChain.hxx
     ${dir}/Sudo_XYZWings.hxx
     ${dir}/Sudo_sprtf.hxx
-    ${dir}/targetver.h
+    ${dir}/Sudo-vers.h
     )
 add_library( ${name} ${LIB_TYPE} ${${name}_SRCS} ${${name}_HDRS} )
 list( APPEND add_LIBS ${name} )
