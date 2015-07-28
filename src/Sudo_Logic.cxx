@@ -4031,6 +4031,7 @@ int Do_Simple_Scan(PABOX2 pb)
     { "Paint AIC",IDC_CHECK18,&add_debug_paic, &bChgPAIC     , 0, 0, 0                                  },  // 17
     { "XYZ-Scan",IDC_CHECK19,&add_debug_xyz, &bChgDXYZ       , Do_XYZ_Wings, &Do_XYZ, &Chg_XYZ          },  // 18
     { "Strong Links 3",IDC_CHECK20,&add_debug_sl3, &bChgDSL3 , Do_Strong_Link3_Scan, &Do_SL3, &Chg_SL3  },  // 19
+    { "Unique Rects 2",IDC_CHECK21,&add_debug_ur2, &bChgDUR2 , Do_UniqRect2_Scan, &Do_UR2, &Chg_UR2     },  // 20
    ----------------------------------------------- */
 
 // This could be done run per the above TABLE

@@ -27,7 +27,7 @@ BOOL bChgDYW = FALSE;
 
 int add_debug_ur = 0;    // debug Unique Rectangles
 BOOL bChgDUR = FALSE;
-int add_debug_ur2 = 0;
+int add_debug_ur2 = 0;  // debug Unique Rectangle 3
 BOOL bChgDUR2 = FALSE;
 
 
@@ -183,7 +183,7 @@ DBGLIST DbgList[] = {
     { "Paint AIC",IDC_CHECK18,&add_debug_paic, &bChgPAIC     , 0, 0, 0                                  },  // 17
     { "XYZ-Scan",IDC_CHECK19,&add_debug_xyz, &bChgDXYZ       , Do_XYZ_Wings, &Do_XYZ, &Chg_XYZ          },  // 18
     { "Strong Links 3",IDC_CHECK20,&add_debug_sl3, &bChgDSL3 , Do_Strong_Link3_Scan, &Do_SL3, &Chg_SL3  },  // 19
-    { "Unique_Rects_2",IDC_CHECK21,&add_debug_ur2, &bChgDUR2 , Do_UniqRect2_Scan, &Do_UR2, &Chg_UR2     },  // 20
+    { "Unique Rects 2",IDC_CHECK21,&add_debug_ur2, &bChgDUR2 , Do_UniqRect2_Scan, &Do_UR2, &Chg_UR2     },  // 20
 
     // *** MUST be LAST ***
     { 0, 0, 0, 0, 0, 0, 0 }

@@ -349,6 +349,7 @@ INILST sIniLst[] = {
    { szDbg, (char *)DbgList[17].pcaption, it_Bool, (char *)DbgList[17].pdebug, DbgList[17].pchg, 0, 0 },
    { szDbg, (char *)DbgList[18].pcaption, it_Bool, (char *)DbgList[18].pdebug, DbgList[18].pchg, 0, 0 },
    { szDbg, (char *)DbgList[19].pcaption, it_Bool, (char *)DbgList[19].pdebug, DbgList[19].pchg, 0, 0 },
+   { szDbg, (char *)DbgList[20].pcaption, it_Bool, (char *)DbgList[20].pdebug, DbgList[20].pchg, 0, 0 },
 
    // section Strategies - CARE this must match the items in Sudo_Debug.cxx - DbgList structure
    { szStr, (char *)DbgList[0].pcaption, it_Bool, (char *)DbgList[0].penab, DbgList[0].pchgd, 0, 0 },
@@ -371,6 +372,7 @@ INILST sIniLst[] = {
    //{ szStr, (char *)DbgList[17].pcaption, it_Bool, (char *)DbgList[17].penab, DbgList[17].pchgd, 0, 0 },
    { szStr, (char *)DbgList[18].pcaption, it_Bool, (char *)DbgList[18].penab, DbgList[18].pchgd, 0, 0 },
    { szStr, (char *)DbgList[19].pcaption, it_Bool, (char *)DbgList[19].penab, DbgList[19].pchgd, 0, 0 },
+   { szStr, (char *)DbgList[20].pcaption, it_Bool, (char *)DbgList[20].penab, DbgList[20].pchgd, 0, 0 },
 
    // last entry
    { 0,  0,  it_None, 0, 0, 0, 0 }
