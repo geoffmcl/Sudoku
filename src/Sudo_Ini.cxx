@@ -683,7 +683,16 @@ DWORD GetModuleFileName(HMODULE hModule, LPTSTR  lpFilename, DWORD   nSize)
     char id[256];
     memset(lpFilename,0,nSize);
     sprintf(id,"/proc/%d/exe", getpid());
-    readlink(id,lpFilename,nSize);
+    int ch = readlink(id,lpFilename,nSize);
+    if ((ch != -1) && lpFilename[0]) {
+        lpFilename[ch] = 0;
+        std::string path = lpFilename;
+        std::string::size_type t = path.find_last_of("/");
+        if (t > 0) {
+            path = path.substr(0,t+1);
+            strcpy(lpFilename,path.c_str());
+        }
+    }
     return (DWORD)strlen(lpFilename);
 }
 
