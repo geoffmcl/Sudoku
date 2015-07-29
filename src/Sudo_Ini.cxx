@@ -1223,7 +1223,7 @@ void WriteINI( void )
       }
       plst++;
    }
-   sprtf("Written INI file with 5d changes.\n", chgcount);
+   sprtf("Written INI file with %d changes.\n", chgcount);
 
 }
 
