@@ -1006,7 +1006,7 @@ void ReadINI( void )
                *pb = TRUE; // set that we have a (valid!) WINDOWPLACEMENT
             }
             else
-               *pb = TRUE;
+               *pb = FALSE; // set this only if a windows placment is done (TRUE);
             break;
          case it_Rect:
             pr = (PRECT) &lpb[ strlen(lpb) + 2 ];
