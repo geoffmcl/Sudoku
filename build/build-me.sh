@@ -10,8 +10,22 @@ if [ -f "$TMPLOG" ]; then
     fi
     mv $TMPLOG $TMPLOG.bak
 fi
-echo "$BN: Doing 'cmake ..', output to $TMPLOG..."
-cmake .. >$TMPLOG 2>&1
+echo ""
+echo "$BN: Some suggested cmake options to use for debug..."
+echo "  -DCMAKE_VERBOSE_MAKEFILE=TRUE - use a verbose Makefile good to see flags. switches, libraries, etc..."
+echo "  -DCMAKE_BUILD_TYPE=DEBUG - to add symbols for gdb use (add -g compiler switch)"
+echo "  Then run gdb with '\$ gdb --args ask prompt'"
+echo "  -DCMAKE_INSTALL_PREFIX:PATH=$HOME - to add a spcific install location"
+echo ""
+
+TMPOPTS=""
+for arg in $@; do
+    TMPOPTS="$TMPOPTS $arg"
+done
+
+
+echo "$BN: Doing 'cmake .. $TMPOPTS', output to $TMPLOG..."
+cmake .. $TMPOPTS >$TMPLOG 2>&1
 if [ ! "$?" = "0" ]; then
     echo "$BN: Cmake config, generation error!"
     exit 1
