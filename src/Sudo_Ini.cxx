@@ -173,22 +173,36 @@ BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpS
     int res;
     size_t off, ii;
     if (get_to_section(file, lpSecName, vs)) {
-        res = get_to_key(file, lpKeyName, vs, &off);
-        if (res) {
-            if (res == 2) {
-                // reached next section, without finding the key! backup one
-                file.seekg(off);    // back to BEFORE this section
-            } else {
-                // could check if there is a change...
+        if (lpKeyName && *lpKeyName) {
+            res = get_to_key(file, lpKeyName, vs, &off);
+            if (res) {
+                if (res == 2) {
+                    // reached next section, without finding the key! backup one
+                    file.seekg(off);    // back to BEFORE this section
+                } else {
+                    // could check if there is a change...
+                }
             }
-        }
-        // insert new line
-        line  = lpKeyName;
-        line += "=";
-        line += lpString;
-        vs.push_back(line);
-        while (std::getline(file, line)) {
+            // insert new line
+            line  = lpKeyName;
+            line += "=";
+            line += lpString;
             vs.push_back(line);
+            while (std::getline(file, line)) {
+                vs.push_back(line);
+            }
+        } else {
+            // delete this SECTION
+            while (std::getline(file, line)) {
+                if (line[0] == '[') {
+                    // got next section
+                    vs.push_back(line);
+                    break;
+                }
+            }
+            while (std::getline(file, line)) {
+                vs.push_back(line);
+            }
         }
         file.close();
 
@@ -217,16 +231,18 @@ BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpS
     } else {
          file.close();
          // Append new section, and write value
-         out.open(lpFileName, std::ios::app);
-         line = "[";
-         line += lpSecName;
-         line += "]";
-         out << line << std::endl;
-         line  = lpKeyName;
-         line += "=";
-         line += lpString;
-         out << line << std::endl;
-         out.close();
+         if (lpString) {
+             out.open(lpFileName, std::ios::app);
+             line = "[";
+             line += lpSecName;
+             line += "]";
+             out << line << std::endl;
+             line  = lpKeyName;
+             line += "=";
+             line += lpString;
+             out << line << std::endl;
+             out.close();
+         }
     }
     return TRUE;
 }
