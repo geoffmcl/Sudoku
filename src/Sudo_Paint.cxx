@@ -123,6 +123,22 @@ void Add_String( char * ps )
     vlp->push_back(s);
 }
 
+BOOL g_bLineSB = FALSE;
+BOOL g_bSkipAll = TRUE; // when adding mark to cell with selected candidate, SKIP cells with ALL on
+BOOL g_bPntCtr = FALSE; // just center to center or from candidate to candidate - this seem best
+BOOL g_bPntSeq = TRUE;  // add sequence or chain_number to square
+BOOL g_bPntChN = TRUE;  // paint 'chain_number' instead of sequence number
+BOOL g_bPntChns = TRUE; // join only those with same 'chain_number' and same Row, Col, or Box
+
+BOOL g_bOddBox = TRUE;  // Fill (logical) Odd Boxes (Regions) with another color crOddBox
+
+BOOL g_bUseChNum = FALSE; // for on_xcycles_test, paint chain number instead of candidate
+
+BOOL g_bDbgPntRects = FALSE; // Just to PAINT rectangle ONLY
+
+BOOL g_bCopyHDC = TRUE;
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32    // Windows - use Msimg32 library
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,21 +154,6 @@ using namespace std;
 #endif
 
 #define OUTITPFR(tb) if (add_debug_pfr) OUTIT(tb)
-
-BOOL g_bLineSB = FALSE;
-BOOL g_bSkipAll = TRUE; // when adding mark to cell with selected candidate, SKIP cells with ALL on
-BOOL g_bPntCtr = FALSE; // just center to center or from candidate to candidate - this seem best
-BOOL g_bPntSeq = TRUE;  // add sequence or chain_number to square
-BOOL g_bPntChN = TRUE;  // paint 'chain_number' instead of sequence number
-BOOL g_bPntChns = TRUE; // join only those with same 'chain_number' and same Row, Col, or Box
-
-BOOL g_bOddBox = TRUE;  // Fill (logical) Odd Boxes (Regions) with another color crOddBox
-
-BOOL g_bUseChNum = FALSE; // for on_xcycles_test, paint chain number instead of candidate
-
-BOOL g_bDbgPntRects = FALSE; // Just to PAINT rectangle ONLY
-
-BOOL g_bCopyHDC = TRUE;
 
 // NOT USED HERE!
 typedef struct tagPPSET {
