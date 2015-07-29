@@ -26,6 +26,14 @@
 #endif  // WIN32 y/n - compare file macro
 #endif
 
+#ifdef WIN32    // windows formats
+#define MY3VALS "%d,%d,%d"
+#define MY4VALS "%d,%d,%d,%d"
+#else
+#define MY3VALS "%ld,%ld,%ld"
+#define MY4VALS "%ld,%ld,%ld,%ld"
+#endif
+
 /* ************************************************************************
    *** port of INI file handling ***
    =================================
@@ -58,10 +66,12 @@ DWORD GetPrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpDefa
 {
     return 0;
 }
+
 BOOL WritePrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
 {
     return FALSE;
 }
+
 BOOL EqualRect( PRECT pr1, PRECT pr2 )
 {
     return FALSE;
@@ -817,7 +827,7 @@ void ReadINI( void )
             pr->top = 0;
             pr->right = 0;
             pr->bottom = 0;
-            if( ( m_sscanf(lpb, "%d,%d,%d,%d", &pr->left, &pr->top, &pr->right, &pr->bottom ) == 4 ) &&
+            if( ( m_sscanf(lpb, MY4VALS, &pr->left, &pr->top, &pr->right, &pr->bottom ) == 4 ) &&
                 ( IsRectOk( pr ) ) )
             {
                pr1 = (PRECT)pDef;
@@ -836,7 +846,7 @@ void ReadINI( void )
             pr->top = 0;
             pr->right = 0;
             pr->bottom = 0;
-            if( m_sscanf(lpb, "%d,%d,%d", &pr->left, &pr->top, &pr->right ) == 3 )
+            if( m_sscanf(lpb, MY3VALS, &pr->left, &pr->top, &pr->right ) == 3 )
             {
                COLORREF * pcr = (COLORREF *)pDef;
                *pcr = RGB( pr->left, pr->top, pr->right );
@@ -869,7 +879,7 @@ void trim_trailing_zeros( char * lpb )
 
 
 #define  WI( a, b )\
-   {  sprintf(lpb, "%d", b );\
+   {  sprintf(lpb, "%d", (int)b );\
       WritePrivateProfileString(pSect, a, lpb, lpini ); }
 
 void WriteINI( void )
@@ -958,7 +968,7 @@ void WriteINI( void )
             break;
          case it_Rect:
             pr = (PRECT)pDef;
-            sprintf(lpb, "%d,%d,%d,%d", pr->left, pr->top, pr->right, pr->bottom );
+            sprintf(lpb, MY4VALS, pr->left, pr->top, pr->right, pr->bottom );
             break;
          case it_Color:
             {
