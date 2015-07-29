@@ -193,7 +193,7 @@ BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpS
             ofile = ofile.substr(0,off);
         }
         ofile += ".old";
-        out.open(ofile, ios_base::out);
+        out.open(ofile.c_str(), ios_base::out);
         off = vs.size();
         for (ii = 0; ii < off; ii++) {
             line = vs[ii];
