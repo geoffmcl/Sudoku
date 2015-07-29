@@ -18,6 +18,13 @@
 #define STRCMPFIL  strcmp
 #endif  // WIN32 y/n - compare file macro
 #endif
+#ifndef STRCMPI
+#ifdef WIN32    // windows STRCMPFIL macro = strcmpi
+#define STRCMPI  strcmpi
+#else   // !WIN32 - STRCMPFIL macro = strcmp
+#define STRCMPI  strcasecmp
+#endif  // WIN32 y/n - compare file macro
+#endif
 
 /* ************************************************************************
    *** port of INI file handling ***
@@ -487,8 +494,8 @@ char * GetINIFile(void) {
 int  IsYes( char * lpb )
 {
    int  bRet = FALSE;
-   if( ( strcmpi(lpb, "yes") == 0 ) ||
-       ( strcmpi(lpb, "on" ) == 0 ) )
+   if( ( STRCMPI(lpb, "yes") == 0 ) ||
+       ( STRCMPI(lpb, "on" ) == 0 ) )
        bRet = TRUE;
    return bRet;
 }
@@ -496,8 +503,8 @@ int  IsYes( char * lpb )
 int  IsNo( char * lpb )
 {
    int  bRet = FALSE;
-   if( ( strcmpi(lpb, "no" ) == 0 ) ||
-       ( strcmpi(lpb, "off") == 0 ) )
+   if( ( STRCMPI(lpb, "no" ) == 0 ) ||
+       ( STRCMPI(lpb, "off") == 0 ) )
        bRet = TRUE;
    return bRet;
 }
