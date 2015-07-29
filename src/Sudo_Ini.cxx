@@ -10,6 +10,7 @@
 #ifdef WIN32    // include 'direct.h' for _getcwd()
 #include <direct.h> // for _getcwd()
 #endif  // WIN32 'direct.h'
+#include <fstream>
 
 #ifndef STRCMPFIL
 #ifdef WIN32    // windows STRCMPFIL macro = strcmpi
@@ -31,7 +32,7 @@
 #define MY4VALS "%d,%d,%d,%d"
 
 #define	GetStg( a, b )	\
-	GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
+	m_GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
 
 #else // !#ifdef WIN32    // unix formats and INI read/write
 
@@ -75,14 +76,153 @@ BOOL WINAPI WritePrivateProfileString(
 
 #endif // #ifdef WIN32 y/n   // formats and INI read/write
 
-DWORD m_GetPrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
+DWORD m_GetPrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
                                 DWORD   nSize,  LPCTSTR lpFileName)
 {
+    // GetStg( pSect, szShow ); // = "ShowCmd";
+    std::ifstream file(lpFileName);
+    std::string line, key, val; 
+    size_t off;
+    bool insect = false;
+    while (std::getline(file, line))
+    {
+        // Process line
+        if (line[0] == '[') {
+            off = line.find(']');
+            if (off > 0) {
+                val = line.substr(1,off-1);
+                insect = strcmp(lpSecName,val.c_str()) ? false : true;
+            }
+        } else if ((off = line.find('=')) > 0) {
+            if (insect) {
+                key = line.substr(0,off);
+                if (strcmp(lpKeyName, key.c_str()) == 0) {
+                    val = line.substr(off+1);
+                    if ((DWORD)val.size() < nSize) {
+                        strcpy(lpReturnedString, val.c_str());
+                        file.close();
+                        return (DWORD) val.size();
+                    }
+                }
+            }
+        }
+    }
+    file.close();
+    strcpy(lpReturnedString, lpDefault);
     return 0;
 }
 
-BOOL m_WritePrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
+BOOL get_to_section(std::ifstream &file, LPCTSTR lpSecName, vSTG &vs)
 {
+    std::string line, key, val; 
+    size_t off;
+    bool insect = false;
+    while (std::getline(file, line))
+    {
+        vs.push_back(line);     // Process line
+        if (line[0] == '[') {
+            off = line.find(']');
+            if (off > 0) {
+                val = line.substr(1,off-1);
+                insect = strcmp(lpSecName,val.c_str()) ? false : true;
+                if (insect)
+                    return TRUE;
+            }
+        }
+    }
+    return FALSE;
+}
+
+int get_to_key(std::ifstream &file, LPCTSTR lpKeyName, vSTG &vs, size_t *poff)
+{
+    std::string line, key; 
+    size_t off;
+    bool insect = false;
+    off = (size_t)file.tellg();
+    while (std::getline(file, line))
+    {
+        if (line[0] == '[') {
+            if (poff)
+                *poff = off;
+            return 2;
+        }
+        if ((off = line.find('=')) > 0) {
+            key = line.substr(0,off);
+            if (strcmp(lpKeyName, key.c_str()) == 0) {
+                if (poff)
+                    *poff = off;
+                return 1;
+            }
+        }
+        off = (size_t)file.tellg();
+        vs.push_back(line);
+    }
+    return 0;
+}
+
+
+BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
+{
+    std::ifstream file(lpFileName);
+    vSTG vs;
+    std::string line, ofile;
+    std::ofstream out;
+    int res;
+    size_t off, ii;
+    if (get_to_section(file, lpSecName, vs)) {
+        res = get_to_key(file, lpKeyName, vs, &off);
+        if (res) {
+            if (res == 2) {
+                // reached next section, without finding the key! backup one
+                file.seekg(off);    // back to BEFORE this section
+            } else {
+                // could check if there is a change...
+            }
+        }
+        // insert new line
+        line  = lpKeyName;
+        line += "=";
+        line += lpString;
+        vs.push_back(line);
+        while (std::getline(file, line)) {
+            vs.push_back(line);
+        }
+        ofile = lpFileName;
+        off = ofile.rfind('.');
+        if (off > 0) {
+            ofile = ofile.substr(0,off);
+        }
+        ofile += ".old";
+        out.open(ofile, ios_base::out);
+        off = vs.size();
+        for (ii = 0; ii < off; ii++) {
+            line = vs[ii];
+             out << line << std::endl;
+        }
+        out.close();
+        ///////////////////////////////////////////////////////////////
+        // if successful write operation, delete previous, and ren .old
+        ///////////////////////////////////////////////////////////////
+        unlink(lpFileName);
+        int rc = std::rename(ofile.c_str(), lpFileName); 
+        if(rc) {
+            std::perror("Error renaming"); 
+            return 1; 
+        }
+    } else {
+         file.close();
+         // Append new section, and write value
+         out.open(lpFileName, std::ios::app);
+         line = "[";
+         line += lpSecName;
+         line += "]";
+         out << line << std::endl;
+         line  = lpKeyName;
+         line += "=";
+         line += lpString;
+         out << line << std::endl;
+         out.close();
+    }
     return FALSE;
 }
 
