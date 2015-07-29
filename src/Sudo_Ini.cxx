@@ -52,7 +52,26 @@ BOOL WINAPI WritePrivateProfileString(
 
 ==================================================================
 */
+#ifndef WIN32
+DWORD GetPrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
+                                DWORD   nSize,  LPCTSTR lpFileName)
+{
+    return 0;
+}
+BOOL WritePrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
+{
+    return FALSE;
+}
+BOOL EqualRect( PRECT pr1, PRECT pr2 )
+{
+    return FALSE;
+}
 
+BOOL GetWindowPlacement(HWND hwnd, PWINDOWPLACEMENT pwp)
+{
+    return FALSE;
+}
+#endif
 static char m_szTmpBuf[1024];
 static char g_szDefIni[] = "Sudoku.ini";
 char g_szIni[264] = { "\0" };
@@ -257,8 +276,9 @@ char *Get_First_INI_File() { return Get_INI_File(0); }
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
-#ifdef WIN32    // INI file handling for windows
+//#ifdef WIN32    // INI file handling for windows
 /////////////////////////////////////////////////////////////////////////////////////////
+#if 1
 
 DWORD Add_INI_Files_to_Menu()
 {
@@ -450,6 +470,7 @@ int Chk4Debug( char * lpd )
    return bret;
 }
 
+#ifndef WIN32
 /* SYNTAX:
 
 DWORD WINAPI GetModuleFileName(
@@ -459,6 +480,17 @@ DWORD WINAPI GetModuleFileName(
 );
 
  */
+
+DWORD GetModuleFileName(HMODULE hModule, LPTSTR  lpFilename, DWORD   nSize)
+{
+    char id[256];
+    memset(lpFilename,0,nSize);
+    sprintf(id,"/proc/%d/exe", getpid());
+    readlink(id,lpFilename,nSize);
+    return (DWORD)strlen(lpFilename);
+}
+
+#endif
 
 void  GetModulePath( char * lpb )
 {
@@ -693,7 +725,7 @@ void Post_INI_Read()
     // char g_szLastPath[264] = {0}; // LAST PATH
     // BOOL gChgLPath = FALSE;
     if (g_szLastPath[0] == 0) {
-        if (_getcwd( g_szLastPath, 256 )) 
+        if (getcwd( g_szLastPath, 256 )) 
             gChgLPath = TRUE;
     }
 
@@ -728,7 +760,7 @@ void ReadINI( void )
                 // Always do FULL LIST, in case of gaps
                 sprintf( lpb, pItem, (j+1) );
 			    GetStg( pSect, lpb );
-                if( i = strlen( lpb ) ) { // If we GOT a FILE NAME
+                if(( i = strlen( lpb ) ) != 0 ) { // If we GOT a FILE NAME
                     s = lpb;
                     vsp->push_back(s);
                 }
@@ -780,7 +812,7 @@ void ReadINI( void )
                *pb = TRUE;
             break;
          case it_Rect:
-            pr = (PRECT) &lpb[ lstrlen(lpb) + 2 ];
+            pr = (PRECT) &lpb[ strlen(lpb) + 2 ];
             pr->left = 0;
             pr->top = 0;
             pr->right = 0;
@@ -799,7 +831,7 @@ void ReadINI( void )
             }
             break;
          case it_Color:
-            pr = (PRECT) &lpb[ lstrlen(lpb) + 2 ];
+            pr = (PRECT) &lpb[ strlen(lpb) + 2 ];
             pr->left = 0;
             pr->top = 0;
             pr->right = 0;

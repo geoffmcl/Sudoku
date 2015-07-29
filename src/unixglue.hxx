@@ -12,13 +12,16 @@
 typedef void * HWND;
 typedef void * HINSTANCE;
 typedef char TCHAR;
+typedef unsigned char BYTE;
+typedef unsigned short WORD;
 typedef int BOOL;
 typedef BOOL * PBOOL;
 typedef long WPARAM;
 typedef void VOID;
+typedef char * PTSTR;
 typedef char * LPTSTR;
-typedef char * LPCTSTR;
-typedef char * LPCSTR;
+typedef const char * LPCTSTR;
+typedef const char * LPCSTR;
 typedef long LPARAM;
 typedef void * HPEN;
 typedef void * HBRUSH;
@@ -29,6 +32,7 @@ typedef void * HMENU;
 typedef void * HPALETTE;
 typedef void * HBITMAP;
 typedef void * PVOID;
+typedef void * HMODULE;
 typedef unsigned char byte;
 
 typedef unsigned long COLORREF;
@@ -54,7 +58,7 @@ typedef struct tagWINDOWPLACEMENT {
     unsigned int showCmd;
     POINT ptMinPosition;
     POINT ptMaxPosition;
-    RECT rcNormalPositon;
+    RECT rcNormalPosition;
 }WINDOWPLACEMENT, *PWINDOWPLACEMENT;
 
 typedef struct tagCHOOSECOLOR {
@@ -120,6 +124,11 @@ typedef struct tagCHOOSECOLOR {
 #define SW_SHOWDEFAULT      10
 #define SW_FORCEMINIMIZE    11
 #define SW_MAX              11
+
+#define LOBYTE(w) ((BYTE)((w) & 0xff))
+#define GetRValue(rgb)  (LOBYTE(rgb))
+#define GetGValue(rgb)  (LOBYTE(((WORD)(rgb)) >> 8))
+#define GetBValue(rgb)  (LOBYTE((rgb)>>16))
 
 #endif // #ifndef _UNIXGLUE_HXX_
 // eof - unixglue.hxx
