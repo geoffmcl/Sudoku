@@ -1083,6 +1083,8 @@ void WriteINI( void )
    WINDOWPLACEMENT * pwp;
    PRECT    pr;
    char *  lpini = GetINIFile();
+   int chgcount = 0;
+
    sprtf("Writting INI file [%s]\n", lpini);
    // Pre_INI_Write();
    if( ball )
@@ -1202,6 +1204,7 @@ void WriteINI( void )
                      lpb,       // Res.word
                      s.c_str(), // name
                      lpini );   // ini file name
+                 chgcount++;
              }
              *lpb = 0;  // ALL Done - List written
          }
@@ -1215,10 +1218,13 @@ void WriteINI( void )
 						pItem,		// Res.Word
 						lpb,		// String to write
 						lpini );	// File Name
+            chgcount++;
          }
       }
       plst++;
    }
+   sprtf("Written INI file with 5d changes.\n", chgcount);
+
 }
 
 // eof - Sudo_Ini.cxx
