@@ -30,6 +30,9 @@
 #define MY3VALS "%d,%d,%d"
 #define MY4VALS "%d,%d,%d,%d"
 
+#define	GetStg( a, b )	\
+	GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
+
 #else // !#ifdef WIN32    // unix formats and INI read/write
 
 /* ************************************************************************
@@ -62,28 +65,37 @@ BOOL WINAPI WritePrivateProfileString(
 #define MY3VALS "%ld,%ld,%ld"
 #define MY4VALS "%ld,%ld,%ld,%ld"
 
-DWORD GetPrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
+#define	GetStg( a, b )	\
+	m_GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
+
+#define GetPrivateProfileString m_GetPrivateProfileString
+#define WritePrivateProfileString m_WritePrivateProfileString
+#define EqualRect m_EqualRect
+#define GetWindowPlacement m_GetWindowPlacement
+
+#endif // #ifdef WIN32 y/n   // formats and INI read/write
+
+DWORD m_GetPrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
                                 DWORD   nSize,  LPCTSTR lpFileName)
 {
     return 0;
 }
 
-BOOL WritePrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
+BOOL m_WritePrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
 {
     return FALSE;
 }
 
-BOOL EqualRect( PRECT pr1, PRECT pr2 )
+BOOL m_EqualRect( PRECT pr1, PRECT pr2 )
 {
     return FALSE;
 }
 
-BOOL GetWindowPlacement(HWND hwnd, PWINDOWPLACEMENT pwp)
+BOOL m_GetWindowPlacement(HWND hwnd, PWINDOWPLACEMENT pwp)
 {
     return FALSE;
 }
 
-#endif // #ifdef WIN32 y/n   // formats and INI read/write
 
 static char m_szTmpBuf[1024];
 static char g_szDefIni[] = "Sudoku.ini";

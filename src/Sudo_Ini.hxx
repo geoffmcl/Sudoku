@@ -5,9 +5,6 @@
 #include <Windows.h>
 #endif
 
-#define	GetStg( a, b )	\
-	GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
-
 #define  it_None        0     // end of list
 #define  it_Version     1
 #define  it_String      2
