@@ -413,6 +413,14 @@ VOID Do_WM_CONTEXTMENU( HWND hWnd, WPARAM wParam, LPARAM lParam )
 #else // !#ifdef WIN32 - TODO: menu handling
 //////////////////////////////////////////////////////////////////////////////////////////////
 
+DWORD SetFileMRU( HWND hwnd, vSTG vs )
+{
+    DWORD iRet = 0;
+    // TODO: When we have a menu...
+    return iRet;
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n - menu handling
 
