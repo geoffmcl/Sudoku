@@ -1223,7 +1223,11 @@ void WriteINI( void )
       }
       plst++;
    }
-   sprtf("Written INI file with %d changes.\n", chgcount);
+   if (chgcount) {
+       sprtf("Written INI file with %d changes.\n", chgcount);
+   } else {
+       sprtf("No INI file changes...\n");
+   }
 
 }
 
