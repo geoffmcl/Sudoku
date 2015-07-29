@@ -1143,6 +1143,7 @@ int main( int argc, char **argv )
     int iret = 0;
     add_std_out(1);
     g_AutoDelay = 0.0001;  // was 0.02;
+    ReadINI();
     iret = parse_args( argc, argv );
     if (iret) 
         return iret;
@@ -1157,6 +1158,7 @@ int main( int argc, char **argv )
         sprtf("Error: Failed to load '%s'\n", usr_input);
         iret = 1;
     }
+    WriteINI();
     add_app_end();
     return iret;
 }

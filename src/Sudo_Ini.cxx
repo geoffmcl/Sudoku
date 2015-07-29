@@ -34,6 +34,9 @@
 #define	GetStg( a, b )	\
 	m_GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
 
+#undef WritePrivateProfileString
+#define WritePrivateProfileString m_WritePrivateProfileString
+
 #else // !#ifdef WIN32    // unix formats and INI read/write
 
 /* ************************************************************************
@@ -187,11 +190,10 @@ BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpS
         while (std::getline(file, line)) {
             vs.push_back(line);
         }
+        file.close();
+
+        // write NEW file
         ofile = lpFileName;
-        off = ofile.rfind('.');
-        if (off > 0) {
-            ofile = ofile.substr(0,off);
-        }
         ofile += ".old";
         out.open(ofile.c_str(), ios_base::out);
         off = vs.size();
@@ -203,11 +205,14 @@ BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpS
         ///////////////////////////////////////////////////////////////
         // if successful write operation, delete previous, and ren .old
         ///////////////////////////////////////////////////////////////
-        unlink(lpFileName);
-        int rc = std::rename(ofile.c_str(), lpFileName); 
+        int rc;
+        rc = unlink(lpFileName);
         if(rc) {
-            std::perror("Error renaming"); 
-            return 1; 
+            SPRTF("Failed to 'delete' file '%s' (%d)\n", lpFileName, errno);
+        }
+        rc = std::rename(ofile.c_str(), lpFileName); 
+        if(rc) {
+            SPRTF("Failed to 'rename' file '%s' to '%s'! (%d)\n", ofile.c_str(), lpFileName, errno);
         }
     } else {
          file.close();
@@ -223,7 +228,7 @@ BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpS
          out << line << std::endl;
          out.close();
     }
-    return FALSE;
+    return TRUE;
 }
 
 BOOL m_EqualRect( PRECT pr1, PRECT pr2 )
