@@ -27,7 +27,9 @@
 #endif  // WIN32 y/n - compare file macro
 #endif
 
+/////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32    // windows formats and INI read/write
+/////////////////////////////////////////////////////////////////////////////
 #define MY3VALS "%d,%d,%d"
 #define MY4VALS "%d,%d,%d,%d"
 
@@ -37,8 +39,10 @@
 #undef WritePrivateProfileString
 #define WritePrivateProfileString m_WritePrivateProfileString
 
+/////////////////////////////////////////////////////////////////////////////
 #else // !#ifdef WIN32    // unix formats and INI read/write
-
+/////////////////////////////////////////////////////////////////////////////
+#include <errno.h>
 /* ************************************************************************
    *** port of INI file handling ***
    =================================
@@ -77,6 +81,7 @@ BOOL WINAPI WritePrivateProfileString(
 #define EqualRect m_EqualRect
 #define GetWindowPlacement m_GetWindowPlacement
 
+/////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n   // formats and INI read/write
 
 DWORD m_GetPrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
