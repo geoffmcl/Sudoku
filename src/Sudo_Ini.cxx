@@ -26,13 +26,11 @@
 #endif  // WIN32 y/n - compare file macro
 #endif
 
-#ifdef WIN32    // windows formats
+#ifdef WIN32    // windows formats and INI read/write
 #define MY3VALS "%d,%d,%d"
 #define MY4VALS "%d,%d,%d,%d"
-#else
-#define MY3VALS "%ld,%ld,%ld"
-#define MY4VALS "%ld,%ld,%ld,%ld"
-#endif
+
+#else // !#ifdef WIN32    // unix formats and INI read/write
 
 /* ************************************************************************
    *** port of INI file handling ***
@@ -60,7 +58,10 @@ BOOL WINAPI WritePrivateProfileString(
 
 ==================================================================
 */
-#ifndef WIN32
+
+#define MY3VALS "%ld,%ld,%ld"
+#define MY4VALS "%ld,%ld,%ld,%ld"
+
 DWORD GetPrivateProfileString(LPCTSTR lpAppName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
                                 DWORD   nSize,  LPCTSTR lpFileName)
 {
@@ -81,7 +82,9 @@ BOOL GetWindowPlacement(HWND hwnd, PWINDOWPLACEMENT pwp)
 {
     return FALSE;
 }
-#endif
+
+#endif // #ifdef WIN32 y/n   // formats and INI read/write
+
 static char m_szTmpBuf[1024];
 static char g_szDefIni[] = "Sudoku.ini";
 char g_szIni[264] = { "\0" };
@@ -284,11 +287,6 @@ char *Get_INI_File( int off )
 
 char *Get_First_INI_File() { return Get_INI_File(0); }
 
-
-/////////////////////////////////////////////////////////////////////////////////////////
-//#ifdef WIN32    // INI file handling for windows
-/////////////////////////////////////////////////////////////////////////////////////////
-#if 1
 
 DWORD Add_INI_Files_to_Menu()
 {
@@ -1033,51 +1031,5 @@ void WriteINI( void )
       plst++;
    }
 }
-
-/////////////////////////////////////////////////////////////////////////////////////////
-#else // !#ifdef WIN32 - TODO: INI file handling for not windows
-/////////////////////////////////////////////////////////////////////////////////////////
-void ReadINI( void )
-{
-    sprtf("ReadINI not yet implemented in unix\n");
-}
-void WriteINI( void )
-{
-    sprtf("WriteINI not yet implemented in unix\n");
-}
-
-void Add_to_INI_File_List( char * pfile )
-{
-    vSTG *vsp = &load_files;
-    string s = pfile;
-    string s2;
-    vSTGi ii;
-    // last file is ALWAYS put to TOP of list
-    vSTG nlist;
-    nlist.push_back(s);
-    DWORD count = 1;    // have ONE in list
-    for (ii = vsp->begin(); ii != vsp->end(); ii++) {
-        s2 = *ii;
-        if (STRCMPFIL(s.c_str(),s2.c_str()) == 0 )
-            continue; // was already in list
-        nlist.push_back(s2);
-        count++;
-        if (count >= gdwMaxFiles)
-            break;
-    }
-    gChgFiles = TRUE;
-    vsp->clear();
-    for (ii = nlist.begin(); ii != nlist.end(); ii++)
-    {
-        s = *ii;
-        vsp->push_back(s);
-    }
-    nlist.clear();
-    // Add_INI_Files_to_Menu();    // reset the MENU LIST MRU
-
-}
-
-/////////////////////////////////////////////////////////////////////////////////////////
-#endif // #ifdef WIN32 y/n - INI file handling
 
 // eof - Sudo_Ini.cxx
