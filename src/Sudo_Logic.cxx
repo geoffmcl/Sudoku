@@ -412,6 +412,10 @@ bool Eliminate_Unique_In_Row( int crow, int ccol, PABOX2 pb, PSET ps_1, PSET ps_
 }
 
 // Basic - Mark in SAME Row, Col, Box
+// In a complete puzzle search this can give multiple hits,
+// so ONLY count a 'hit' if it does not already have that 'elimination' flag
+// ==================================
+// To do a COLUMN, just do each row down
 int Mark_Same_Col( PABOX2 pb, int col, PSET ps, int flag )
 {
     int row2, val, cnt;
@@ -431,6 +435,7 @@ int Mark_Same_Col( PABOX2 pb, int col, PSET ps, int flag )
     return cnt;
 }
 
+// To do a ROW, just march across the columns
 int Mark_Same_Row( PABOX2 pb, int row, PSET ps, int flag )
 {
     int col2, val, cnt;
@@ -450,6 +455,8 @@ int Mark_Same_Row( PABOX2 pb, int row, PSET ps, int flag )
     return cnt;
 }
 
+// To do a BOX is a little more complicated, and need to know the 
+// current row,col to determine which BOX to search.
 int Mark_Same_Box( int crow, int ccol, PABOX2 pb, PSET ps, int flag )
 {
     int r = crow / 3;
@@ -3986,7 +3993,9 @@ int Do_Unique_Scan(PABOX2 pb)
     return count;
 }
 
-
+// Scan of row,cols,boxes eliminating any candidate already in that set
+// That is is we have '1' in R1C1, then '1' can be eliminated in all of
+// R1, C1, and Box 1... done after the user adds a value somewhere.
 int Do_Simple_Scan(PABOX2 pb)
 {
     int row, col, count;
