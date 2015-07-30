@@ -27,6 +27,8 @@
 #endif  // WIN32 y/n - compare file macro
 #endif
 
+int add_debug_ini = 0;
+
 /////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32    // windows formats and INI read/write
 /////////////////////////////////////////////////////////////////////////////
@@ -34,10 +36,10 @@
 #define MY4VALS "%d,%d,%d,%d"
 
 #define	GetStg( a, b )	\
-	m_GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
+	m_ReadProf( a, b, &szBlk[0], lpb, 256, lpini )
 
 #undef WritePrivateProfileString
-#define WritePrivateProfileString m_WritePrivateProfileString
+#define WritePrivateProfileString m_WriteProf
 
 /////////////////////////////////////////////////////////////////////////////
 #else // !#ifdef WIN32    // unix formats and INI read/write
@@ -74,17 +76,18 @@ BOOL WINAPI WritePrivateProfileString(
 #define MY4VALS "%ld,%ld,%ld,%ld"
 
 #define	GetStg( a, b )	\
-	m_GetPrivateProfileString( a, b, &szBlk[0], lpb, 256, lpini )
+	m_ReadProf( a, b, &szBlk[0], lpb, 256, lpini )
 
-#define GetPrivateProfileString m_GetPrivateProfileString
-#define WritePrivateProfileString m_WritePrivateProfileString
+#define GetPrivateProfileString m_ReadProf
+#define WritePrivateProfileString m_WriteProf
 #define EqualRect m_EqualRect
 #define GetWindowPlacement m_GetWindowPlacement
 
 /////////////////////////////////////////////////////////////////////////////
 #endif // #ifdef WIN32 y/n   // formats and INI read/write
 
-DWORD m_GetPrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
+
+DWORD m_ReadProf(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpDefault,LPTSTR  lpReturnedString,
                                 DWORD   nSize,  LPCTSTR lpFileName)
 {
     // GetStg( pSect, szShow ); // = "ShowCmd";
@@ -169,7 +172,7 @@ int get_to_key(std::ifstream &file, LPCTSTR lpKeyName, vSTG &vs, size_t *poff)
 }
 
 
-BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
+BOOL m_WriteProf(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
 {
     std::ifstream file(lpFileName);
     vSTG vs;
@@ -227,11 +230,11 @@ BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpS
         int rc;
         rc = unlink(lpFileName);
         if(rc) {
-            SPRTF("Failed to 'delete' file '%s' (%d)\n", lpFileName, errno);
+            SPRTF("Error: m_WriteProf: Failed to 'delete' file '%s' (%d)\n", lpFileName, errno);
         }
         rc = std::rename(ofile.c_str(), lpFileName); 
         if(rc) {
-            SPRTF("Failed to 'rename' file '%s' to '%s'! (%d)\n", ofile.c_str(), lpFileName, errno);
+            SPRTF("Error: m_WriteProf: Failed to 'rename' file '%s' to '%s'! (%d)\n", ofile.c_str(), lpFileName, errno);
         }
     } else {
          file.close();
@@ -254,6 +257,12 @@ BOOL m_WritePrivateProfileString(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpS
 
 BOOL m_EqualRect( PRECT pr1, PRECT pr2 )
 {
+    if ((pr1->bottom == pr2->bottom) &&
+        (pr1->left   == pr2->left  ) &&
+        (pr1->right  == pr2->right ) &&
+        (pr1->top    == pr2->top   )) {
+        return TRUE;
+    }
     return FALSE;
 }
 
@@ -952,6 +961,7 @@ void ReadINI( void )
 
    char * lpini = GetINIFile();
    icnt = 0;
+   if (add_debug_ini) sprtf("Reading INI file [%s]\n", lpini);
     while( ( dwt = plst->i_Type ) != it_None )
     {
         pSect = plst->i_Sect;   // pointer to [section] name
@@ -1094,7 +1104,7 @@ void WriteINI( void )
    char *  lpini = GetINIFile();
    int chgcount = 0;
 
-   sprtf("Writting INI file [%s]\n", lpini);
+   if (add_debug_ini) sprtf("Writting INI file [%s]\n", lpini);
    // Pre_INI_Write();
    if( ball )
    {
@@ -1232,12 +1242,13 @@ void WriteINI( void )
       }
       plst++;
    }
-   if (chgcount) {
-       sprtf("Written INI file with %d changes.\n", chgcount);
-   } else {
-       sprtf("No INI file changes...\n");
+   if (add_debug_ini) {
+        if (chgcount) {
+            sprtf("Written INI file with %d changes.\n", chgcount);
+        } else {
+            sprtf("No INI file changes...\n");
+        }
    }
-
 }
 
 // eof - Sudo_Ini.cxx
