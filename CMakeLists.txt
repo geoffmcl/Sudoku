@@ -32,7 +32,9 @@ if(WIN32 AND MSVC)
     set(MSVC_FLAGS "-DNOMINMAX -D_USE_MATH_DEFINES -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS -D__CRT_NONSTDC_NO_WARNINGS")
     # turn off various warnings
     # foreach(warning 4244 4251 4267 4275 4290 4786 4305 4996)
-    foreach(warning 4996)
+    # C4267: 'return' : conversion from 'size_t' to 'DWORD', possible loss of data
+    # C4244: 'initializing' : conversion from 'INT_PTR' to 'int'
+    foreach(warning 4267 4244 4996)
         set(MSVC_FLAGS "${MSVC_FLAGS} /wd${warning}")
     endforeach()
     
