@@ -11,7 +11,7 @@ BOOL Change_Box(PABOX2 pb, int row, int col, int val, int flag)
         int val2 = get_solution_value(row,col);
         if (val2 && (val2 != val)) {
             g_bAutoSolve = FALSE;   // stop any AUTO SOLVE!!!
-            sprtf("Change R%dC%d: Value %d NOT %d\n", row + 1, col + 1, val2, val);
+            sprtf("Cheat: Change R%dC%d: Solution value is %d, NOT %d!\n", row + 1, col + 1, val2, val);
             if (g_bWarnOnChange) {
                 char *tb = GetNxtBuf();
                 sprintf(tb,"Cell R%dC%d (%c%d) is about to be SET with value [%d]" MEOL,
