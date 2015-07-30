@@ -862,7 +862,7 @@ int Do_Naked_Quad_Scan( PABOX2 pb )
             m2++;
             ADDSP(tb);
         }
-        OUTIT(tb);
+        OUTITNP(tb);
         sprtf("S2c: Marked Naked Quad [%d] - to %d\n", count, sg_Fill_NakedQuad );
         //Stack_Fill( Do_Fill_NakedTriple );
         pb->iStage = sg_Fill_NakedQuad;
@@ -877,7 +877,8 @@ int Do_Naked_Quad_Scan( PABOX2 pb )
 int Do_Fill_NakedQuad( PABOX2 pb )
 {
     int count = Do_Fill_By_Flags( pb, cf_NTE, cf_NT, "NQ", "Naked.Quad" );
-    sprtf("Done Fill Naked Quad - count %d\n", count);
+    if (add_debug_np)
+        sprtf("Done Fill Naked Quad - count %d\n", count);
     if (count)
         pb->iStage = sg_Begin;
     return count;
@@ -1687,7 +1688,7 @@ int Do_Naked_Pairs(PABOX2 pb)
                 }
             }
         }
-        OUTIT(tb);
+        OUTITNP(tb);
         sprtf("S2c: Found Naked Pairs. Elim %d To Fill\n", count, sg_Fill_Naked);
         pb->iStage = sg_Fill_Naked;
     } else {

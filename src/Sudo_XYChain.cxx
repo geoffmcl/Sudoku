@@ -381,7 +381,7 @@ int Test_XY_Chain_for_Elims(PXYSTR pxystr)
         }
         Mark_XY_Chain_setvals(pxystr);
         if (count) {
-            OUTIT(tb);
+            OUTITXY(tb);
             vRC *pact_chain = Get_XY_Act_Chain();
             pact_chain->clear();
             xy_chain_elims = count;

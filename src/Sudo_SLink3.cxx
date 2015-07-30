@@ -261,7 +261,7 @@ int Process_SL_Colored_Pairs_for_Elims_per_ch_num3(PABOX2 pb, int setval, vRCP *
             const char *clrtype = ((flg1 == cf_XAB) ? "?" : (flg1 & cf_XCA) ? "A" : (flg1 & cf_XCB) ? "B" : "U");
             sprintf(EndBuf(tb),"seen %s%s ", Get_RC_setval_RC_Stg( prc, setval ), clrtype);
         }
-        OUTIT(tb);
+        OUTITSL3(tb);
         count = (int)max;
 
     }

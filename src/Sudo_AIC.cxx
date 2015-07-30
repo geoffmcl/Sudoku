@@ -327,7 +327,7 @@ void Check_AIC_Chain( PAICSTR paic )
             Get_RC_setval_RC_Stg(prc,prc->cnum),
             Get_RC_setval_RC_Stg(prc1,prc->cnum),
             Get_RC_setval_RC_Stg(prc2,prc->cnum) );
-        OUTIT(tb);
+        OUTITAIC(tb);
     }
 
     if (paic->elim_count) {
@@ -1240,8 +1240,8 @@ int Do_AIC_Scans( PABOX2 pb )
     paic->pvibox    = &vibox;
     CLRVINTS;
 
-    sprtf("Do AIC scan on %d empty cells.\n",cnt);
     if (add_debug_aic) {
+        sprtf("Do AIC scan on %d empty cells.\n",cnt);
         scnout = add_screen_out(0);
         Show_PRCB(&rcrcb);
     }

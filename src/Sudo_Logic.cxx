@@ -1832,6 +1832,7 @@ int Do_Fill_Hidden(PABOX2 pb)
     return count;
 }
 
+#define OUTITXW(a) if (add_debug_xw) OUTIT(a)
 
 int Do_Fill_XWing( PABOX2 pb )
 {
@@ -1867,7 +1868,7 @@ int Do_Fill_XWing( PABOX2 pb )
         }
     }
     if (count) {
-        OUTIT(tb);
+        OUTITXW(tb);
         sprintf(tb,"S%d: Cleared [%d] X-Wing Excl ", pb->iStage, count);
     } else {
         sprintf(tb,"S%d: No X-Wing Excl found ", pb->iStage);

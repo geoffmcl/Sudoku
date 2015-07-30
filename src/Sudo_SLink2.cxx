@@ -357,7 +357,7 @@ int Check_SL_Elim( PABOX2 pb )
         Append_RC_Settings(tb, prc);
         ADDSP(tb);
     }
-    OUTIT(tb);
+    OUTITSL2(tb);
     return count;
 }
 
@@ -444,7 +444,7 @@ int Scan_Strong_Links_by_setval( PABOX2 pb, int setval )
     if (add_debug_sl2) Show_RC_SL_Chain2(pvrc2, setval,"SL-Chain: after sort");
     val = Check_SL_for_Elims(pb, pvrc2, setval);
     if (val) {
-        sprtf("SL Scan elim %d\n",val);
+        if (add_debug_sl2) sprtf("SL Scan elim %d\n",val);
         int val2 = Check_SL_Elim(pb);
     }
     count = val;
