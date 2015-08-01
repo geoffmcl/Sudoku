@@ -1528,6 +1528,74 @@ int PP_Elim_in_Col_outside_Box( PABOX2 pb, int col, int box, PRCRCB prcrcb, int 
 }
 
 int g_bSkipPPVals = 0;
+// Pointing Pairs
+//
+// In AIC-Rule1.txt are missing a set of pointing pairs
+// 6@A5 and 6@A6 can be eliminated, since in the next box,
+// there are only 2 cells with 6 as the candidate, 6@A8 and 6@A9
+// Either A8 or A9 must take the 6, then 6's in this row can be eliminated
+//
+// =======================================================================
+int Do_Pointing_Pairs1( PABOX2 pb ) // some NEW test code only
+{
+    int count = 0;
+    // for each BOX, find the candidate pairs
+    int crow = 0;
+    int ccol = 0;
+    int r = crow / 3;
+    int c = ccol / 3;
+    int rw, cl, val, cnt, i, row, col, fnd;
+    r *= 3;
+    c *= 3;
+    cnt = 0;
+    PSET ps;
+    int setvals1[9];
+    int donevals[9];
+    int candcnts[9];
+
+    memset(donevals,0,sizeof(donevals));
+    for (crow = 0; crow < 9; crow += 3) {
+        r = (crow / 3) * 3;
+        for (ccol = 0; ccol < 9; ccol += 3) {
+            c = (ccol / 3) * 3;
+            memset(donevals,0,sizeof(donevals));
+            fnd = 0;
+            for (rw = 0; rw < 3; rw++) {
+                row = r + rw;
+                for (cl = 0; cl < 3; cl++) {
+                    col = c + cl;
+                    val = pb->line[row].val[col];    // get the value, if any
+                    if (val) continue;
+
+                    ps = &pb->line[row].set[col];       // get pointset for an empty slot in this box
+                    cnt = Get_Set_Cnt2(ps,setvals1);    // Do_Pointing_Pairs1() - scan boxes for pointing pairs
+                    for (i = 0; i < cnt; i++) {
+                        val = setvals1[i];
+                        candcnts[val - 1]++;
+                    }
+                }
+            }
+            // done BOX collecting candidate counts
+            for (i = 0; i < 9; i++) {
+                val = candcnts[i];
+                if (val == 2) {
+                    // we have a PAIR
+                    // we have a candidate value
+                    val = i + 1;
+                    if (!donevals[val]) {
+                        donevals[val] = val;
+                        // time to search this box for a partner
+                        // *************************************
+                    }
+
+                }
+            }
+
+        }
+    }
+    return count;
+}
+
 int Do_Pointing_Pairs( PABOX2 pb )
 {
     int count = 0;
@@ -2840,6 +2908,22 @@ int Do_Fill_Simple(PABOX2 pb)
 
 BOOL g_bChkElims = TRUE;
 
+////////////////////////////////////////////////////////////////////////
+// Changing the puzzle
+// ===================
+//
+// Eliminate candidates marked with an eflg 'flag'
+// Scan all slots with NO value
+// Scan the remaining candidate in that empty slot
+// If the candidate has that eflg, and if 'delete' requested,
+// *** THE CANDIDATE WILL BE ELIMINATED ***
+// If that candidate also has the 'modified' (mflg), add that to a debug message
+// Also if given an optional cflag, and the slot contains the 'cflg' then clear that flag.
+//
+// Keep a vector vRC of eliminated candidates, elims,
+// If the global g_bChkElims is ON, && we have run the solver on the PABOX2 (pb->bflag & bf_DnTest)
+//
+////////////////////////////////////////////////////////////////////////
 int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char *type, uint64_t cflg,
                       bool do_delete )
 {
@@ -2907,7 +2991,10 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
     OUTITFF(tb);
 
     // =============================================================
-    if (g_bChkElims && (pb->bflag & bf_DnTest)) {
+    cflags = 0;
+    if (g_bChkElims && (pb->bflag & bf_DnTest) && (pb->bflag & bf_Unique)) {
+        // we have a VALID brute force UNIQUE solution.
+        // Make sure each eliminated value is NOT the solution value
         size_t max = elims.size();
         size_t ii;
         PROWCOL prc;
@@ -2923,7 +3010,7 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
             }
         }
         if (cflags) {
-            sprtf("WARNING: %d %s elim errors! %s\n", cflags, type, tb);
+            sprtf("WARNING: %d %s ELIM ERRORS! %s\n", cflags, type, tb);
         }
     }
     elims.clear();
@@ -2931,8 +3018,10 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
     // ================================================================
 
     if (count) {
-        sprintf(tb,"S%d: Cleared [%d] %s ", pb->iStage, count, type);
-        strcat(tb," To begin");
+        sprintf(tb,"S%d: Cleared [%d] %s", pb->iStage, count, type);
+        if (cflags)
+            sprintf(EndBuf(tb),", NOTE %d elim. errors!",cflags);
+        strcat(tb," - To begin");
         pb->iStage = sg_Begin;
     } else {
         sprintf(tb,"S%d: No %s found - no change", pb->iStage, type);
