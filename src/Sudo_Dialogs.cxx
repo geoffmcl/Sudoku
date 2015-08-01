@@ -264,7 +264,9 @@ VOID Do_Text_Scroll(HWND hDlg)
     if (!stop_scroll) {
         time_t secs = time(0);
         if (secs != seconds) {
-            // 
+            // Presently scroll one line each second
+            // TODO: Would be nice if this could be a pixel smooth scroll
+            // rather than the current 'jerky' line scroll
             DWORD res = SendDlgItemMessage(hDlg, IDC_EDIT3, EM_GETTHUMB, 0, 0 );
             if (res >= 100) {
                 stop_scroll = true;
@@ -290,10 +292,10 @@ BOOL Do_INIT_About(HWND hDlg)
 {
     char *tb = GetNxtBuf();
 
-    sprintf(tb,"Sudoku, version %s", APP_VERSION);
+    sprintf(tb,"Sudoku, version %s of %s", SUDO_VERSION, SUDO_DATE);
     SetDlgItemText(hDlg, IDC_LABEL1, tb);
 
-    sprintf(tb,"Copyright (C) Geoff R. McLane, 2012");
+    sprintf(tb,"Copyright (C) Geoff R. McLane, 2012-2015");
     SetDlgItemText(hDlg, IDC_LABEL2, tb);
 
     sprintf(tb,"Compiled on %s at %s", __DATE__, __TIME__);

@@ -22,8 +22,13 @@
 #include <SDKDDKVer.h>
 #endif  // #ifdef WIN32
 
-// This should be the SAME as the VERSION resource
-#define APP_VERSION "1.0.0.RC1"
+// This should be the SAME as the VERSION resource - need to abandon this windows ONLY embedded version
+#ifndef SUDO_VERSION
+#define SUDO_VERSION "1.0.0.RC1"
+#endif
+#ifndef SUDO_DATE
+#define SUDO_DATE "2015.08.01"
+#endif
 
 // 20121003 - accepted USE_BOX_STACK // stack the BOX on every change, what ever the change
 
