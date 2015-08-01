@@ -291,8 +291,11 @@ VOID Do_Text_Scroll(HWND hDlg)
 BOOL Do_INIT_About(HWND hDlg)
 {
     char *tb = GetNxtBuf();
-
+#ifdef SUDO_RC_VALUE
+    sprintf(tb,"Sudoku, version %s.%s of %s", SUDO_VERSION, SUDO_RC_VALUE, SUDO_DATE);
+#else
     sprintf(tb,"Sudoku, version %s of %s", SUDO_VERSION, SUDO_DATE);
+#endif
     SetDlgItemText(hDlg, IDC_LABEL1, tb);
 
     sprintf(tb,"Copyright (C) Geoff R. McLane, 2012-2015");

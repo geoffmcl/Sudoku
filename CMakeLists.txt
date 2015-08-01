@@ -15,6 +15,40 @@ option( BUILD_WIN32_EXE   "Set OFF to build a console app, using main()"  ON  )
 set( LIB_TYPE STATIC )  # set default static
 option( BUILD_SHARED_LIB  "Set ON to build shared (DLL) Libraries"        OFF )
 
+# NOTE: *** Adjust version.txt when required ***
+# NOTE: Both version and date MUST be DOT separated, in two lines.
+# read 'version' file into a variable (stripping any newlines or spaces)
+# supplying BOTH version and a date
+file(READ version.txt versionFile)
+if (NOT versionFile)
+    message(FATAL_ERROR "Unable to determine libtidy version. version.txt file is missing.")
+endif()
+string(STRIP "${versionFile}" VERSION_TEXT)
+string(REGEX REPLACE "(.*)[\r\n|\n](.*)" "\\1" LIBSUDO_VERSION ${VERSION_TEXT})
+string(REGEX REPLACE "(.*)[\r\n|\n](.*)" "\\2" LIBSUDO_DATE ${VERSION_TEXT})
+# establish version number
+if (LIBSUDO_VERSION)
+    string(REPLACE "." ";" VERSION_LIST ${LIBSUDO_VERSION})
+    list(GET VERSION_LIST 0 SUDO_MAJOR_VERSION)
+    list(GET VERSION_LIST 1 SUDO_MINOR_VERSION)
+    list(GET VERSION_LIST 2 SUDO_POINT_VERSION)
+else ()
+    message(FATAL_ERROR "*** FAILED to get a VERSION from version.txt!")
+endif ()    
+# establish version date
+if (LIBSUDO_DATE)
+    string(REPLACE "." ";" DATE_LIST ${LIBSUDO_DATE})
+    list(GET DATE_LIST 0 SUDO_YEAR)
+    list(GET DATE_LIST 1 SUDO_MONTH)
+    list(GET DATE_LIST 2 SUDO_DAY)
+else ()
+    message(FATAL_ERROR "*** FAILED to get a DATE from version.txt!")
+endif ()
+
+add_definitions ( -DSUDO_VERSION="${LIBSUDO_VERSION}" )
+add_definitions ( -DSUDO_DATE="${SUDO_YEAR}/${SUDO_MONTH}/${SUDO_DAY}" )
+add_definitions ( -DSUDO_RC_VALUE="RC1" )
+
 # Setup MSVC 3rd party directories if available and needed
 # include( ConfigureMsvc3rdParty )
 
