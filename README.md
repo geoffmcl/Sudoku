@@ -1,6 +1,6 @@
 # Sudoku Project
 
-A WIN32/WIN64 a GUI application to display and **solve** a Sudoku puzzle. Certainly **not** perfect, and **NOT** complete... else as a simple console app...
+In WIN32/WIN64, a GUI application to display and **solve** a Sudoku puzzle. Certainly **not** perfect, and **NOT** complete... else as a simple console app...
 
 #### History
 
@@ -32,7 +32,7 @@ The `examples` folder contains a considerable list of `sample` files which can b
 
 In unix can only build a console app... have not yet chosen what GUI library to use... This console app, Sudo-con, can also be built in WIN32 using the option -DBUILD_WIN32_EXE:BOOL=OFF.
 
-Ii uses the **SAME** OpenSudoku library as the WIN32 GUI app. It will read a text file in several formats (txt,csv,sdk,xml) and proceed to auto-solve it, if it can!
+It uses the **SAME** OpenSudoku library as the WIN32 GUI app. It will read a text file in several formats (txt,csv,sdk,xml) and proceed to auto-solve it, if it can!
 
 The main thing is **have FUN!**
 
