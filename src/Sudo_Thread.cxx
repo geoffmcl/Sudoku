@@ -44,6 +44,10 @@ static void solve_on_thread()
     //sprtf( "Thread exit... %d\n", got_solution );
     tm.stop();
     thread_time = tm.getElapsedTime();
+    if (got_solution) {
+        PABOX2 pb = get_curr_box();
+        pb->bflag |= pb_copy->bflag;    // transfer some flags
+    }
     in_thread--;
 }
 
