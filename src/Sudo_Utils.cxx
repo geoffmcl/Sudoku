@@ -993,7 +993,7 @@ void trim_float_buf( char *pb )
    }
 }
 
-char *double_to_stg( double d )
+char *double_to_stg( double d ) // get_double_stg trimmed...
 {
     char *cp = GetNxtBuf();
     sprintf(cp,"%lf",d);

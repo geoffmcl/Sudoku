@@ -1048,7 +1048,7 @@ void do_message_block( double elap, const char *why )
         strcpy(tb,"\n");
     sprintf(EndBuf(tb),"%s in %d steps in %s", why, steps_taken, tb1);
     if (secs_in_sleep > 0.0) {
-        sprintf(EndBuf(tb),", slept %s", tb2);
+        sprintf(EndBuf(tb),", slept %s (-d %s)", tb2, double_to_stg(g_AutoDelay));
     }
     sprintf(EndBuf(tb),", form/IO %s", tb3);
     SPRTF("%s\n",tb);
