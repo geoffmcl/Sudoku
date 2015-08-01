@@ -865,13 +865,25 @@ static int verbosity = 1;
 #define VERB5 (verbosity >= 5)
 #define VERB9 (verbosity >= 9)
 
+// TODO: Not sure I like this #ifdef SUDO_RC_VALUE...
+void show_version()
+{
+#ifdef SUDO_RC_VALUE
+    printf("$s version %s.%s of %s\n", module, SUDO_VERSION, SUDO_RC_VALUE, SUDO_DATE );
+#else // !SUDO_RC_VALUE
+    printf("$s version %s of %s\n", module, SUDO_VERSION, SUDO_DATE );
+#endif // SUDO_RC_VALUE y/n
+}
+
 void give_help( char *name )
 {
+    show_version();
     printf("%s: usage: [options] usr_input\n", module);
     printf("Options:\n");
     printf(" --help  (-h or -?) = This help and exit(2)\n");
     // char szASD[] = "Auto_Solve_Delay_Seconds_as_float";
     printf(" --verb[n]     (-v) = Bump or set verbosity. (def=%d)\n", verbosity);
+    printf(" --Version     (-V) = Show the version and exit(2)\n");
     printf(" --delay float (-d) = Set Auto_Solve_Delay_Seconds_as_float. (def=%lf)\n", g_AutoDelay);
     // TODO: More help
 }
@@ -917,6 +929,10 @@ int parse_args( int argc, char **argv )
                     sarg++;
                 }
                 break;
+            case 'V':
+                show_version();
+                return 2;
+
             // TODO: Other arguments
             default:
                 printf("%s: Unknown argument '%s'. Try -? for help...\n", module, arg);
