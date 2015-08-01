@@ -166,6 +166,7 @@ extern BOOL bChgClr4;
 // extern double g_AutoDelay;
 extern BOOL gChgASD;
 
+extern char * GetINIFile(void); // get DEFAULT name of INI file in use
 
 #endif // #ifndef _SUDO_INI_HXX
 // eof - Sudo_Ini.hxx

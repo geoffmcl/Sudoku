@@ -865,19 +865,25 @@ static int verbosity = 1;
 #define VERB5 (verbosity >= 5)
 #define VERB9 (verbosity >= 9)
 
-// TODO: Not sure I like this #ifdef SUDO_RC_VALUE...
+// TODO: Not sure I like this #ifdef SUDO_RC_VALUE... but how else to designate a 'Release Candidate'???
 void show_version()
 {
+    printf("\n");
 #ifdef SUDO_RC_VALUE
     printf("%s: version %s.%s of %s\n", module, SUDO_VERSION, SUDO_RC_VALUE, SUDO_DATE );
 #else // !SUDO_RC_VALUE
     printf("%s: version %s of %s\n", module, SUDO_VERSION, SUDO_DATE );
 #endif // SUDO_RC_VALUE y/n
+    printf(" Copyright (C) Geoff R. McLane, 2012-2015\n");
+    printf(" Compiled on %s at %s\n", __DATE__, __TIME__);
+    printf(" Compiled by %s\n", COMPILER_STR);
+    printf(" Licence GNU GPL version 2 (or later)\n");
+    printf("\n");
 }
 
 void give_help( char *name )
 {
-    show_version();
+    printf("\n");
     printf("%s: usage: [options] usr_input\n", module);
     printf("Options:\n");
     printf(" --help  (-h or -?) = This help and exit(2)\n");
@@ -885,7 +891,29 @@ void give_help( char *name )
     printf(" --verb[n]     (-v) = Bump or set verbosity. (def=%d)\n", verbosity);
     printf(" --Version     (-V) = Show the version and exit(2)\n");
     printf(" --delay float (-d) = Set Auto_Solve_Delay_Seconds_as_float. (def=%lf)\n", g_AutoDelay);
-    // TODO: More help
+    printf("\n");
+    printf(" Given a Sudoku puzzle file input, read and auto solve the Sudoku.\n");
+    printf(" The 'solution' will be compared to the 'brute force' solution, and\n");
+    printf(" the auto-solve will abort if it finds no solution.\n");
+    printf("\n");
+    printf(" The 'input' file can be one of several ASCII file formats...\n");
+    printf(" '*.txt' - Assumed to be a line of 81 values, 0 = no value, [1-9] the slot value.\n");
+    printf(" '*.csv' - Nine rows of nine comma separated values. No value (,,) = no value, else [1-9] slot value.\n");
+    printf(" '*.sdk' - Similar to csv without the separator. 9 rows of 9 values. '.' = no value, else [1-9] slot value.\n");
+    printf(" '*.xml' - Root 'NewDataSet', with 81 <Table1><spot> values. 0 = no value, else [1-9] slot value.\n");
+    printf(" %s tries to 'guess' the type of input by the extension and analysis of ASCII contents.\n", module );
+    printf(" See the 'examples' folder for samples. Some support comment lines...\n");
+    printf("\n");
+    printf(" %s reads and writes an INI file, with lots of parameters. (def=%s)\n", module, GetINIFile() ); // Get_INI_File(0));
+    printf(" That INI file contains multiple user parameters, like [Strategies] enabled, some [Debug], etc...\n");
+    printf(" Manually adjust its contents to what you desire before running %s.\n", module );
+    printf("\n");
+    printf(" A big thank you to http://www.sudokuwiki.org/sudoku.htm for a great javascript (?) inspiration!\n");
+    printf(" This Sudoku 'wiki' has LOTS of very good 'tutorial' information, strategies, with images, examples...\n");
+    printf("\n");
+    printf(" This C/C++ code effort is not complete, nor perfect ;=)) Would like some help achieving that.\n");
+    printf(" Clone this repo, and present a Pull Request, or a diff/patch file, and it will be considered.\n");
+    show_version();
 }
 
 int parse_args( int argc, char **argv )
@@ -1164,9 +1192,11 @@ int main( int argc, char **argv )
     if (iret) 
         return iret;
     add_app_begin();
-    SPRTF("%s: Will read input file '%s',\n"
-        "and begin a thread to analyse the puzzle by BRUTE FORCE. Try each possible\n"
-        "value for each blank cell, and report if the solution is UNIQUE!\n", module, usr_input );
+    if (VERB2) {
+        SPRTF("%s: Will read input file '%s',\n"
+            "and begin a thread to analyse the puzzle by BRUTE FORCE. Try each possible\n"
+            "value for each blank cell, and report if the solution is UNIQUE!\n", module, usr_input );
+    }
     if (Load_a_file( 0, (LPTSTR)usr_input )) {
         SLEEP(msSleep);
         iret = solve_the_Sudoku(); // action of the app
