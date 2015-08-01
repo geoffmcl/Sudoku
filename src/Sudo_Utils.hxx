@@ -26,6 +26,30 @@ extern BOOL Got_Comm_Ctrl6();
 #ifdef _MSC_VER
 #define COMPILER_STR "Microsoft Visual C++ version " G_STRINGIZE(_MSC_VER)
 #else
+//////////////////////////////////////////////////////////////////////////
+#ifdef __GNUC__
+#  define COMPILER_STR "GNU C++ version " G_STRINGIZE(__GNUC__) "." G_STRINGIZE(__GNUC_MINOR__)
+#else
+/* KAI C++ */
+#if defined(__KCC)
+#  define COMPILER_STR "Kai C++ version " G_STRINGIZE(__KCC_VERSION)
+#else
+#if defined ( sgi ) && !defined( __GNUC__ )
+#  define COMPILER_STR "SGI MipsPro compiler version " G_STRINGIZE(_COMPILER_VERSION)
+#else
+#if defined (__sun) && !defined( __GNUC__ )
+#   define COMPILER_STR "Sun compiler version " G_STRINGIZE(__SUNPRO_CC)
+#else
+#if defined(__ICC) || defined (__ECC)
+#  define COMPILER_STR "Intel C++ version " G_STRINGIZE(__ICC)
+#endif // __ICC
+#endif // sun
+#endif // Native SGI compilers
+#endif // __KCC
+#endif // __GNUC__
+//////////////////////////////////////////////////////////////////////////
+#endif
+#ifndef COMPILER_STR
 #define COMPILER_STR "Unknown Compiler"
 #endif
 
