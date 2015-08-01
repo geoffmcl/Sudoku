@@ -1,8 +1,36 @@
 // Sudo-AIC.cxx
 // Alternating Inference Chains
 // Extension of X-Cycles where any candidate can be used
-
 #include "Sudoku.hxx"
+
+/* ==================================================================
+   from : http://www.sudokuwiki.org/Alternating_Inference_Chains
+
+    Alternating Inference Chains
+
+    Chaining strategies now take a new leap with Alternating Inference Chains. These extend X-Cycle 
+    into a new dimension - where X-Cycles stuck to a single number, AICs use any candidate number.
+
+    AICs encapsulate all the discussion of chaining strategies so far. It's very useful to split out 
+    chain-like strategies into X-Wings, XY-Chains, Forcing Chains, XYZ-Wings, X-Cycles, Nice Loops and 
+    so on, since they have special characteristics which make them spottable. But it turns out they are 
+    all part of a larger extended family.
+
+    As we saw in the previous chapter, alternation is just what X-Cycles are about. However, you'll remember 
+    that X-Cycles are applied only to a single candidate number. AICs, on the other hand, take everything 
+    from an X-Cycle and extend the logic to as many different candidate numbers as necessary.
+
+    AICs ask the question "How many ways are there to make a strong or a weak link?" If there is more than 
+    one way, we can join them up in an alternating manner and make deductions leading to eliminations. 
+    Let's look back on the previous chain-like strategies and note the following:
+
+    - We can link two candidates of the same value in a unit - this is called "bi-location" (X-Cycles).
+    - We can link two different candidates in the same cell - this is called "bi-value".
+
+    There are also other ways (see later articles), but for now let's keep it simple and stick to these 
+    two dimensions - links between cells and within cells.
+
+   ================================================================== */
 
 #define DO_CELL_VALUES_FIRST
 #define MY_MX_CHAINS 512
