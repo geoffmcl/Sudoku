@@ -869,9 +869,9 @@ static int verbosity = 1;
 void show_version()
 {
 #ifdef SUDO_RC_VALUE
-    printf("$s version %s.%s of %s\n", module, SUDO_VERSION, SUDO_RC_VALUE, SUDO_DATE );
+    printf("%s version %s.%s of %s\n", module, SUDO_VERSION, SUDO_RC_VALUE, SUDO_DATE );
 #else // !SUDO_RC_VALUE
-    printf("$s version %s of %s\n", module, SUDO_VERSION, SUDO_DATE );
+    printf("%s version %s of %s\n", module, SUDO_VERSION, SUDO_DATE );
 #endif // SUDO_RC_VALUE y/n
 }
 
