@@ -169,6 +169,7 @@ int Get_Set_Cnt( PSET ps, int *pnv )
 }
 
 // return an array of values - pnv MUST be an array of min 9 ints
+// inspect each of the candidate slots, only adding it to the returned array if it has a value
 int Get_Set_Cnt2( PSET ps, int *pnv )
 {
     int i, cnt, val;
