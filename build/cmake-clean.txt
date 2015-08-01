@@ -1,3 +1,7 @@
 bldlog-1.txt
 Sudoku
+Sudo-con
+libOpenSudoku.a
+bldlog-u.txt
+bldlog-u.txt.bak
 
