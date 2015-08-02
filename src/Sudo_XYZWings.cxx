@@ -341,7 +341,7 @@ int Do_XYZ_Wings( PABOX2 pb )
         ///////////////////////////////////////////////////////////////////////////////////////////
         // CHEAT A LITTLE - If we HAVE a UNIQUE solution, check this marked for deletion candidte
         ///////////////////////////////////////////////////////////////////////////////////////////
-        int i, val, val2, got_err;
+        int i, val, val2;
         max = elims.size();
         sprintf(tb,"XYZ.Elim.C %d ", (int)max);
         for (ii = 0; ii < max; ii++) {
