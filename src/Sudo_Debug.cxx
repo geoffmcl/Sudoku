@@ -161,7 +161,7 @@ STRATLIST StratServers[] = {
     { 0, 0, 0, -1 }
 };
 
-
+//   pcaption,      conrol,    (int *)pdebug   pchg          , serv            penab    pchgd
 DBGLIST DbgList[] = {
     { "Naked Pairs",IDC_CHECK1, &add_debug_np, &bChgDNP      , Do_Naked_Pairs, &Do_NP, &Chg_NP          },  // 0
     { "Color Scan",IDC_CHECK2,  &add_debug_cs2, &bChgDCS2    , Do_Color_Scan2, &Do_CS2, &Chg_CS2        },  // 1
@@ -188,6 +188,37 @@ DBGLIST DbgList[] = {
     // *** MUST be LAST ***
     { 0, 0, 0, 0, 0, 0, 0 }
 };
+
+
+VOID Set_ALL_Dbg_ON(BOOL markchg)
+{
+    PDBGLIST plist = &DbgList[0];
+    while (plist->pcaption) {
+        int *pi = plist->pdebug;
+        PBOOL pb = plist->pchg;
+        if (!*pi) {
+            *pi = 1;
+            if (markchg)
+                *pb = TRUE;
+        }
+        plist++;
+    }
+}
+
+VOID Set_ALL_Dbg_OFF(BOOL markchg)
+{
+    PDBGLIST plist = &DbgList[0];
+    while (plist->pcaption) {
+        int *pi = plist->pdebug;
+        PBOOL pb = plist->pchg;
+        if (*pi) {
+            *pi = 0;
+            if (markchg)
+                *pb = TRUE;
+        }
+        plist++;
+    }
+}
 
 #ifdef WIN32    // windows select debug options dialog
 

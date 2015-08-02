@@ -107,6 +107,11 @@ extern BOOL Do_XYZ; //, &Chg_XYZ          },  // 18
 //    { "Strong Links 3",IDC_CHECK20,&add_debug_sl3, &bChgDSL3 , Do_Strong_Link3_Scan, &
 extern BOOL Do_SL3; //, &Chg_SL3  },  // 19
 
+// toggle the debug flags, mark changne if desired
+extern VOID Set_ALL_Dbg_ON(BOOL markchg = FALSE);
+extern VOID Set_ALL_Dbg_OFF(BOOL markchg = FALSE);
+
+
 #endif // #ifndef _SUDO_DEBUG_HXX_
 // eof - Sudo_Debug.hxx
 
