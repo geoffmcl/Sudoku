@@ -1302,13 +1302,13 @@ int Do_AIC_Scans( PABOX2 pb )
     tb = GetNxtBuf();
     if (count) {
         AIC_chains_valid = true;
-        sprintf(tb,"S%d:  Elim AIC [%d] To Fill\n", pb->iStage, count);
+        sprintf(tb,"S%d:  Elim AIC [%d] - To Fill.", pb->iStage, count);
         pb->iStage = sg_Fill_AIC;
     } else {
         sprintf(tb,"S%d:  None elim by AIC.", pb->iStage);
         if (paic->had_error) 
             sprintf(EndBuf(tb)," Note errors");
-        sprintf(EndBuf(tb),"To bgn\n");
+        sprintf(EndBuf(tb)," - To bgn");
         pb->iStage = sg_Begin;
     }
     OUTIT(tb);
