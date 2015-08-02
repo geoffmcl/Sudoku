@@ -34,6 +34,14 @@ In unix can only build a console app... have not yet chosen what GUI library to 
 
 It uses the **SAME** OpenSudoku library as the WIN32 GUI app. It will read a text file in several formats (txt,csv,sdk,xml) and proceed to auto-solve it, if it can!
 
+#### Future
+
+The idea in building it into an OpenSudoku library is to build a library of API services that can be used to analyse any given box, and provide a set of C/C++ strategies that ultimately **solve** the puzzle.
+
+This is an ongoing effort, and would welcome collaborators, contributors, people who want to assist in this.
+
+Clone the repo, make a fix, and present it as a Pull Request, or a simple diff file, and it will be considered.
+
 The main thing is **have FUN!**
 
 Geoff.  
