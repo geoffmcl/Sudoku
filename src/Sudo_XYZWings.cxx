@@ -383,7 +383,10 @@ int Do_XYZ_Wings( PABOX2 pb )
         pb->iStage = sg_Fill_XYZWing;
 
     } else {
-        sprintf(tb,"Sxyz: No XYZ-Wing marked - To bgn" );
+        sprintf(tb,"Sxyz: No XYZ-Wing marked.");
+        if (got_err)
+            strcat(tb," Note errors!");
+        strcat(tb," - To bgn" );
     }
     elims.clear();
     elimby.clear();

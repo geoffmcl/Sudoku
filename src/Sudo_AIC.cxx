@@ -1299,14 +1299,19 @@ int Do_AIC_Scans( PABOX2 pb )
     }
     count = paic->elim_count;
 
+    tb = GetNxtBuf();
     if (count) {
         AIC_chains_valid = true;
-        sprtf("S%d:  Elim AIC [%d] To Fill\n", pb->iStage, count);
+        sprintf(tb,"S%d:  Elim AIC [%d] To Fill\n", pb->iStage, count);
         pb->iStage = sg_Fill_AIC;
     } else {
-        sprtf("S%d:  None elim by AIC To bgn\n", pb->iStage);
+        sprintf(tb,"S%d:  None elim by AIC.", pb->iStage);
+        if (paic->had_error) 
+            sprintf(EndBuf(tb)," Note errors");
+        sprintf(EndBuf(tb),"To bgn\n");
         pb->iStage = sg_Begin;
     }
+    OUTIT(tb);
     return count;
 }
 
