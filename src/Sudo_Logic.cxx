@@ -1814,7 +1814,7 @@ int Do_Fill_Unique(PABOX2 pb)
     }
 
     char *tb = GetNxtBuf();
-    sprintf(tb,"S%d: ",pb->iStage);
+    sprintf(tb,"S%d:  ",pb->iStage);
     if (count) {
         sprintf(EndBuf(tb),"Fill %d UNIQUE vals.", count);
     } else {
@@ -1855,7 +1855,7 @@ int Do_Fill_Naked(PABOX2 pb)
         }
     }
     char *tb = GetNxtBuf();
-    sprintf(tb,"S%d: Del NAKED ",pb->iStage);
+    sprintf(tb,"S%d:  Del NAKED ",pb->iStage);
     if (count)
         sprintf(EndBuf(tb),"%d vals.",count);
     else
@@ -4106,10 +4106,10 @@ int Do_Simple_Scan(PABOX2 pb)
         }
     }
     if (count) {
-        sprtf("S%d: Elim same row,col,box [%d] To Fill\n", sg_One, count, sg_Fill_Simple);
+        sprtf("S%d:  Elim same row,col,box [%d] To Fill\n", sg_One, count, sg_Fill_Simple);
         pb->iStage = sg_Fill_Simple;
     } else {
-        sprtf("S%d: NONE Elim same row,col,box To %d\n", sg_One, sg_Two);
+        sprtf("S%d:  NONE Elim same row,col,box To %d\n", sg_One, sg_Two);
         pb->iStage = sg_Two;
     }
     return count;

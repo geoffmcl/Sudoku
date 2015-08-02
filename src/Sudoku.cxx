@@ -854,7 +854,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 void Post_Command( WPARAM cmd )
 {
-    sprtf("TODO: Post_Command( %d ) to be done...\n", (int)cmd );
+    // TODO: in alternative GUI code, maybe sprtf("TODO: Post_Command( %d ) to be done...\n", (int)cmd );
 }
 
 static const char *usr_input = 0;

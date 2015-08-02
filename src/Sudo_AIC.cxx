@@ -1283,10 +1283,10 @@ int Do_AIC_Scans( PABOX2 pb )
 
     if (count) {
         AIC_chains_valid = true;
-        sprtf("Saic: Elim AIC [%d] To Fill\n", count);
+        sprtf("S%d:  Elim AIC [%d] To Fill\n", pb->iStage, count);
         pb->iStage = sg_Fill_AIC;
     } else {
-        sprtf("Saic: None elim by AIC To bgn\n");
+        sprtf("S%d:  None elim by AIC To bgn\n", pb->iStage);
         pb->iStage = sg_Begin;
     }
     return count;
