@@ -588,6 +588,26 @@ int Mark_Color_Chain( PCLRSTR pclrstr )
     return count;
 }
 
+int set_color2_elim_cand(PABOX2 pb, PROWCOL prc, int lval, int setval)
+{
+    int iret = 1;
+    pb->line[prc->row].set[prc->col].flag[lval] |= cf_CCE; // Color2 R1/2 elim
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    // CHEAT A LITTLE - If we HAVE a UNIQUE solution, check this marked for deletion candidte
+    ///////////////////////////////////////////////////////////////////////////////////////////
+    int val2 = get_solution_value(prc->row,prc->col);
+    if (val2 && (val2 == setval )) { // was prc->cnum
+        sprtf("Warning: Color2: Candidate %s marked for deletion!\n", Get_RC_setval_RC_Stg(prc,val2));
+        //if (treat_aic_warn_as_error) {
+        //    paic->exit_scan = true;
+        //    paic->had_error = true;
+        //    paic->elim_count = 0;
+        //    break;
+        //}
+        iret = 0;
+    }
+    return iret;
+}
 
 int Mark_Color_Rule_1( PABOX2 pb, int setval, vRC &empty, vRC &members, vRC &nonmembers,
                             RCRCB &memrcb )
@@ -647,7 +667,10 @@ int Mark_Color_Rule_1( PABOX2 pb, int setval, vRC &empty, vRC &members, vRC &non
                     if (flag2 & flg) {
                         // YEEK, exposed to BOTH - eliminate
                         if ( !(pb->line[rc.row].set[rc.col].flag[lval] & cf_CCE) ) {
-                            pb->line[rc.row].set[rc.col].flag[lval] |= cf_CCE; // Color2 R1 elim
+                            /////////////////////////////////////////////////////////////////////
+                            // pb->line[rc.row].set[rc.col].flag[lval] |= cf_CCE; // Color2 R1 elim
+                            set_color2_elim_cand( pb, &rc, lval, setval );
+                            /////////////////////////////////////////////////////////////////////
                             sprintf(EndBuf(tb),"%s ", Get_RC_setval_RC_Stg( &rc, setval ));
                             count++;
                             sprtf("ELIM: Color2 R1 %s\n", Get_RC_setval_RC_Stg( &rc, setval ));
@@ -800,7 +823,10 @@ int Mark_Color_Rule_2( PABOX2 pb, int setval, vRC &members, RCRCB &memrcb )
                 rc = members[k];
                 if (rc.set.flag[lval] & flg) {
                     if ( !(pb->line[rc.row].set[rc.col].flag[lval] & cf_CCE) ) {
-                        pb->line[rc.row].set[rc.col].flag[lval] |= cf_CCE; // Color2 R2 elim
+                        /////////////////////////////////////////////////////////////////////
+                        // pb->line[rc.row].set[rc.col].flag[lval] |= cf_CCE; // Color2 R2 elim
+                        set_color2_elim_cand( pb, &rc, lval, setval );
+                        /////////////////////////////////////////////////////////////////////
                         sprintf(EndBuf(tb),"%s ", Get_RC_setval_RC_Stg( &rc, setval ));
                         count++;
                         sprtf("ELIM: Color2 R2 %s\n", Get_RC_setval_RC_Stg( &rc, setval ));
