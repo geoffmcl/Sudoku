@@ -995,6 +995,9 @@ int parse_args( int argc, char **argv )
         printf("%s: No user input found in command!\n", module);
         return 1;
     }
+    if (VERB9) {
+        Set_ALL_Dbg_ON();
+    }
     return 0;
 }
 

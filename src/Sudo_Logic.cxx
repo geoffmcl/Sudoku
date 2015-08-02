@@ -11,6 +11,7 @@
 #endif
 
 bool done_count_warning = false;
+bool treat_elim_warn_as_error = true;
 
 int use_elim_on_square = 0; // this service seems SUSPECT - need to check MORE ;=(( MAYBE OK
 
@@ -2992,7 +2993,7 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
 
     // =============================================================
     cflags = 0;
-    if (g_bChkElims && (pb->bflag & bf_DnTest) && (pb->bflag & bf_Unique)) {
+    if (do_delete && g_bChkElims && (pb->bflag & bf_DnTest) && (pb->bflag & bf_Unique)) {
         // we have a VALID brute force UNIQUE solution.
         // Make sure each eliminated value is NOT the solution value
         size_t max = elims.size();
@@ -3018,11 +3019,16 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
     // ================================================================
 
     if (count) {
-        sprintf(tb,"S%d: Cleared [%d] %s", pb->iStage, count, type);
-        if (cflags)
-            sprintf(EndBuf(tb),", NOTE %d elim. errors!",cflags);
-        strcat(tb," - To begin");
-        pb->iStage = sg_Begin;
+        if (treat_elim_warn_as_error && cflags) {
+            sprintf(tb,"S%d: Would clear [%d] %s, but had %d warnings!", pb->iStage, count, type, cflags);
+            count = 0;
+        } else {
+            sprintf(tb,"S%d: Cleared [%d] %s", pb->iStage, count, type);
+            if (cflags)
+                sprintf(EndBuf(tb),", NOTE %d elim. errors!",cflags);
+            strcat(tb," - To begin");
+            pb->iStage = sg_Begin;
+        }
     } else {
         sprintf(tb,"S%d: No %s found - no change", pb->iStage, type);
     }

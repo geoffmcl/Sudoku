@@ -12,6 +12,8 @@
 //#define xyz_off 0
 #define OUTITXYZ(tb) if( *tb && add_debug_xyz ) OUTIT(tb)
 
+int treat_xyz_warning_as_error = 1;
+
 int Mark_PB_per_SET( PABOX2 pb, PROWCOL prc, PSET ps, uint64_t mark, bool all = false );
 int Mark_PB_per_SET( PABOX2 pb, PROWCOL prc, PSET ps, uint64_t mark, bool all )
 {
@@ -107,6 +109,11 @@ int Mark_PB_per_SET( PABOX2 pb, PROWCOL prc, PSET ps, uint64_t mark, bool all )
 // 1 - get all cells with 3 candidates remaining
 // 2 - get all cells with 2 candidates remaining
 // 3 - Scan thought the XYZ set, and seek XZ and YZ buddies
+VOID Mark_Elim_XYZ_Wings( PABOX2 pb, PROWCOL prce, int eval)
+{
+     pb->line[prce->row].set[prce->col].flag[eval - 1] |= xyz_elim;  // XYZ.marked elim
+}
+
 int Process_XYZ_Wings( PABOX2 pb, vRC *pelims, vRC *pelimby )
 {
     int count = 0;
@@ -188,7 +195,10 @@ int Process_XYZ_Wings( PABOX2 pb, vRC *pelims, vRC *pelimby )
                     pelimby->push_back(*prc);   // XYZ 'hinge'
                     pelimby->push_back(*prc2);  // in BOX buddy XZ
                     pelimby->push_back(*prc3);  // same ROW/COL buddy YZ
-                    pb->line[prce->row].set[prce->col].flag[eval - 1] |= xyz_elim;
+                    //////////////////////////////////////////////////////////////
+                    //pb->line[prce->row].set[prce->col].flag[eval - 1] |= xyz_elim;  // XYZ.marked elim
+                    Mark_Elim_XYZ_Wings( pb, prce, eval );
+                    //////////////////////////////////////////////////////////////
                     pb->line[prc->row].set[prc->col].flag[eval - 1] |= xyz_mark;
                     pb->line[prc2->row].set[prc2->col].flag[eval - 1] |= xyz_mark;
                     pb->line[prc3->row].set[prc3->col].flag[eval - 1] |= xyz_mark;
@@ -238,7 +248,11 @@ int Process_XYZ_Wings( PABOX2 pb, vRC *pelims, vRC *pelimby )
                     pelimby->push_back(*prc);   // XYZ 'hinge'
                     pelimby->push_back(*prc2);  // in BOX buddy XZ
                     pelimby->push_back(*prc3);  // same ROW/COL buddy YZ
-                    pb->line[prce->row].set[prce->col].flag[eval - 1] |= xyz_elim;
+
+                    ///////////////////////////////////////////////////////////////////
+                    // pb->line[prce->row].set[prce->col].flag[eval - 1] |= xyz_elim;  // XYZ.marked.elim
+                    Mark_Elim_XYZ_Wings( pb, prce, eval );
+                    ///////////////////////////////////////////////////////////////////
 
                     pb->line[prc->row].set[prc->col].flag[eval - 1] |= xyz_mark;
                     pb->line[prc2->row].set[prc2->col].flag[eval - 1] |= xyz_mark;
@@ -278,13 +292,13 @@ int Mark_XYZ_Wings( PABOX2 pb )
 {
     int count;
     vRC elims, elimby;
-    count = Process_XYZ_Wings( pb, &elims, &elimby );
+    count = Process_XYZ_Wings( pb, &elims, &elimby );   // Mark_XYZ_Wings
     char *tb = GetNxtBuf();
     if (count) {
         size_t max, ii;
         PROWCOL prc;
         max = elims.size();
-        sprintf(tb,"XYZ.Elim %d ", (int)max);
+        sprintf(tb,"XYZ.Elim.M %d ", (int)max);
         for (ii = 0; ii < max; ii++) {
             prc = &elims[ii];
             sprintf(EndBuf(tb),"%s ", Get_RC_setval_RC_Stg(prc, prc->cnum));
@@ -311,18 +325,49 @@ int Do_Fill_XYZWing( PABOX2 pb )
     return count;
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// This seems buggy at the moment. It can elminate candidates that are needed for the solution!
+////////////////////////////////////////////////////////////////////////////////////////////////////
 int Do_XYZ_Wings( PABOX2 pb )
 {
-    int count;
+    int count, got_err;
     vRC elims, elimby;
-    count = Process_XYZ_Wings( pb, &elims, &elimby );
+    count = Process_XYZ_Wings( pb, &elims, &elimby );   // Do_XYZ_Wings
     char *tb = GetNxtBuf();
+    size_t max, ii;
+    PROWCOL prc;
+    got_err = 0;
     if (count) {
-        size_t max, ii;
-        PROWCOL prc;
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        // CHEAT A LITTLE - If we HAVE a UNIQUE solution, check this marked for deletion candidte
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        int i, val, val2, got_err;
         max = elims.size();
-        sprintf(tb,"XYZ.Elim %d ", (int)max);
+        sprintf(tb,"XYZ.Elim.C %d ", (int)max);
+        for (ii = 0; ii < max; ii++) {
+            prc = &elims[ii];
+            sprintf(EndBuf(tb),"%s ", Get_RC_setval_RC_Stg(prc, prc->cnum));
+            PSET ps = &prc->set;
+            for (i = 0; i < 9; i++) {
+                val = ps->val[i];
+                if (!val) continue;
+                val2 = get_solution_value(prc->row,prc->col);
+                if (val2 && (val2 == val)) {
+                    sprtf("Warning: XYZ: Candidate %s marked for deletion!\n", Get_RC_setval_RC_Stg(prc,val2));
+                    if (treat_xyz_warning_as_error) {
+                        got_err = 1;
+                        count = 0;
+                        break;
+                    }
+                }
+            }
+            if (got_err) break;
+            OUTITXYZ(tb);
+        }
+    }
+    if (count) {
+        max = elims.size();
+        sprintf(tb,"XYZ.Elim.D %d ", (int)max);
         for (ii = 0; ii < max; ii++) {
             prc = &elims[ii];
             sprintf(EndBuf(tb),"%s ", Get_RC_setval_RC_Stg(prc, prc->cnum));
@@ -334,11 +379,15 @@ int Do_XYZ_Wings( PABOX2 pb )
         }
         OUTIT(tb);
         sprintf(tb,"Sxyz: Marked XYZ-Wing %d - To fill", count);
+        Stack_Fill(Do_Clear_XYZWing);
+        pb->iStage = sg_Fill_XYZWing;
+
     } else {
         sprintf(tb,"Sxyz: No XYZ-Wing marked - To bgn" );
     }
     elims.clear();
     elimby.clear();
+    OUTIT(tb);
     return count;
 }
 
