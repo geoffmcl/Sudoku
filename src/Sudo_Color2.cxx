@@ -81,7 +81,10 @@ typedef struct tagCLRSTR {
 static SET clr_set;
 static CLRSTR clrstr[9];
 
+int treat_color2_warn_as_error = 1;
 int do_color_test2 = 0;  // start with value 1-9
+static BOOL had_elim_err = FALSE;
+
 vRC *Get_Color2_Members(int setval)
 {
     if (!VALUEVALID(setval))
@@ -590,7 +593,7 @@ int Mark_Color_Chain( PCLRSTR pclrstr )
 
 int set_color2_elim_cand(PABOX2 pb, PROWCOL prc, int lval, int setval)
 {
-    int iret = 1;
+    int iret = 0;
     pb->line[prc->row].set[prc->col].flag[lval] |= cf_CCE; // Color2 R1/2 elim
     ///////////////////////////////////////////////////////////////////////////////////////////
     // CHEAT A LITTLE - If we HAVE a UNIQUE solution, check this marked for deletion candidte
@@ -598,13 +601,11 @@ int set_color2_elim_cand(PABOX2 pb, PROWCOL prc, int lval, int setval)
     int val2 = get_solution_value(prc->row,prc->col);
     if (val2 && (val2 == setval )) { // was prc->cnum
         sprtf("Warning: Color2: Candidate %s marked for deletion!\n", Get_RC_setval_RC_Stg(prc,val2));
-        //if (treat_aic_warn_as_error) {
-        //    paic->exit_scan = true;
-        //    paic->had_error = true;
-        //    paic->elim_count = 0;
-        //    break;
-        //}
-        iret = 0;
+        if (treat_color2_warn_as_error) {
+            iret = 1;
+            sprtf("Flag treat_color2_warn_as_error is on, so aborting color2 scan\n");
+            had_elim_err = TRUE;
+        }
     }
     return iret;
 }
@@ -669,7 +670,8 @@ int Mark_Color_Rule_1( PABOX2 pb, int setval, vRC &empty, vRC &members, vRC &non
                         if ( !(pb->line[rc.row].set[rc.col].flag[lval] & cf_CCE) ) {
                             /////////////////////////////////////////////////////////////////////
                             // pb->line[rc.row].set[rc.col].flag[lval] |= cf_CCE; // Color2 R1 elim
-                            set_color2_elim_cand( pb, &rc, lval, setval );
+                            if (set_color2_elim_cand( pb, &rc, lval, setval ))
+                                return 0;
                             /////////////////////////////////////////////////////////////////////
                             sprintf(EndBuf(tb),"%s ", Get_RC_setval_RC_Stg( &rc, setval ));
                             count++;
@@ -825,7 +827,8 @@ int Mark_Color_Rule_2( PABOX2 pb, int setval, vRC &members, RCRCB &memrcb )
                     if ( !(pb->line[rc.row].set[rc.col].flag[lval] & cf_CCE) ) {
                         /////////////////////////////////////////////////////////////////////
                         // pb->line[rc.row].set[rc.col].flag[lval] |= cf_CCE; // Color2 R2 elim
-                        set_color2_elim_cand( pb, &rc, lval, setval );
+                        if (set_color2_elim_cand( pb, &rc, lval, setval )) 
+                            return 0;
                         /////////////////////////////////////////////////////////////////////
                         sprintf(EndBuf(tb),"%s ", Get_RC_setval_RC_Stg( &rc, setval ));
                         count++;
@@ -963,16 +966,26 @@ int Mark_Color2_Elims ( PCLRSTR pclrstr ) // all the information is in this stru
 
         count += Mark_Color_Rule_1( pb, setval, empty, members, nonmembers, memrcb );
         if (count) {
-            Mark_Color_Members( pb, color_chain2, setval );
-            chain_valid2 = true;
-        } else {
-            count += Mark_Color_Rule_2( pb, setval, members, memrcb );
-            if (count) {
+            if (had_elim_err) {
+                count = 0;
+            } else {
                 Mark_Color_Members( pb, color_chain2, setval );
                 chain_valid2 = true;
             }
+        } else {
+            count += Mark_Color_Rule_2( pb, setval, members, memrcb );
+            if (count) {
+                if (had_elim_err) {
+                    count = 0;
+                } else {
+                    Mark_Color_Members( pb, color_chain2, setval );
+                    chain_valid2 = true;
+                }
+            }
         }
         if (count && only_one_cs2)
+            break;
+        if (had_elim_err)
             break;
     }   // Deal CHAIN by CHAIN for (j = 0; j < max2; j++)
 
@@ -998,6 +1011,7 @@ int Do_Color_Scan2( PABOX2 pb )
     RCPAIR rcpair;
     char *tb = GetNxtBuf();
     if (add_debug_cs2) sprtf("Do_Color_Scan2: Begin with DEBUG on!\n");
+    had_elim_err = FALSE;
     for (i = 0; i < 9; i++) {
         setval = i + 1;
         if (do_color_test2 && (setval != do_color_test2)) continue; // do for just this value
@@ -1170,16 +1184,25 @@ int Do_Color_Scan2( PABOX2 pb )
         if (count && only_one_cs2) {
             break;
         }
+        if (had_elim_err) {
+            count = 0;
+            break;
+        }
     }
     if (add_debug_cs2) sprtf("Do_Color_Scan2: End with DEBUG on!\n");
+    tb = GetNxtBuf();
     if (count) {
-        sprtf("S2f: Color2 scan elimin %d. To fill\n", count);
+        sprintf(tb,"S2f: Color2 scan elimin %d. To fill.", count);
         pb->iStage = sg_Fill_Color;
     } else {
         Set_Chain_Invalid2();
-        sprtf("S2f: Color2 scan. No elims. To begin.\n");
+        sprintf(tb,"S2f: Color2 scan. No elims.");
+        if (had_elim_err)
+            sprintf(EndBuf(tb)," Note errors");
+        sprintf(EndBuf(tb), " - To begin.");
         pb->iStage = sg_Begin;
     }
+    OUTIT(tb);
 
     return count;
 }
