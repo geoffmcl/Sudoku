@@ -266,6 +266,35 @@ int Mark_SET_NOT_in_SET( PSET ps, PSET ps2, int flag )
     return count;
 }
 
+int Mark_SET_NOT_in_SET2( PABOX2 pb, PROWCOL prc, PSET ps2, int flag, bool *had_err )
+{
+    PSET ps = &pb->line[prc->row].set[prc->col];
+    int i, val, count;
+    count =0;
+    for (i = 0; i < 9; i++) {
+        val = ps->val[i];  // Mark values NOT in SET
+        if (val) {
+            // got a VALUE
+            if (Value_NOT_in_SET( val, ps2 )) {
+                // ps->flag[val - 1] |= cf_YWE;
+                int res = OR_Row_Col_SetVal_with_Flag( pb, prc->row, prc->col, val, flag );
+                if (res) {
+                    if (res == SERR_ISMKD) {
+                        // aleady marked is not a problem
+                    } else {
+                        *had_err = true;
+                        return 0;
+                    }
+                } else {
+                    // if ( !(ps->flag[i] & flag) ) {
+                    //    ps->flag[i] |= flag;
+                    count++;
+                }
+            }
+        }
+    }
+    return count;
+}
 
 int Get_Shared_SET( PSET ps1, PSET ps2, PSET comm, bool all )
 {

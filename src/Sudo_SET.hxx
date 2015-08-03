@@ -46,6 +46,7 @@ extern int Mark_SET_in_SET( PSET psdst, PSET pssrc, uint64_t flag, bool all = fa
 extern bool Value_In_SET( PSET ps, int nval );
 extern bool Value_NOT_in_SET( int val, PSET ps );
 extern int Mark_SET_NOT_in_SET( PSET ps, PSET ps2, int flag );
+extern int Mark_SET_NOT_in_SET2( PABOX2 pb, PROWCOL prc, PSET ps2, int flag, bool *had_err );
 
 extern void Fill_SET( PSET ps );
 extern void Zero_SET( PSET ps );

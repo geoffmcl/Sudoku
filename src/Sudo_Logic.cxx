@@ -728,7 +728,7 @@ int Find_Same_Pair( PABOX2 pb, int cval1, int crow1, int ccol1, int cval2, int c
 typedef map<int,vPAIR *> mPAIR;
 typedef mPAIR::iterator mPAIRi;
 
-int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
+int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp, bool *phad_err )
 {
     vPAIRi ii;
     PAIR pair;
@@ -802,6 +802,14 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
     haddel = true;
     int cnt2;
     PSET ps, ps2;
+    bool had_err = false;
+    SET set;
+    bool dodel = false;
+    int box = 0;
+    int r, c, rw, cl;
+    int row, col, val;
+    vRC vrc;
+    ROWCOL rc, rc2;
     while(haddel) {
         haddel = false;
         for ( mi = mMap.begin(); mi != mMap.end(); mi++ ) {
@@ -816,12 +824,11 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
                 continue;
             }
             // sprintf(tb,"%3d: key %d+%d has %d pairs", cnt, val1, val2, pvp->size());
-            SET set;
             Zero_SET(&set);
             set.val[val1 - 1] = val1;
             set.val[val2 - 1] = val2;
             ps2 = &set; // these are the value to eliminate
-            bool dodel = false;
+            dodel = false;
             vINT cols;
             vINT rows;
             // get ROWS and COLUMNS of the pairs
@@ -839,16 +846,12 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
             // Now check each BOX to see if just either -
             // (a) 2 ROWS and 1 COLUMN, or (b) 2 COLUMNS and 1 ROW are excluded,
             // which would leave 2 cells in that BOX where this PAIR can be ELIMINATED
-            int box = 0;
-            int r, c, rw, cl;
+            box = 0;
             // Process BOX by BOX
             for (r = 0; r < 3; r++) {
                 for (c = 0; c < 3; c++) {
                     // processing a BOX
                     box++;
-                    int row, col, val;
-                    vRC vrc;
-                    ROWCOL rc, rc2;
                     vrc.clear();
                     // Now each CELL in the BOX
                     for (rw = 0; rw < 3; rw++) {
@@ -879,22 +882,42 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
                         sprtf("%s\n",tb);
                         *tb = 0;
                         rc = vrc[0];
+                        /////////////////////////////////////////////////////////////////////
                         ps = &pb->line[rc.row].set[rc.col];
-                        cnt2 = Mark_SET_NOT_in_SET( ps, ps2, cf_HPE );
+                        // cnt2 = Mark_SET_NOT_in_SET( ps, ps2, cf_HPE );
+                        cnt2 = Mark_SET_NOT_in_SET2( pb, &rc, ps2, cf_HPE, &had_err );
+                        /////////////////////////////////////////////////////////////////////
 
                         sprintf(EndBuf(tb)," Box %d: r %d c %d has %d ", box, rc.row, rc.col,
                             Get_Set_Cnt(ps) ); // rc.cnt);
                         AddSet2Buf(tb, ps);
                         sprintf(EndBuf(tb), " elim %d ", cnt2);
-                        count += cnt2;
+                        if (had_err) {
+                            strcat(tb," had error ");
+                            sprtf("%s\n",tb);
+                            count = 0;
+                            goto Exit;
+                        } else {
+                            count += cnt2;
+                        }
                         rc2 = vrc[1];
+                        /////////////////////////////////////////////////////////////////////
                         ps = &pb->line[rc2.row].set[rc2.col];
-                        cnt2 = Mark_SET_NOT_in_SET( ps, ps2, cf_HPE );
+                        // cnt2 = Mark_SET_NOT_in_SET( ps, ps2, cf_HPE );
+                        cnt2 = Mark_SET_NOT_in_SET2( pb, &rc2, ps2, cf_HPE, &had_err );
+                        /////////////////////////////////////////////////////////////////////
                         sprintf(EndBuf(tb)," r %d c %d has %d ",rc2.row, rc2.col,
                             Get_Set_Cnt(ps) ); // rc2.cnt);
                         AddSet2Buf(tb, ps);
                         sprintf(EndBuf(tb), " elim %d ", cnt2);
-                        count += cnt2;
+                        if (had_err) {
+                            strcat(tb," had error ");
+                            sprtf("%s\n",tb);
+                            count = 0;
+                            goto Exit;
+                        } else {
+                            count += cnt2;
+                        }
                         // hmmm wanted to find the 3 pairs resposible, but difficult
                         //for (ii = pvp->begin(); ii != pvp->end(); ii++) {
                         //    pair = *ii;
@@ -919,14 +942,317 @@ int  Sort_Hidden_Pairs( PABOX2 pb, vPAIR & vp )
 
 
     // on the way OUT
+Exit:
     add_list_out(prev);
     for ( mi = mMap.begin(); mi != mMap.end(); mi++ ) {
         pvp = (*mi).second;
         pvp->clear();
         delete pvp;
     }
+    if (had_err && phad_err)
+        *phad_err = true;
     return count;
 }
+
+/*-------------------------------------------------------------------------*/
+/* Purpose of hidden_pairs is to look for pairs of numbers, eg 3-7 and 3-7 */
+/* mixed up in the same two squares with other numbers - which can be      */
+/* eliminated. 															   */
+/*-------------------------------------------------------------------------*/
+// function hidden_pairs()
+static int jig = -1;
+
+int bit_count( int b )
+{
+    int n=0;
+	if (!b) {
+		return 0;
+	}
+    do { ++n; } while ( (b &= (b-1)) );
+    return n;
+}
+
+//std::string apply_new_mask( "HIDDEN PAIR: ", " in diagonal ",1,x,x,h );
+std::string apply_new_mask( const char *title, const char *place, int type, int row, int col, int h )
+{
+    std::string s("\n");
+    s += title;
+    char *tb = GetNxtBuf();
+    sprintf(tb," t=%d, r=%d, c=%d, h=%d", type, row, col, h );
+    s += tb;
+    s += " ";
+    s += place;
+    return s;
+}
+
+std::string digitise( int y, int x, int m ) {
+	int i,p=0;
+    std::string str="";
+    char *tb = GetNxtBuf();
+	for (i = 0; i < 9; i++) {
+		if (m & (1 << i)) {
+            sprintf(tb,"%d%d%d", y, x, i );
+			str += tb;  // ''+y+x+i;
+		}
+	}
+	return str;
+}
+
+class sbox
+{
+public:
+    sbox() { }
+    ~sbox() { }
+    int val(int y, int x) { PABOX2 pb = get_curr_box();
+                            return pb->line[y].val[x];
+    }
+    int mask(int y, int x) { PABOX2 pb = get_curr_box();
+                             PSET ps = &pb->line[y].set[x];
+                             int i, val, n = 1;
+                             int res = 0;
+                             for (i = 0; i < 9; i++) {
+                                 val = ps->val[i];
+                                 if (val) {
+                                     res |= n;
+                                 }
+                                 n = n << 1;
+                             }
+                            return res;
+    }
+    int bcmask(int y, int x)  { PABOX2 pb = get_curr_box();
+                             PSET ps = &pb->line[y].set[x];
+                             int i, val;
+                             int res = 0;
+                             for (i = 0; i < 9; i++) {
+                                 val = ps->val[i];
+                                 if (val) {
+                                     res++;
+                                 }
+                             }
+                            return res; // count of candidate for this slot
+    }
+};
+
+int hidden_pairs()
+{
+    int count = 0;
+	int x,y,n,m,i,bb,cc,box=0,h;
+    int a,b;
+    std::string s="";
+    PABOX2 pb = get_curr_box();
+    sbox g;
+	int pos[9];
+
+	if( jig==-1 ) {// Diagonal 1
+		for(n=0;n<9;n++) {	// .. check each number
+			for(pos[n]=x=0;x<9;x++) {
+				if( !g.val(x,x) && (g.mask(x,x) & (1 << n)) ) {
+                    pos[n] += (1 << x);  // ith position of n
+                }
+            }
+        }
+		for(n=0;n<8;n++) {
+			for(m=n+1;m<9;m++) {
+				if( bit_count(pos[n])==2 && pos[n] == pos[m] ) {
+					for(x=0;x<9;x++) {
+						if( pos[n] & (1 << x) && g.bcmask(x,x) > 2 )
+						{
+							h=(1 << n) + (1 << m);
+							s += apply_new_mask( "HIDDEN PAIR: ", " in diagonal ",1,x,x,h );
+                            count++;
+						}
+                    }
+                }
+            }
+        }
+		// Diagonal 2
+		for(n=0;n<9;n++) {	// .. check each number
+			for(pos[n]=x=0;x<9;x++) {
+				if( !g.val(x,8-x) && (g.mask(x,8-x) & (1 << n)) ) {
+					pos[n] += (1 << x);  // ith position of n
+                }
+            }
+        }
+		for(n=0;n<8;n++) {
+			for(m=n+1;m<9;m++) {
+				if( bit_count(pos[n])==2 && pos[n] == pos[m] ) {
+					for(x=0;x<9;x++) {
+						if( pos[n] & (1 << x) && g.bcmask(x,8-x) > 2 )
+						{
+							h=(1 << n) + (1 << m);
+							s += apply_new_mask( "HIDDEN PAIR: ", " in diagonal ",2,x,8-x,h );
+                            count++;
+						}
+                    }
+                }
+            }
+        }
+	}
+	for(bb=0;bb<9;bb+=3) {  	// Once more, for each box (9 of them 3 by 3 each)
+		for(cc=0;cc<9;cc+=3)
+		{
+			for(n=0;n<9;n++)	// .. check each number
+			{
+				pos[n]=i=0;
+				for(y=bb;y<bb+3;y++) {	// which means looking in each 3 by 3 box
+					for(x=cc;x<cc+3;x++,i++) {
+						if( !g.val(y,x) && (g.mask(y,x) & (1 << n)) ) {
+							pos[n] += (1 << i);  // ith position of n
+                        }
+                    }
+                }
+			}
+			for(n=0;n<8;n++) {
+				for(m=n+1;m<9;m++) {
+					if( bit_count(pos[n] | pos[m]) == 2 && pos[n] && pos[m] )
+					{
+						h=(1 << n) + (1 << m); // this is our pair
+						i=0;
+						for(y=bb;y<bb+3;y++) {	// check if it implies an elimination
+							for(x=cc;x<cc+3;x++) {
+								if( (g.mask(y,x) & h) && (g.mask(y,x) - (g.mask(y,x) & h)) ) {
+									i++;
+                                }
+                            }
+                        }
+						if( !i ) continue;
+						i=0;
+						for(y=bb;y<bb+3;y++) {	// which means looking in each 3 by 3 box
+							for(x=cc;x<cc+3;x++,i++)
+							{
+								a=pos[n] & (1 << i);
+								b=pos[m] & (1 << i);
+								if( a || b ) {
+									if( g.bcmask(y,x) > ((a>0)+(b>0)) ) {
+										s += apply_new_mask( "HIDDEN PAIR: ", " in box ",box,y,x,h );
+                                        count++;
+									} else {
+										s += digitise(y,x,g.mask(y,x) );
+									}
+								}
+							}
+                        }
+					}
+                }
+            }
+			box++;
+		}
+    }
+	/*-------------------------------------------------------------------------*/
+	/* Checking in the box will get most hidden pairs, but some are aligned    */
+	/* over two box but still on the same row or columns				       */
+	/*-------------------------------------------------------------------------*/
+	for(y=0;y<9;y++)
+	{
+		for(n=0;n<9;n++) {	// .. check each number
+			for(pos[n]=x=0;x<9;x++)	{ // which means looking in each row/col
+				if( !g.val(y,x) && (g.mask(y,x) & (1 << n)) ) {
+					pos[n] += (1 << x);  // ith position of n
+                }
+            }
+        }
+
+	/*	for(n=0;n<8;n++)
+			for(m=n+1;m<9;m++)
+				if( bit_count(pos[n])==2 && pos[n] == pos[m] )
+					for(x=0;x<9;x++)	// which means looking in each row/col
+						if( pos[n] & (1 << x) && g.bcmask(y,x) > 2 )
+						{
+							h=(1 << n) + (1 << m);
+							s += apply_new_mask( "HIDDEN PAIR: ", " in row ",y,y,x,h );
+						} */
+
+
+		for(n=0;n<8;n++) {
+			for(m=n+1;m<9;m++) {
+				if( bit_count(pos[n] | pos[m]) == 2 && pos[n] && pos[m] )
+				{
+					h=(1 << n) + (1 << m); // this is our pair
+					for(i=x=0;x<9;x++) {
+						if( (g.mask(y,x) & h) && (g.mask(y,x) - (g.mask(y,x) & h)) ) i++;
+                    }
+					if( !i ) continue;
+					for(x=0;x<9;x++)
+					{
+						a=pos[n] & (1 << x);
+						b=pos[m] & (1 << x);
+						if( a || b ) {
+							if( g.bcmask(y,x) > ((a>0)+(b>0)) ) {
+								s += apply_new_mask( "HIDDEN PAIR: ", " in row ",y,y,x,h );
+                                count++;
+							} else {
+								s += digitise(y,x,g.mask(y,x) );
+							}
+                        }
+					}
+				}
+            }
+        }
+	}
+	for(x=0;x<9;x++)
+	{
+		for(n=0;n<9;n++) {	// .. check each number
+			for(pos[n]=y=0;y<9;y++)	{ // which means looking in each row/col
+				if( !g.val(y,x) && (g.mask(y,x) & (1 << n)) ) {
+					pos[n] += (1 << y);  // ith position of n
+                }
+            }
+        }
+
+	/*	for(n=0;n<8;n++)
+			for(m=n+1;m<9;m++)
+				if( bit_count(pos[n])==2 && pos[n] == pos[m] )
+					for(y=0;y<9;y++)	// which means looking in each row/col
+						if( pos[n] & (1 << y) && g.bcmask(y,x) > 2 )
+						{
+							h=(1 << n) + (1 << m);
+							s += apply_new_mask( "HIDDEN PAIR: ", " in col ",x,y,x,h );
+						} */
+
+		for(n=0;n<8;n++) {
+			for(m=n+1;m<9;m++) {
+				if( bit_count(pos[n] | pos[m]) == 2 && pos[n] && pos[m] )
+				{
+					h=(1 << n) + (1 << m); // this is our pair
+					for(i=y=0;y<9;y++) {
+						if( (g.mask(y,x) & h) && (g.mask(y,x) - (g.mask(y,x) & h)) )
+                            i++;
+                    }
+					if( !i ) continue;
+					for(y=0;y<9;y++)
+					{
+						a = pos[n] & (1 << y);
+						b = pos[m] & (1 << y);
+						if( a || b ) {
+							if( g.bcmask(y,x) > ((a>0)+(b>0)) ) {
+								s += apply_new_mask( "HIDDEN PAIR: ", " in col ",x,y,x,h );
+                                count++;
+							} else {
+								s += digitise(y,x,g.mask(y,x) );
+							}
+                        }
+					}
+				}
+            }
+        }
+	}
+#if 0 // 00000000000000000000000000000000000000000000000000000000000000000000
+	for(y=0;y<9;y++)
+		for(x=0;x<9;x++)	// for every square on the board...
+			if( g.c(y,x).elim ) {
+				lable_square(y,x,g.c(y,x).elim);
+				some_changes=true;
+				gotsome = true;
+			}
+	grn_blue_color(s,"fshGrn",0);
+    return s.length;
+#endif // 000000000000000000000000000000000000000000000000000000000000000000000
+    if (s.size()) {
+        sprtf("%s\n", s.c_str());
+    }
+	return count;
+}
+
 
 int Do_Hidden_Pairs(PABOX2 pb)
 {
@@ -935,9 +1261,14 @@ int Do_Hidden_Pairs(PABOX2 pb)
     PSET ps;
     vPAIR vp;
     PAIR pair;
-    count = 0;
+    bool had_err = false;
     sprtf("S2d: Find Hidden Pairs\n");
     char *tb = GetNxtBuf();
+//    count = hidden_pairs();
+//    if (count) {
+//        sprtf("S2j: Returned %d...\n", count);
+//    }
+    count = 0;
     for (row = 0; row < 9; row++) {
         for (col = 0; col < 9; col++) {
             val = pb->line[row].val[col];
@@ -987,15 +1318,22 @@ int Do_Hidden_Pairs(PABOX2 pb)
     }
 
     sprtf("S2d: Found %d Pairs (%d)\n", vp.size(), count);
-    count = Sort_Hidden_Pairs( pb, vp );
+
+    count = Sort_Hidden_Pairs( pb, vp, &had_err );
+
+    tb = GetNxtBuf();
     if (count) {
-        sprtf("S2d: Hidden Pairs, elim %d vals. To %d\n", count,
+        sprintf(tb,"S2d: Hidden Pairs, elim %d vals. To Fill (%d)", count,
             sg_Fill_Hidden);
         pb->iStage = sg_Fill_Hidden;
     } else {
-        sprtf("S2d: Hidden Pairs. No elims. To begin.\n");
-        pb->iStage = sg_Begin;
+        sprintf(tb,"S2d: Hidden Pairs. No elims.");
+        if (had_err)
+            strcat(tb," had errors");
+        strcat(tb," - To begin.");
+        //pb->iStage = sg_Begin;
     }
+    OUTIT(tb);
     return count;
 }
 
@@ -4046,6 +4384,7 @@ int Do_Single_Scan(PABOX2 pb)
 // Mark SINGLES - Unique in Row, Column or Box, or a combination
 // Where the previous eliminations have left just ONE unique 
 // single candidate in ROW, COL, BOX
+// I use 'Marked Unique RCB', while sudokuwiki calls this 'Hidden Singles`
 int Do_Unique_Scan(PABOX2 pb)
 {
     int count = 0;
