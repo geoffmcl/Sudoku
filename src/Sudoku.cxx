@@ -1142,7 +1142,7 @@ int solve_the_Sudoku()
             //////////////////////////////////////////////////////////
             get_empty_count();
             // if no change in 'stage' then failed or finished
-            if (pb->iStage == iSolveStage) {
+            if ( (total_empty_count != 0) && (pb->iStage == iSolveStage) ) {
                 g_bAutoSolve = false;
                 pAutoTime->stop();
                 do_message_block( pAutoTime->getElapsedTime(), "Aborted" );
@@ -1178,6 +1178,10 @@ int solve_the_Sudoku()
             }
         }
     }
+
+    // show solution (or restart) value
+    SPRTF("%s\n", get_ASCII_81_Stg(get_curr_box()));
+
 #ifdef SHOW_STAGE_LIST
     Show_Stage_List();
 #endif
