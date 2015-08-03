@@ -1100,7 +1100,9 @@ void Paint_Set(HDC hdc, PRECT prcCell, PSET ps, PABOX2 pab, int row, int col)
             }
         }
     }
-    if ( (( sz.cy * 3 ) < height) && ((sz.cx * 3) < width) ) {
+    // we have to paint
+    // if ( (( sz.cy * 3 ) < height) && ((sz.cx * 3) < width) ) {
+    {
         int i, val, len, cnt;
         char buf[16];
         char *pb = buf;
