@@ -78,6 +78,7 @@ extern int Do_Unique_Scan(PABOX2 pb );
 extern int Do_Pointing_Pairs( PABOX2 pb );
 extern int Do_YWing_Scan(PABOX2 pb);
 extern int Do_Hidden_Triple_Scan(PABOX2 pb);
+extern int Do_Hidden_Pairs(PABOX2 pb);
 
 extern vRC *Get_Strong_Links(); // { return &vStrong_Links; }
 

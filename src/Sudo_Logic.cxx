@@ -4482,6 +4482,7 @@ int Do_Simple_Scan(PABOX2 pb)
     { "XYZ-Scan",IDC_CHECK19,&add_debug_xyz, &bChgDXYZ       , Do_XYZ_Wings, &Do_XYZ, &Chg_XYZ          },  // 18
     { "Strong Links 3",IDC_CHECK20,&add_debug_sl3, &bChgDSL3 , Do_Strong_Link3_Scan, &Do_SL3, &Chg_SL3  },  // 19
     { "Unique Rects 2",IDC_CHECK21,&add_debug_ur2, &bChgDUR2 , Do_UniqRect2_Scan, &Do_UR2, &Chg_UR2     },  // 20
+    { "Hidden Pairs",IDC_CHECK22,&add_debug_hp, &bChgHP      , Do_Hidden_Pairs, &Do_HP, &Chg_HP         },  // 21
    ----------------------------------------------- */
 
 // This could be done run per the above TABLE
@@ -4497,11 +4498,11 @@ int Do_Stage_Two(PABOX2 pb)
     if (!count && Do_NP) {
         count = Do_Naked_Pairs(pb);
     }
-#if 0 // this is NOT working properly yet
-    if (!count) {
+//#if 0 // this is NOT working properly yet
+    if (!count && Do_HP) {
         count = Do_Hidden_Pairs(pb);
     }
-#endif // 0
+//#endif // 0
     if (!count && Do_LE) {
         count = Do_Locked_Excl(pb);
     }

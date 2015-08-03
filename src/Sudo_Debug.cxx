@@ -30,6 +30,8 @@ BOOL bChgDUR = FALSE;
 int add_debug_ur2 = 0;  // debug Unique Rectangle 3
 BOOL bChgDUR2 = FALSE;
 
+int add_debug_hp = FALSE;
+BOOL bChgHP = FALSE;
 
 int add_debug_ff = 0;    // debug fill by flags
 BOOL bChgDFF = FALSE;
@@ -74,9 +76,7 @@ BOOL bChgPXY2 = FALSE;
 
 BOOL Do_US = TRUE;
 BOOL Do_NP = TRUE;
-#if 0 // this is NOT working properly yet
 BOOL Do_HP = FALSE;
-#endif // 0
 BOOL Do_LE = TRUE;
 BOOL Do_PP = TRUE;
 BOOL Do_XW = TRUE;
@@ -123,6 +123,7 @@ BOOL Chg_XYZ = FALSE;
 BOOL Chg_XC = FALSE;
 BOOL Chg_XC3 = FALSE;
 BOOL Chg_UR2 = FALSE;
+BOOL Chg_HP = FALSE;    // Hidden Pairs
 
 typedef struct tagSTRATLIST {
     STRATSERV serv;
@@ -134,9 +135,9 @@ typedef struct tagSTRATLIST {
 STRATLIST StratServers[] = {
     { Do_Unique_Scan, &Do_US, &Chg_US,          -1 },
     { Do_Naked_Pairs, &Do_NP, &Chg_NP,           0 },
-#if 0 // this is NOT working properly yet
+//#if 0 // this is NOT working properly yet
     { Do_Hidden_Pairs, &Do_HP, &Chg_HP,         -1 },
-#endif // 0
+//#endif // 0
     { Do_Locked_Excl, &Do_LE, &Chg_LE,           3 },
     { Do_Pointing_Pairs, &Do_PP, &Chg_PP,        2 },
     { Do_XWing_Scan, &Do_XW, &Chg_XW,            4 },
@@ -184,6 +185,7 @@ DBGLIST DbgList[] = {
     { "XYZ-Scan",IDC_CHECK19,&add_debug_xyz, &bChgDXYZ       , Do_XYZ_Wings, &Do_XYZ, &Chg_XYZ          },  // 18
     { "Strong Links 3",IDC_CHECK20,&add_debug_sl3, &bChgDSL3 , Do_Strong_Link3_Scan, &Do_SL3, &Chg_SL3  },  // 19
     { "Unique Rects 2",IDC_CHECK21,&add_debug_ur2, &bChgDUR2 , Do_UniqRect2_Scan, &Do_UR2, &Chg_UR2     },  // 20
+    { "Hidden Pairs",IDC_CHECK22,&add_debug_hp, &bChgHP      , Do_Hidden_Pairs, &Do_HP, &Chg_HP         },  // 21
 
     // *** MUST be LAST ***
     { 0, 0, 0, 0, 0, 0, 0 }

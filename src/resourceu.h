@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
+// COPY of Microsoft Visual C++ generated (unicode) include file.
 // Used by Sudoku.rc
 //
 #define IDC_MYICON                      2
@@ -103,6 +103,7 @@
 #define IDC_EDIT30                      1063
 #define IDC_BUTTON19                    1064
 #define IDC_BUTTON20                    1065
+#define IDC_CHECK22                     1066
 #define ID_FILE_OPEN                    32771
 #define ID_FILE_SAVE                    32772
 #define ID_OPTIONS_SHOWHINTS            32773
@@ -150,7 +151,7 @@
 #define _APS_NO_MFC                     1
 #define _APS_NEXT_RESOURCE_VALUE        139
 #define _APS_NEXT_COMMAND_VALUE         32822
-#define _APS_NEXT_CONTROL_VALUE         1046
+#define _APS_NEXT_CONTROL_VALUE         1067
 #define _APS_NEXT_SYMED_VALUE           127
 #endif
 #endif
