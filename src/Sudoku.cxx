@@ -152,6 +152,22 @@ int Get_MsgBox_YNC(const char *msg,const char *title, bool abort)
     return 1;
 }
 
+int Do_MsgBox_YNC2(const char *msg,const char *title)
+{
+    int res = MB3(msg, title);
+    return res;
+}
+
+
+int Do_MsgBox_YN(const char *msg, const char *title)
+{
+    int res = MB2(msg,title);
+    if (res != IDYES) {
+        return 1;
+    }
+    return 0;
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE

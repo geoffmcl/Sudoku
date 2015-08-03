@@ -19,8 +19,10 @@ BOOL Change_Box(PABOX2 pb, int row, int col, int val, int flag)
                 sprintf(EndBuf(tb),"However a generated test solution indicates the value" MEOL
                     "of this cell should be [%d]" MEOL, val2 );
                 sprintf(EndBuf(tb),"Do you want to CONTINUE with the setting of value [%d]?", val);
-                int res = MB2(tb,"CHECK BOX CHANGE");
-                if (res != IDYES) {
+                int res = Do_MsgBox_YN(tb,"CHECK BOX CHANGE");
+                //int res = MB2(tb,"CHECK BOX CHANGE");
+                //if (res != IDYES) {
+                if (res) {
                     return FALSE;
                 }
             }

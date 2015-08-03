@@ -471,8 +471,10 @@ void Do_ID_EDIT_GENERATE(HWND hWnd)
             if (!b) {
                 char *tb = GetNxtBuf();
                 sprintf(tb,"EEK! Failed to generate a NEW sudoku!"EOL_CHR"with %d spots."EOL_CHR"Click [Yes] to try again!", g_iMinGiven);
-                res = MB2(tb,"Generation Failed");
-                if (res != IDYES) {
+                //res = MB2(tb,"Generation Failed");
+                //if (res != IDYES) {
+                res = Do_MsgBox_YN(tb,"Generation Failed");
+                if (res) {
                     cont = false;
                 }
             } else {
@@ -1341,22 +1343,32 @@ BOOL Do_Import_OK(HWND hDlg)
             "Need 81, 9x9..." MEOL
             "Click [No] to abort" MEOL, len );
         strcat(tb,"Click [Yes] to redo" MEOL);
-        len = MB2(tb,"NOT ENOUGH CHARACTERS");
-        if (len == IDYES)
-            return FALSE; // stay and redo
+        //len = MB2(tb,"NOT ENOUGH CHARACTERS");
+        //if (len == IDYES)
+        //    return FALSE; // stay and redo
+        //else
+        //    return TRUE; // forget it - close DIALOG
+        len = Do_MsgBox_YN(tb,"NOT ENOUGH CHARACTERS");
+        if (len)
+            return TRUE;
         else
-            return TRUE; // forget it - close DIALOG
+            return FALSE;
     }
     if (len > 81) {
         sprintf(tb,"Oops, TOO many charcters! Got %d!" MEOL
             "Need 81, 9x9..." MEOL
             "Click [No] to abort" MEOL, len );
         strcat(tb,"Click [Yes] to redo" MEOL);
-        len = MB2(tb,"TOO MANY CHARACTERS");
-        if (len == IDYES)
-            return FALSE; // stay and redo input
+        //len = MB2(tb,"TOO MANY CHARACTERS");
+        //if (len == IDYES)
+        //    return FALSE; // stay and redo input
+        //else
+        //    return TRUE; // forget it - close dialog
+        len = Do_MsgBox_YN(tb,"TOO MANY CHARACTERS");
+        if (len)
+            return TRUE; // forget it
         else
-            return TRUE; // forget it - close dialog
+            return FALSE; // stay and redo
     }
 
     int i, c;
@@ -1411,8 +1423,13 @@ BOOL Do_Import_OK(HWND hDlg)
         strcat(tb,MEOL);
         strcat(tb,"Click [No] to abort" MEOL);
         strcat(tb,"Click [Yes] to redo" MEOL);
-        len = MB2(tb,"INVALID Sudoku");
-        if (len == IDYES)
+        //len = MB2(tb,"INVALID Sudoku");
+        //if (len == IDYES)
+        //    return FALSE; // stay and redo IMPORT
+        //else
+        //    return TRUE;  // ABORT import - close DIALOG
+        len = Do_MsgBox_YN(tb,"INVALID Sudoku");
+        if (!len)
             return FALSE; // stay and redo IMPORT
         else
             return TRUE;  // ABORT import - close DIALOG
@@ -1425,7 +1442,8 @@ BOOL Do_Import_OK(HWND hDlg)
             strcat(tb,"Click [Cancel] to abort" MEOL);
             strcat(tb,"Click [Yes] to continue with import" MEOL);
             strcat(tb,"Click [No] to redo import" MEOL);
-            len = MB3(tb,head);
+            //len = MB3(tb,head);
+            len = Do_MsgBox_YNC2(tb,head);
             if (len == IDYES) {
                 // continue and use this imported Sudoku
             } else if (len == IDNO)

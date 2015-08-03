@@ -324,6 +324,8 @@ extern BOOL res_scn_rect;
 
 extern VOID Do_Solved_MsgBox(const char *msg, const char *title);
 extern int Get_MsgBox_YNC(const char *msg,const char *title, bool abort);
+extern int Do_MsgBox_YNC2(const char *msg,const char *title);
+extern int Do_MsgBox_YN(const char *msg, const char *title);
 
 #endif // #ifndef _SUDOKU_HXX_
 // eof - Sudoku.hxx
