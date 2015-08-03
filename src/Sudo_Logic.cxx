@@ -4229,10 +4229,10 @@ int Do_ID_OPTIONS_ONESTEP( HWND hWnd )
     case sg_Begin:
     case sg_One:
         count = Do_Simple_Scan(pb);
-        if (!count) {
-            Do_Stage_Two(pb);
+        if (count) {
+            break;
         }
-        break;
+        // Note fall through to stage two;
     case sg_Two:
         count = Do_Stage_Two(pb);
         break;
