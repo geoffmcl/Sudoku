@@ -51,6 +51,8 @@ extern void File_Reset();
 
 extern VOID Do_ID_FILE_OPENDIRECTORY(HWND hWnd);
 
+extern char *get_ASCII_81_Stg(PABOX2 pb); // get simple list of the 81 puzzle values
+
 
 #endif // #ifndef _SUDO_FILE_HXX_
 // eof - Sudo_File.hxx

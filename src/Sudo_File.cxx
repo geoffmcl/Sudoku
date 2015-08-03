@@ -103,6 +103,7 @@ void File_Reset()
     char *cp = Get_Act_File();
     if (cp && strcmp(g_pSpecial,cp)) {
         sprtf("Loaded [%s]\n",cp);
+        sprtf("%s\n", get_ASCII_81_Stg(get_curr_box()));
         Add_to_INI_File_List(cp);
     }
     done_end_dialog = false;
@@ -807,7 +808,7 @@ VOID Do_ID_FILE_SAVE(HWND hWnd)
         } if ((len > 4) && (STRICMP(&lpstrFile[len-4],".sdk") == 0)) {
             ok = Save_SDK_File(hWnd, lpstrFile);
         } else {
-            ok = Save_a_File(hWnd, lpstrFile);
+            ok = Save_a_File(hWnd, lpstrFile);  // .txt or .csv
         }
         if (ok) {
             // SUCCESSFUL WRITE - Reset FILE NAME, etc
@@ -946,6 +947,24 @@ BOOL Get_Directory_Name(HWND hWnd, char *lpstrFile)
 ////////////////////////////////////////////////////////////////////////////////////////////
 #endif // WIN32 // windows commctrl.h dialogs
 ////////////////////////////////////////////////////////////////////////////////////////////
+
+// get simple list of the 81 puzzle values
+char *get_ASCII_81_Stg(PABOX2 pb)
+{
+    int row, col, val;
+    char *ps = GetNxtBuf();
+    *ps = 0;
+    for (row = 0; row < 9; row++) {
+        for ( col = 0; col < 9; col++ ) {
+            val = pb->line[row].val[col];
+            if (val)
+                sprintf(EndBuf(ps),"%d",val);
+            else
+                strcat(ps,NUL_VAL);
+        }
+    }
+    return ps;
+}
 
 // Add ASCII block is like -
 // Filled with possibilities
