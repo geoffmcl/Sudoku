@@ -64,7 +64,7 @@ PABOX2 Copy_Box2( PABOX2 pb_in )
 {
     PABOX2 pb = (PABOX2)malloc( sizeof(ABOX2) );
     if (!pb) {
-        MB("ERROR: Memory allocation FAILED!\n");
+        Do_MsgBox_OK("ERROR: Memory allocation FAILED!\n");
         exit(1);
     }
     memcpy(pb,pb_in,sizeof(ABOX2));
@@ -77,7 +77,7 @@ PABOX2 get_curr_box()
     if (pCurr_Box == 0) {
         pCurr_Box = (PABOX2)malloc(sizeof(ABOX2));
         if (!pCurr_Box) {
-            MB("Memory allocation failed!\nWill abort on OK\n");
+            Do_MsgBox_OK("Memory allocation failed!\nWill abort on OK\n");
             exit(1);
         }
         invalidate_box(pCurr_Box);

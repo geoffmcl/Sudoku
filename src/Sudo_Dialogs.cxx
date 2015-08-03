@@ -1455,8 +1455,13 @@ BOOL Do_Import_OK(HWND hDlg)
             head = "NO SPOTS";
             strcat(tb,"Click [No] to abort" MEOL);
             strcat(tb,"Click [Yes] to redo" MEOL);
-            len = MB2(tb,head);
-            if (len == IDYES)
+            //len = MB2(tb,head);
+            //if (len == IDYES)
+            //    return FALSE; // stay an REDO import
+            //else
+            //    return TRUE;  // ABORT and close DIALOG
+            len = Do_MsgBox_YN(tb,head);
+            if (!len)
                 return FALSE; // stay an REDO import
             else
                 return TRUE;  // ABORT and close DIALOG

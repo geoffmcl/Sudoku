@@ -659,7 +659,7 @@ void Explode( const char *msg, const char *file, const char *func, int line )
     sprintf(tb,
         "CRITICAL CODE PROBLEM:\r\n%s\r\nFile: %s,\r\nFunction %s,\r\nLine %d\r\nCAN ONLY EXIT on OK!!\r\n",
         msg, file, func, line );
-    MB(tb);
+    Do_MsgBox_OK(tb);
     exit(1);
 }
 

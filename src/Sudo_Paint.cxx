@@ -1051,7 +1051,7 @@ PROWCOL Get_Copy_All_Anal()
 {
     PROWCOL all = (PROWCOL)malloc(sizeof(all_anal));
     if (!all) {
-        MB("Copy a all_anal FAILED!");
+        Do_MsgBox_OK("Copy a all_anal FAILED!");
         exit(1);
     }
     memcpy(all,all_anal,sizeof(all_anal));
@@ -1511,7 +1511,7 @@ void Paint_Box( HDC hdc )
         if (len < MCA_SZ)
             strcpy(cp,tb);  // copy the potential value string
         else {
-            MB("ERROR: String length greater than buffer. Increase MCA_SZ and recompile!");
+            Do_MsgBox_OK("ERROR: String length greater than buffer. Increase MCA_SZ and recompile!");
             exit(1);
         }
         if (len) {
@@ -1614,7 +1614,7 @@ void Paint_Box( HDC hdc )
         if (len < MCA_SZ)
             strcpy(cp,tb);
         else {
-            MB("ERROR: String length greater than buffer. Increase MCA_SZ and recompile!");
+            Do_MsgBox_OK("ERROR: String length greater than buffer. Increase MCA_SZ and recompile!");
             exit(1);
         }
         if (len) {

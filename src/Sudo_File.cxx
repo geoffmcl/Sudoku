@@ -40,7 +40,7 @@ void Reset_Active_File(char *file)
     }
     g_pAct_File = (char *)malloc( strlen(file) + 8 );
     if (!g_pAct_File) {
-        MB("Memory allocation for file name FAILED!");
+        Do_MsgBox_OK("Memory allocation for file name FAILED!");
         exit(1);
     }
     strcpy(g_pAct_File,file);
@@ -1237,7 +1237,7 @@ bool Save_a_File( HWND hWnd, char *pf, int flag )
             sprintf(ps,"WARNING: Writing to file [%s] FAILED!\nRequested write %d, but written %d\nCheck the FILE!\n",
                 pf, len, wtn);
             sprtf("%s\n",ps);
-            wtn = MB2(ps,"File Write Failed");
+            wtn = Do_MsgBox_YN(ps,"File Write Failed");
         } else {
             ok = true;
         }
@@ -1298,7 +1298,7 @@ bool Save_SDK_File( HWND hWnd, char *pf, int flag )
             sprintf(ps,"WARNING: Writing to file [%s] FAILED!\nRequested write %d, but written %d\nCheck the FILE!\n",
                 pf, len, wtn);
             sprtf("%s\n",ps);
-            wtn = MB2(ps,"File Write Failed");
+            wtn = Do_MsgBox_YN(ps,"File Write Failed");
         } else {
             ok = true;
         }
@@ -1368,7 +1368,7 @@ bool Save_XML_File(HWND hWnd, char *pf, int flag)
     if (!hfile) {
         char *tb = GetNxtBuf();
         sprintf(tb,"ERROR: Unable to create file [%s]!\n",pf);
-        MB(tb);
+        Do_MsgBox_OK(tb);
         return false;
     }
     DWORD len, wtn;
@@ -1396,7 +1396,7 @@ bool Save_XML_File(HWND hWnd, char *pf, int flag)
         sprintf(ps,"WARNING: Writing to file [%s] FAILED!\nRequested write %d, but written %d\nCheck the FILE!\n",
             pf, len, wtn);
         sprtf("%s\n",ps);
-        MB(ps);
+        Do_MsgBox_OK(ps);
     } else {
         ok = true;
     }
@@ -2094,8 +2094,12 @@ BOOL Load_Selected_File( HWND hWnd, char *pfile )
             tb = GetNxtBuf();
             sprintf(tb,"Warning, currently loaded file\n%s\nhas been changed!\nDo you want to SAVE this first?\n",
                 (cp3 ? cp3 : "Untitled") );
-            res = MB2(tb,"Save Current Changed File");
-            if (res == IDYES) {
+            //res = MB2(tb,"Save Current Changed File");
+            //if (res == IDYES) {
+            //    Do_ID_FILE_SAVE(hWnd);
+            //}
+            res = Do_MsgBox_YN(tb,"Save Current Changed File");
+            if (!res) {
                 Do_ID_FILE_SAVE(hWnd);
             }
         }
@@ -2130,8 +2134,12 @@ VOID Do_VIEW_FILELIST( HWND hWnd, vSTG *plist )
                         "FAILED!" MEOL
                         "Click OK to Select again" MEOL,
                         pfile );
-                    res = MB2(tb,"Advice of Failure");
-                    if (res == IDYES) {
+                    //res = MB2(tb,"Advice of Failure");
+                    //if (res == IDYES) {
+                    //    done = false; // back for another selection
+                    //}
+                    res = Do_MsgBox_YN(tb,"Advice of Failure");
+                    if (!res) {
                         done = false; // back for another selection
                     }
                 }

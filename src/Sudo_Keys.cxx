@@ -5,9 +5,14 @@
 bool Check_Exit() 
 {
     if (g_bChanged && total_empty_count) {
-        int res = MB2("The Sudoku box has been changed\nDo you want to SAVE the results.\nClick Yes to abort this exit.\nClick [ NO ] to exit without saving.",
-            "Save on Exit?");
-        if (res == IDYES) {
+        const char *msg = "The Sudoku box has been changed\nDo you want to SAVE the results.\nClick Yes to abort this exit.\nClick [ NO ] to exit without saving.";
+        //int res = MB2(msg,"Save on Exit?");
+        //if (res == IDYES) {
+        //    Post_Command(ID_FILE_SAVE);
+        //    return false;
+        //}
+        int res = Do_MsgBox_YN(msg,"Save on Exit?");
+        if (!res) {
             Post_Command(ID_FILE_SAVE);
             return false;
         }

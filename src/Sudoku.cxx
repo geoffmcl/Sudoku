@@ -168,7 +168,10 @@ int Do_MsgBox_YN(const char *msg, const char *title)
     return 0;
 }
 
-
+VOID Do_MsgBox_OK(const char *msg)
+{
+    MB(msg);
+}
 ////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -296,7 +299,7 @@ int ParseArgs(int argc, char **argv)
         char *arg = argv[i];
         if (*arg == '-') {
             sprintf(tb,"ERROR: Unknow command\n%s\nAt present there are NO options\nWill abort on OK",arg);
-            MB(tb);
+            Do_MsgBox_OK(tb);
             return 1;
         } else if (*arg == '@') {
             res = 1;
@@ -305,7 +308,7 @@ int ParseArgs(int argc, char **argv)
             }
             if (res) {
                 sprintf(tb,"ERROR: Unable to load input file\n%s\nCheck file name and location\nWill abort on OK",&arg[1]);
-                MB(tb);
+                Do_MsgBox_OK(tb);
                 return 1;
             }
         } else {
@@ -314,7 +317,7 @@ int ParseArgs(int argc, char **argv)
                 Reset_Active_File(arg);
             else {
                 sprintf(tb,"ERROR: Unable to 'stat' file\n%s\nCheck file name and location\nWill abort on OK",arg);
-                MB(tb);
+                Do_MsgBox_OK(tb);
                 return 1;
             }
         }
@@ -361,7 +364,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 #ifdef	ADD_TIMER1
    if( !(uiTimer1 = SetTimer( g_hWnd, TIMER_ID1, TIMER_INTERVAL1, NULL)) ) {
-      MB( "Failed in get Timer! Aborting ..." );
+      Do_MsgBox_OK( "Failed in get Timer! Aborting ..." );
       return FALSE;
 	}
 #endif	/* ADD_TIMER1 */
@@ -592,7 +595,7 @@ void DoOneStepCommand( HWND hWnd )
     int last_stage = pb->iStage;
     int count = Do_ID_OPTIONS_ONESTEP(hWnd);
     if (last_stage == pb->iStage) {
-        MB("Warning: One Step FAILED! Logic impaired!!\n"
+        Do_MsgBox_OK("Warning: One Step FAILED! Logic impaired!!\n"
             "\n"
             "Either unable to find solutions, or\n"
             "perhaps some previous value was wrong.\n"
@@ -1019,7 +1022,7 @@ int parse_args( int argc, char **argv )
             else {
                 char * tb = GetNxtBuf();
                 sprintf(tb,"ERROR: Unable to 'stat' file\n%s\nCheck file name and location\nWill abort on OK",arg);
-                MB(tb);
+                Do_MsgBox_OK(tb);
                 return 1;
             }
             usr_input = strdup(arg);
