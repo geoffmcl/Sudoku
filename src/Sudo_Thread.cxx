@@ -73,7 +73,7 @@ unsigned __stdcall ThreadFunc( void* pArguments )
     return 0;
 } 
 
-bool StartThread()
+bool StartThread()  // windows - uses _beginthreadex()
 {
     bool bret = false;
     if (in_thread)
@@ -116,7 +116,7 @@ void *ThreadFunc(void *vp)
     return 0;
 }
 
-bool StartThread()
+bool StartThread()  // unix - uses pthread_create()
 {
     bool bret = false;
     if (in_thread)
