@@ -57,12 +57,7 @@ VOID Do_Solved_Message()
     sprtf("Sudoku has been SOLVED!\n");
     strcat(tb,done_msg);
     set_repaint();
-    int res = MB3(tb,"SUDOKU SOLVED");
-    if (res == IDYES) {
-        Post_Command(ID_FILE_OPEN);
-    } else if (res == IDCANCEL) {
-        Post_Command(IDM_EXIT);
-    }
+    Do_Solved_MsgBox(tb,"SUDOKU SOLVED");
 }
 
 static Timer *pAutoTime = 0;

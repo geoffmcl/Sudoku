@@ -296,6 +296,7 @@ extern BOOL res_scn_rect;
 #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
 ////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef WIN32    // Use Windows 'MessgeBox'
+#define USE_MESSAGE_BOX 1
 #define  MB(a) MessageBox( g_hWnd, a, "CRITICAL ERROR", MB_OK | MB_ICONINFORMATION )
 #define  MB2(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNO )
 #define  MB3(a,b) MessageBox( g_hWnd, a, b, MB_ICONINFORMATION | MB_YESNOCANCEL )
@@ -320,6 +321,9 @@ extern BOOL res_scn_rect;
 #endif // ADD_MSGBOX_IO y/n
 
 #endif // #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
+
+extern VOID Do_Solved_MsgBox(const char *msg, const char *title);
+extern int Get_MsgBox_YNC(const char *msg,const char *title, bool abort);
 
 #endif // #ifndef _SUDOKU_HXX_
 // eof - Sudoku.hxx

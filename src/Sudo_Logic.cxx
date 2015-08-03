@@ -3718,16 +3718,12 @@ int Find_YWing_3rd(PABOX2 pb, PROWCOL prc1 , PROWCOL prc2, int br, int bc)
                                     strcat(tb, "Click [No] to abort operation." MEOL );
                                 }
                                 strcat(tb,"Click [Cancel] (or ESC) to exit application!" MEOL);
-                                res = MB3(tb, "Y-Wing Strategy Problem");
-                                if (abort || (res == IDCANCEL)) {
-                                    Post_Command(IDM_EXIT);
+                                res = Get_MsgBox_YNC(tb,"Y-Wing Strategy Problem", abort);
+                                // res = MB3(tb, "Y-Wing Strategy Problem");
+                                if (res)
                                     return 0;
-                                } else if (!abort && (res == IDYES)) {
-                                        res = OR_Row_Col_SetVal_with_Flag( pb, row4, col4, nval, cf_YWE, true );
-                                        if (res) return 0;
-                                } else {
-                                    return 0;
-                                }
+                                res = OR_Row_Col_SetVal_with_Flag( pb, row4, col4, nval, cf_YWE, true );
+                                if (res) return 0;
                                 *tb = 0;
                             }
                             count++;
@@ -3844,15 +3840,11 @@ int Do_YWing_Scan(PABOX2 pb)
                             strcat(tb, "Click [No] to abort operation." MEOL );
                         }
                         strcat(tb,"Click [Cancel] (or ESC) to exit application!" MEOL);
-                        res = MB3(tb, "Y-Wing Strategy Problem");
-                        if (res == IDCANCEL) {
-                            Post_Command(IDM_EXIT);
+                        res = Get_MsgBox_YNC(tb,"Y-Wing Strategy Problem",abort);
+                        if (res) 
                             return 0;
-                        } else if (!abort && (res == IDYES)) {
-                                OR_Row_Col_SetVal_with_Flag( pb, row2, col2, val, cf_YWE, true );
-                        } else {
-                            return 0;
-                        }
+                        OR_Row_Col_SetVal_with_Flag( pb, row2, col2, val, cf_YWE, true );
+
                     }
                     count++;
                     ps->cellflg |= cf_YWC;

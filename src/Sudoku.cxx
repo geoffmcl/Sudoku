@@ -127,6 +127,32 @@ void add_app_end()
     add_sys_time(curr);
 }
 
+// Do_Solved_MsgBox(tb,"SUDOKU SOLVED");
+VOID Do_Solved_MsgBox(const char *msg, const char *title)
+{
+    //int res = MB3(tb,"SUDOKU SOLVED");
+    int res = MB3(msg,title);
+    if (res == IDYES) {
+        Post_Command(ID_FILE_OPEN);
+    } else if (res == IDCANCEL) {
+        Post_Command(IDM_EXIT);
+    }
+}
+
+// Get_MsgBox_YNC(tb,"Y-Wing Strategy Problem");
+int Get_MsgBox_YNC(const char *msg,const char *title, bool abort)
+{
+    int res = MB3(msg, title);
+    if (res == IDCANCEL) {
+        Post_Command(IDM_EXIT);
+        return 1;
+    } else if (!abort && (res == IDYES)) {
+        return 0;
+    }
+    return 1;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
 ////////////////////////////////////////////////////////////////////////////////////////////
