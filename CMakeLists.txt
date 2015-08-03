@@ -92,7 +92,6 @@ set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${MSVC_LD_FLAGS}")
 
 if (BUILD_WIN32_EXE)
     set( EXE_TYPE WIN32 )
-    add_definitions( -DBUILD_WIN32_EXE )
     message(STATUS "*** Building WIN32 GUI EXE - EXE_TYPE=${EXE_TYPE}")
 else ()
     set( EXE_TYPE )
@@ -219,8 +218,31 @@ endif ()
 if (MSVC)
     set_target_properties(${name} PROPERTIES DEBUG_POSTFIX d )
 endif ()
-if (NOT BUILD_WIN32_EXE)
+if (BUILD_WIN32_EXE)
+    set_target_properties(${name} PROPERTIES COMPILE_FLAGS "-DBUILD_WIN32_EXE" )
+else ()
     set_target_properties(${name} PROPERTIES OUTPUT_NAME Sudo-con)
+endif ()
+
+if (BUILD_WIN32_EXE)
+    set(name Sudo-con)
+    set(dir src)
+    set( ${name}_SRCS
+        ${dir}/Sudoku.cxx
+        )
+    set( ${name}_HDRS
+        ${dir}/Sudoku.hxx
+        )
+    add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+    if (add_LIBS)
+        target_Link_libraries(${name} ${add_LIBS} )
+    endif ()
+    if (NOT WIN32)
+        target_Link_libraries(${name} ${CMAKE_THREAD_LIBS_INIT})
+    endif ()
+    if (MSVC)
+        set_target_properties(${name} PROPERTIES DEBUG_POSTFIX d )
+    endif ()
 endif ()
 
 # deal with install, if required
