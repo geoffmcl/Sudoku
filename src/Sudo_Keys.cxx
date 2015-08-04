@@ -90,8 +90,8 @@ VOID Do_WM_KEYDOWN( HWND hWnd, WPARAM wParam, LPARAM lParam )
     case VK_F3: // F3 function key
         //Do_F3_Key( hWnd );
         break;
-    case VK_F5:
-        Post_Command(ID_OPTIONS_ONESTEP);
+    case VK_F5: // F5 function key
+        Post_Command(ID_OPTIONS_ONESTEP);  // F5 function key
         break;
     //default:
     //    if (g_bCtrlDown) {

@@ -1869,6 +1869,7 @@ int PP_Elim_in_Col_outside_Box( PABOX2 pb, int col, int box, PRCRCB prcrcb, int 
 int g_bSkipPPVals = 0;
 // Pointing Pairs
 //
+
 // In AIC-Rule1.txt are missing a set of pointing pairs
 // 6@A5 and 6@A6 can be eliminated, since in the next box,
 // there are only 2 cells with 6 as the candidate, 6@A8 and 6@A9
@@ -4798,23 +4799,23 @@ const char *stage_to_text(int stage)
 {
     switch (stage)
     {
-    case sg_Begin:	return "Begin";
-    case sg_One:	return "One";
-    case sg_Two:	return "Two";
+    case sg_Begin:	        return "Begin";
+    case sg_One:	        return "One";
+    case sg_Two:	        return "Two";
     case sg_Fill_Singles:	return "Fill_Singles";
     case sg_Fill_Unique:	return "Fill_Unique";
-    case sg_Fill_Naked:	return "Fill_Naked";
+    case sg_Fill_Naked:	    return "Fill_Naked";
     case sg_Fill_Hidden:	return "Fill_Hidden";
-    case sg_Six:	return "Six";
-    case sg_Seven:	return "Seven";
-    case sg_Eight:	return "Eight";
+    case sg_Six:	        return "Six";
+    case sg_Seven:	        return "Seven";
+    case sg_Eight:	        return "Eight";
     case sg_Fill_Locked:	return "Fill_Locked";
-    case sg_Fill_XWing:	return "Fill_XWing";
+    case sg_Fill_XWing:	    return "Fill_XWing";
     case sg_Fill_Simple:	return "Fill_Simple";
     case sg_Fill_Pointers:	return "Fill_Pointers";
-    case sg_Fill_YWing:	return "Fill_YWing";
-    case sg_Fill_Color:	return "Fill_Color";
-    case sg_Fill_Rect:	return "Fill_Rect";
+    case sg_Fill_YWing:	    return "Fill_YWing";
+    case sg_Fill_Color:	    return "Fill_Color";
+    case sg_Fill_Rect:	    return "Fill_Rect";
     case sg_Fill_NakedTrip:	return "Fill_NakedTrip";
     case sg_Fill_NakedQuad:	return "Fill_NakedQuad";
     case sg_Fill_HidTrip:	return "Fill_HidTrip";
@@ -4822,7 +4823,7 @@ const char *stage_to_text(int stage)
     case sg_Fill_SLChains:	return "Fill_SLChains";
     case sg_Fill_SLPairs:	return "Fill_SLPairs";
     case sg_Fill_SLPairs3:	return "Fill_SLPairs3";
-    case sg_Fill_AIC:	return "sg_Fill_AIC";
+    case sg_Fill_AIC:	    return "Fill_AIC";
     case sg_Fill_XYZWing:	return "Fill_XYZWing";
     }
     return "out_of_range";

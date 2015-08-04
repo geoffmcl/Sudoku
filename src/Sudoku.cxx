@@ -1050,7 +1050,7 @@ DWORD msSleep = 55; // a very short time
 static int iSolveStage = -1;
 typedef std::vector<int> vINT;
 
-// #define SHOW_STAGE_LIST
+#define SHOW_STAGE_LIST
 #ifdef SHOW_STAGE_LIST
 static vINT vStages;
 
@@ -1064,6 +1064,8 @@ void Show_Stage_List()
         for (ii = 0; ii < max; ii++) {
             i = vStages[ii];
             st = stage_to_text(i);
+            if (i == 0)
+                SPRTF("\n");
             SPRTF("%s (%d) ", st, i );
         }
         SPRTF("\n");
@@ -1228,7 +1230,9 @@ int solve_the_Sudoku()
     SPRTF("%s\n", get_ASCII_81_Stg(get_curr_box()));
 
 #ifdef SHOW_STAGE_LIST
-    Show_Stage_List();
+    if (VERB2) {
+        Show_Stage_List();
+    }
 #endif
     return iret;
 }
