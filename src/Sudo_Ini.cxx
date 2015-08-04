@@ -723,45 +723,52 @@ void  GetModulePath( char * lpb )
 
 }
 
+bool Get_LocalData_Path( char *path )
+{
+    bool isok = false;
+#ifdef WIN32 // use getenv("LOCALAPPDATA")\sudoku
+    char *cp = getenv("LOCALAPPDATA");
+    if (cp) {
+        std::string s = cp;
+        s += "\\sudoku";
+        if (is_file_or_directory((char *)s.c_str()) != 2) {
+            _mkdir(s.c_str()); // create a directory
+        }
+        if (is_file_or_directory((char *)s.c_str()) == 2) {
+            strcpy(path,s.c_str());
+            strcat(path,"\\");
+            isok = true;
+        }
+    }
+#else        // !#ifdef WIN32 - Try for $HOME/.config/sudoku 
+    char *cp = getenv("HOME");
+    if (cp) {
+        std::string s = cp;
+        s += "/.config";
+        if (is_file_or_directory((char *)s.c_str()) != 2) {
+            mkdir(s.c_str(), 0700); // create a directory
+        }
+        if (is_file_or_directory((char *)s.c_str()) == 2) {
+            s += "/sudoku";
+            if (is_file_or_directory((char *)s.c_str()) != 2) {
+                mkdir(s.c_str(), 0700); // create a directory
+            }
+            if (is_file_or_directory((char *)s.c_str()) == 2) {
+                strcpy(path,s.c_str());
+                strcat(path,"/");
+                isok = true;
+            }
+        }
+    }
+#endif      // #ifdef WIN32 y/n - OS path for INI file
+   return isok;
+}
+
 char * GetINIFile(void) 
 {
     char * lpini = g_szIni;
     if( *lpini == 0 ) {
-        bool isok = false;
-#ifdef WIN32 // use GetModulePath/GetModuleFileName to place INI with app exe
-        char *cp = getenv("LOCALAPPDATA");
-        if (cp) {
-            std::string s = cp;
-            s += "\\sudoku";
-            if (is_file_or_directory((char *)s.c_str()) != 2) {
-                // create a directory
-                    _mkdir(s.c_str());
-            }
-            if (is_file_or_directory((char *)s.c_str()) == 2) {
-                strcpy(lpini,s.c_str());
-                strcat(lpini,"\\");
-                isok = true;
-            }
-        }
-#else        // !#ifdef WIN32 - Try for $HOME/.config/sudoku 
-        char *cp = getenv("HOME");
-        if (cp) {
-            std::string s = cp;
-            s += "/.config";
-            if (is_file_or_directory((char *)s.c_str()) == 2) {
-                s += "/sudoku";
-                if (is_file_or_directory((char *)s.c_str()) != 2) {
-                    // create a directory
-                     mkdir(s.c_str(), 0700);
-                }
-                if (is_file_or_directory((char *)s.c_str()) == 2) {
-                    strcpy(lpini,s.c_str());
-                    strcat(lpini,"/");
-                    isok = true;
-                }
-            }
-        }
-#endif      // #ifdef WIN32 y/n - OS path for INI file
+        bool isok = Get_LocalData_Path(lpini);
         if (!isok)
             GetModulePath( lpini );    // does   GetModuleFileName( NULL, lpini, 256 );
         strcat(lpini, g_szDefIni);

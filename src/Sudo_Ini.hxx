@@ -168,6 +168,8 @@ extern BOOL gChgASD;
 
 extern char * GetINIFile(void); // get DEFAULT name of INI file in use
 
+extern bool Get_LocalData_Path( char *path ); // WIN32=%LOCALAPPDATA%\sudoku, unix=$HOME/.config/sudoku, in buf with trailing path sep
+
 #endif // #ifndef _SUDO_INI_HXX
 // eof - Sudo_Ini.hxx
 
