@@ -121,6 +121,8 @@ void add_app_begin()
 
 void add_app_end()
 {
+    g_dwSvOptBits = sff_TEMP_FILE;
+    Write_Temp_File();
     int curr = add_sys_time(1); // ensure time added to message output
     InApptmr.stop();
     char *log = get_log_file();
