@@ -417,7 +417,7 @@ bool Eliminate_Unique_In_Row( int crow, int ccol, PABOX2 pb, PSET ps_1, PSET ps_
 // so ONLY count a 'hit' if it does not already have that 'elimination' flag
 // ==================================
 // To do a COLUMN, just do each row down
-int Mark_Same_Col( PABOX2 pb, int col, PSET ps, int flag )
+int Mark_Same_Col( int row, int col, PABOX2 pb, PSET ps, int flag )
 {
     int row2, val, cnt;
     cnt = 0;
@@ -437,7 +437,7 @@ int Mark_Same_Col( PABOX2 pb, int col, PSET ps, int flag )
 }
 
 // To do a ROW, just march across the columns
-int Mark_Same_Row( PABOX2 pb, int row, PSET ps, int flag )
+int Mark_Same_Row( int row, int col, PABOX2 pb, PSET ps, int flag )
 {
     int col2, val, cnt;
     cnt = 0;
@@ -4420,9 +4420,13 @@ int Do_Unique_Scan(PABOX2 pb)
     return count;
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Not really a 'strategy', more housekeeping after any puzzle change
+//
 // Scan of row,cols,boxes eliminating any candidate already in that set
 // That is is we have '1' in R1C1, then '1' can be eliminated in all of
-// R1, C1, and Box 1... done after the user adds a value somewhere.
+// R1, C1, and Box 1... say done after the user or auto-step, adds a value somewhere.
+// 
 int Do_Simple_Scan(PABOX2 pb)
 {
     int row, col, count;
@@ -4438,8 +4442,8 @@ int Do_Simple_Scan(PABOX2 pb)
             //memset(&pb->line[row].set[col].flag,0,(sizeof(int) * 9)); // DO I want to do THIS????
             // like pb->line[row].set[col].flag[i] &= ~cf_KEEP;, but for NOW clear
             // pb->line[row].set[col].uval = 0; // WHY clear this here ?????????
-            count += Mark_Same_Col( pb, col, ps, cf_SSE );
-            count += Mark_Same_Row( pb, row, ps, cf_SSE );
+            count += Mark_Same_Col( row, col, pb, ps, cf_SSE );
+            count += Mark_Same_Row( row, col, pb, ps, cf_SSE );
             count += Mark_Same_Box( row, col, pb, ps, cf_SSE );
         }
     }
