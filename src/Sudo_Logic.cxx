@@ -2154,14 +2154,14 @@ int Do_Fill_Unique(PABOX2 pb)
     }
 
     char *tb = GetNxtBuf();
-    sprintf(tb,"S%d:  ",pb->iStage);
+    sprintf(tb,"SFU: ");
     if (count) {
         sprintf(EndBuf(tb),"Fill %d UNIQUE vals.", count);
     } else {
         strcat(tb,"NO Fill UNIQUE found.");
     }
-    strcat(tb," To begin");
-    sprtf("%s\n",tb);
+    strcat(tb," - To begin");
+    OUTIT(tb);
     pb->iStage = sg_Begin;  // reset to do more eliminations if any
     return count;
 }
@@ -4393,9 +4393,10 @@ int Do_Mark_Single( PABOX2 pb )
     return count;
 }
 
+ // check for cells where no value, and only ONE candidate remains
 int Do_Single_Scan(PABOX2 pb)
 {
-    int count = Do_Mark_Single(pb);
+    int count = Do_Mark_Single(pb); // check for cells where no value, and only ONE candidate remains
     if (count) {
         sprtf("S2a: Marked SINGLE values %d - To Fill\n", count);
         pb->iStage = sg_Fill_Singles;  // reset to do more eliminations
@@ -4409,7 +4410,7 @@ int Do_Single_Scan(PABOX2 pb)
 // Where the previous eliminations have left just ONE unique 
 // single candidate in ROW, COL, BOX
 // I use 'Marked Unique RCB', while sudokuwiki calls this 'Hidden Singles`
-int Do_Unique_Scan(PABOX2 pb)
+int Do_Unique_Scan(PABOX2 pb)   // Hidden Singles
 {
     int count = 0;
     int i, row, col, val, cnt, nval;
@@ -4522,7 +4523,12 @@ int Do_Stage_Two(PABOX2 pb)
     int count = 0;
     if (!pb)
         pb = get_curr_box();
-    count = Do_Single_Scan(pb);
+
+    count = Do_Single_Scan(pb);  // Do_Stage_Two: check for cells where no value, and only ONE candidate remains
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // else tumble down the strategies - TODO: Should allow user to ORDER these candidate elimintation strategies
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
     if (!count) {
         count = Do_Unique_Scan(pb); // Mark SINGLES - Unique in Row, Column or Box, or a combination
     }
