@@ -49,6 +49,7 @@ static const char *module = "Sudoku";
 BOOL        g_bChanged = FALSE;
 HWND        g_hWnd = 0;
 HINSTANCE   hInst = 0;			// current instance
+int         verbosity = 0;
 
 #define MAX_LOADSTRING 100
 #ifndef EOL_CHR
@@ -903,12 +904,6 @@ void Post_Command( WPARAM cmd )
 }
 
 static const char *usr_input = 0;
-static int verbosity = 1;
-
-#define VERB1 (verbosity >= 1)
-#define VERB2 (verbosity >= 2)
-#define VERB5 (verbosity >= 5)
-#define VERB9 (verbosity >= 9)
 
 // TODO: Not sure I like this #ifdef SUDO_RC_VALUE... but how else to designate a 'Release Candidate'???
 void show_version()

@@ -235,6 +235,12 @@ typedef struct tagRCRCB {
 extern HWND g_hWnd;         // parent handle
 extern HINSTANCE hInst;		// current instance
 extern TCHAR szTitle[]; 	// The title bar text
+extern int verbosity;       // general verbosity
+
+#define VERB1 (verbosity >= 1)
+#define VERB2 (verbosity >= 2)
+#define VERB5 (verbosity >= 5)
+#define VERB9 (verbosity >= 9)
 
 extern BOOL g_bAShiftDown, g_bCtrlDown, g_bAltDown, g_bLBDown, g_bChanged, g_bShowHints, gChgHint;
 extern BOOL g_bDoneInit, g_bComCtl6;
