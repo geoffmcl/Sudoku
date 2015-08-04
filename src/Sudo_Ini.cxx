@@ -727,11 +727,24 @@ char * GetINIFile(void)
 {
     char * lpini = g_szIni;
     if( *lpini == 0 ) {
+        bool isok = false;
 #ifdef WIN32 // use GetModulePath/GetModuleFileName to place INI with app exe
-        GetModulePath( lpini );    // does   GetModuleFileName( NULL, lpini, 256 );
+        char *cp = getenv("LOCALAPPDATA");
+        if (cp) {
+            std::string s = cp;
+            s += "\\sudoku";
+            if (is_file_or_directory((char *)s.c_str()) != 2) {
+                // create a directory
+                    _mkdir(s.c_str());
+            }
+            if (is_file_or_directory((char *)s.c_str()) == 2) {
+                strcpy(lpini,s.c_str());
+                strcat(lpini,"\\");
+                isok = true;
+            }
+        }
 #else        // !#ifdef WIN32 - Try for $HOME/.config/sudoku 
         char *cp = getenv("HOME");
-        bool isok = false;
         if (cp) {
             std::string s = cp;
             s += "/.config";
@@ -748,9 +761,9 @@ char * GetINIFile(void)
                 }
             }
         }
+#endif      // #ifdef WIN32 y/n - OS path for INI file
         if (!isok)
             GetModulePath( lpini );    // does   GetModuleFileName( NULL, lpini, 256 );
-#endif      // #ifdef WIN32 y/n - OS path for INI file
         strcat(lpini, g_szDefIni);
    }
    return lpini;
