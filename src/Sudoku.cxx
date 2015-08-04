@@ -80,9 +80,12 @@ HWND g_hListBox = 0;
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-// general services
+// general services - TODO: Move to UTILS (in library)
+////////////////////////////////////////////////////////////////////////////////////////////
 int Get_Spots(PABOX2 pb)
 {
+    if (!pb)
+        return 0;
     int spots = 0;
     int row, col, val;
     for (row = 0; row < 9; row++) {
@@ -98,11 +101,24 @@ int Get_Spots(PABOX2 pb)
 
 int Get_Spot_Count()
 {
-    int spots = 0;
     PABOX2 pb = get_curr_box();
     return Get_Spots(pb);
 }
 
+// get global total empty count - 0 == solved
+// use the above Get_Spot_Count()
+int get_empty_count()
+{
+    int len = Get_Spot_Count();
+    total_empty_count = 81 - len;    // set global total empty count - 0 == solved
+    return total_empty_count;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////
+// BEGIN and END app services
+// ==========================
 static Timer InApptmr;
 void add_app_begin()
 {
@@ -122,6 +138,10 @@ void add_app_begin()
 void add_app_end()
 {
     g_dwSvOptBits = sff_TEMP_FILE;
+    int count = get_empty_count();
+    if (!count) {
+        g_dwSvOptBits &= ~(sff_ADD_ASCII_BLOCK | sff_ADD_CANDIDATES);   // if SOLVED, remove the fancy output
+    }
     Write_Temp_File();
     int curr = add_sys_time(1); // ensure time added to message output
     InApptmr.stop();
@@ -129,6 +149,8 @@ void add_app_end()
     sprtf("End Application. Ran for %s. log %s\n", InApptmr.getTimeStg(), log);
     add_sys_time(curr);         // retore adding time to message output
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////
 
 // Do_Solved_MsgBox(tb,"SUDOKU SOLVED");
 VOID Do_Solved_MsgBox(const char *msg, const char *title)
@@ -175,6 +197,7 @@ VOID Do_MsgBox_OK(const char *msg)
 {
     MB(msg);
 }
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -1106,38 +1129,6 @@ void do_message_block( double elap, const char *why )
             Do_Solved_Message();
         }
     }
-}
-
-int get_empty_count()
-{
-    int row, col, val;
-    // uint64_t cellflg;
-    PABOX2 pb = get_curr_box();
-    int len = 0;
-    // SET set;
-    // PSET ps;
-
-    // Keep list of TWO types of CELLS with NO VALUE
-    // 1. Cells that have NO potential possibilities - this means the puzzle is LOCKED, BAD, FAILING
-    // 2. Cells that have just ONE potential value - maybe have key to fill these in...
-    for (row = 0; row < 9; row++) {
-        // Fill_SET(&set); // start with ALL values ON for this ROW
-        // process COL by COL
-        for (col = 0; col < 9; col++) {
-            val = pb->line[row].val[col];
-            // ps = &pb->line[row].set[col];
-            // cellflg = pb->line[row].set[col].cellflg;
-            if (val) {                  // PAINT A VALUE
-                //set.val[val - 1] = 0;   // clear potential values
-                //Zero_SET(ps);           // MAYBE should NOT do this, but for now...
-            } else {
-                len++;
-            }
-        }   // for (col = 0; col < 9; col++)
-        // Done all columns
-    }   // for each row
-    total_empty_count = len;
-    return len;
 }
 
 // now it is loaded, and analyses, or in the process of doing that,
