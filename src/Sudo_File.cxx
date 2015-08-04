@@ -1054,7 +1054,8 @@ bool Save_a_File( HWND hWnd, char *pf, int flag )
 
         len = (DWORD)strlen(ps);
         //WriteFile(hfile,ps,len,&wtn,NULL);
-        wtn = fwrite(ps,1,len,hfile);
+        wtn = fwrite(ps,1,len,hfile);   // write this output
+        *ps = 0;
         if (flag & sff_ADD_ASCII_BLOCK) {
             int rc = 0;
             int cc = 0;
@@ -1225,11 +1226,12 @@ bool Save_a_File( HWND hWnd, char *pf, int flag )
                     strcat(ps,"//    ---------------------------------------"EOL_CHRS);
             }
             strcat(ps,"//      1   2   3    4   5   6    7   8   9"EOL_CHRS);
-            sprintf(EndBuf(ps),EOL_CHRS"// eof - generated %s"EOL_CHRS, get_date_time_stg());
-            len = (DWORD)strlen(ps);
-            //WriteFile(hfile,ps,len,&wtn,NULL);
-            wtn = fwrite(ps,1,len,hfile);
+            strcat(ps,EOL_CHRS);
         }
+        sprintf(EndBuf(ps),"// eof - generated %s"EOL_CHRS, get_date_time_stg());
+        len = (DWORD)strlen(ps);
+        //WriteFile(hfile,ps,len,&wtn,NULL);
+        wtn = fwrite(ps,1,len,hfile);
 
         //CloseHandle(hfile);
         fclose(hfile);
