@@ -120,11 +120,11 @@ void add_app_begin()
 
 void add_app_end()
 {
-    int curr = add_sys_time(1);
+    int curr = add_sys_time(1); // ensure time added to message output
     InApptmr.stop();
     char *log = get_log_file();
     sprtf("End Application. Ran for %s. log %s\n", InApptmr.getTimeStg(), log);
-    add_sys_time(curr);
+    add_sys_time(curr);         // retore adding time to message output
 }
 
 // Do_Solved_MsgBox(tb,"SUDOKU SOLVED");
@@ -1051,6 +1051,7 @@ static int iSolveStage = -1;
 typedef std::vector<int> vINT;
 
 #define SHOW_STAGE_LIST
+
 #ifdef SHOW_STAGE_LIST
 static vINT vStages;
 
