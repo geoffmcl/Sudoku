@@ -54,6 +54,8 @@ extern void Reset_Candidates( bool clr_flag = true ); // RESET ALL candiates for
 extern int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char *type,
                              uint64_t cflg = 0,
                              bool do_delete = true );
+extern int Count_Fill_By_Flag( PABOX2 pb, uint64_t eflg ); // simple count of this flag
+
 
 #define ADDSP(a) strcat(a," ")
 #define OUTIT(a) if (*a) sprtf("%s\n",a); *a = 0

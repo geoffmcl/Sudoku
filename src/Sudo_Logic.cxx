@@ -3248,6 +3248,38 @@ int Do_Fill_Simple(PABOX2 pb)
 
 BOOL g_bChkElims = TRUE;
 
+int Count_Fill_By_Flag( PABOX2 pb, uint64_t eflg )
+{
+    int row, col, val, i, count;
+    uint64_t flag;
+    PSET ps;
+    ROWCOL rc;
+    count = 0;
+    char *tb = GetNxtBuf();
+    // do whole puzzle
+    sprintf(tb,"Fill Count for %s ", get_I64x_Stg(eflg));
+    for (row = 0; row < 9; row++) {
+        for (col = 0; col < 9; col++) {
+            val = pb->line[row].val[col];
+            if (val) continue; // has value
+            ps = &pb->line[row].set[col];   // no value, get candidates for cell
+            for (i = 0; i < 9; i++) {
+                val = ps->val[i];
+                if (!val) continue; // no candidate
+                flag = ps->flag[i];
+                if (flag & eflg) {
+                    sprintf(EndBuf(tb),"D%d@%c%d ", val, (char)(row + 'A'), col + 1);
+                    count++;    // count an elimination of a candidate
+                }
+            }
+        }
+    }
+
+    sprintf(EndBuf(tb),"D=%d", count);
+    OUTITFF(tb);
+    return count;
+}
+
 ////////////////////////////////////////////////////////////////////////
 // Changing the puzzle
 // ===================
@@ -4447,8 +4479,9 @@ int Do_Simple_Scan(PABOX2 pb)
             count += Mark_Same_Box( row, col, pb, ps, cf_SSE );
         }
     }
+    int cnt2 = Count_Fill_By_Flag( pb, cf_SSE ); // simple count of this flag
     if (count) {
-        sprtf("S%d:  Elim same row,col,box [%d] To Fill\n", sg_One, count, sg_Fill_Simple);
+        sprtf("S%d:  Elim same row,col,box %d (%d) To Fill\n", sg_One, cnt2, count, sg_Fill_Simple);
         pb->iStage = sg_Fill_Simple;
     } else {
         sprtf("S%d:  NONE Elim same row,col,box To %d\n", sg_One, sg_Two);
