@@ -3253,7 +3253,6 @@ int Count_Fill_By_Flag( PABOX2 pb, uint64_t eflg )
     int row, col, val, i, count;
     uint64_t flag;
     PSET ps;
-    ROWCOL rc;
     count = 0;
     char *tb = GetNxtBuf();
     // do whole puzzle
@@ -4484,7 +4483,9 @@ int Do_Simple_Scan(PABOX2 pb)
         sprtf("S%d:  Elim same row,col,box %d (%d) To Fill\n", sg_One, cnt2, count, sg_Fill_Simple);
         pb->iStage = sg_Fill_Simple;
     } else {
-        sprtf("S%d:  NONE Elim same row,col,box To %d\n", sg_One, sg_Two);
+        if (VERB6) {
+            sprtf("S%d:  NONE Elim same row,col,box To %d\n", sg_One, sg_Two);
+        }
         pb->iStage = sg_Two;
     }
     return count;
