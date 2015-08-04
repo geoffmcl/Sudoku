@@ -1001,4 +1001,40 @@ char *double_to_stg( double d ) // get_double_stg trimmed...
     return cp;
 }
 
+/////////////////////////////////////////////////////////////////////////
+// value conversions to a string
+/////////////////////////////////////////////////////////////////////////
+char *get_I64i_Stg( long long val )
+{
+    char *cp = GetNxtBuf();
+#ifdef WIN32
+    sprintf(cp,"%I64d",val);
+#else
+    sprintf(cp,"%lld",val);
+#endif
+    return cp;
+}
+
+char *get_I64u_Stg( unsigned long long val )
+{
+    char *cp = GetNxtBuf();
+#ifdef WIN32
+    sprintf(cp,"%I64u",val);
+#else
+    sprintf(cp,"%llu",val);
+#endif
+    return cp;
+}
+
+char *get_I64x_Stg( unsigned long long val )
+{
+    char *cp = GetNxtBuf();
+#ifdef WIN32
+    sprintf(cp,"%I64x",val);
+#else
+    sprintf(cp,"%llx",val);
+#endif
+    return cp;
+}
+
 // eof - Sudo_Utils.cxx

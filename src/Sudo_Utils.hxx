@@ -132,6 +132,9 @@ extern void Clear_PRCRCB( PRCRCB prcrcb );
 extern void Show_RC_Vector( vRC & vrc );
 
 extern char *double_to_stg( double d ); // get_double_stg trimmed...
+extern char *get_I64i_Stg( long long val );
+extern char *get_I64u_Stg( unsigned long long val );
+extern char *get_I64x_Stg( unsigned long long val ); // get_hex64_stg,...
 
 #endif // #ifndef _SUDO_UTILS_HXX_
 // eof - Sudo_Utils.hxx
