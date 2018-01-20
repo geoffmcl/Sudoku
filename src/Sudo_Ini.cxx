@@ -171,6 +171,19 @@ int get_to_key(std::ifstream &file, LPCTSTR lpKeyName, vSTG &vs, size_t *poff)
     return 0;
 }
 
+const char *get_file_name( const char *file )
+{
+    const char *name = file;
+    size_t ii, len = strlen(file);
+    int c;
+    for (ii = 0; ii < len; ii++) {
+        c = file[ii];
+        if (( c == '\\' ) || ( c == '/' )) {
+            name = &file[ii+1];
+        }
+    }
+    return name;
+}
 
 BOOL m_WriteProf(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lpFileName)
 {
@@ -232,9 +245,14 @@ BOOL m_WriteProf(LPCTSTR lpSecName,LPCTSTR lpKeyName,LPCTSTR lpString,LPCTSTR lp
         if(rc) {
             SPRTF("Error: m_WriteProf: Failed to 'delete' file '%s' (%d)\n", lpFileName, errno);
         }
+
         rc = std::rename(ofile.c_str(), lpFileName); 
         if(rc) {
-            SPRTF("Error: m_WriteProf: Failed to 'rename' file '%s' to '%s'! (%d)\n", ofile.c_str(), lpFileName, errno);
+            const char *nm = get_file_name(lpFileName);
+            rc = std::rename(ofile.c_str(), nm); 
+            if (rc) {
+                SPRTF("Error: m_WriteProf: Failed to 'rename' file '%s' to '%s'! or %s! (%d)\n", ofile.c_str(), lpFileName, nm, errno);
+            }
         }
     } else {
          file.close();
