@@ -40,9 +40,9 @@ int Compare_with_Solution(PABOX2 pb, char *tb_in)
     }
 
     if (count)
-        sprintf(EndBuf(tb),"%d diffs"MEOL, count);
+        sprintf(EndBuf(tb),"%d diffs" MEOL, count);
     else {
-        strcpy(tb,"Is SAME as brute force solution!"MEOL);
+        strcpy(tb,"Is SAME as brute force solution!" MEOL);
     }
     sprtf(tb);
     return count;

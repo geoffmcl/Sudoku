@@ -444,7 +444,7 @@ bool Check_Clear()
     if (g_bChanged && spots) { // total_empty_count
         char *tb = GetNxtBuf();
         sprintf(tb,"New will clears all %d current cells.", spots);
-        strcat(tb,EOL_CHR"But current Sudoku box has been changed."EOL_CHR"Do you want to SAVE these results?"EOL_CHR"Click [Yes] to save this change."EOL_CHR"Click [ NO ] to clear all spots.");
+        strcat(tb,EOL_CHR"But current Sudoku box has been changed." EOL_CHR "Do you want to SAVE these results?" EOL_CHR "Click [Yes] to save this change." EOL_CHR "Click [ NO ] to clear all spots.");
         res = MB2(tb,"Save on New?");
         if (res == IDYES) {
             Do_ID_FILE_SAVE(g_hWnd);

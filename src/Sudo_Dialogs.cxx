@@ -150,42 +150,42 @@ BOOL CenterWindow(HWND hwndChild, HWND hwndParent)
 #define TIMER_INTERVAL2 200
 UINT uiTimer2;
 
-static char mission[] = "Mission Statement"EOL_CHR EOL_CHR
-    "For many, many years, initially my only interest in Soduku"EOL_CHR
-    "was to occassionally attempt the puzzle while sitting on the toilet ;=))"EOL_CHR EOL_CHR
-    "Then on 18 August 2012 I decided why not write a program to solve "EOL_CHR
-    "the puzzle. Of course that program should ONLY use the 'stategies'"EOL_CHR
-    "I had developed"EOL_CHR EOL_CHR
-    "After an initial command line attempt, I got interested enough"EOL_CHR
-    "that I wanted it in a GUI to be able to 'see' what was happening."EOL_CHR EOL_CHR
-    "After some progression I decided to try to see what was available"EOL_CHR
-    "on internet. I suppose I should NOT have been so surpised that it has"EOL_CHR
-    "quite a large internet presence. There are lots of interesting sites."EOL_CHR
-    "Just put Sudoku in any search engine."EOL_CHR EOL_CHR
-    "While quite a number also enumerated various strategies, I did not"EOL_CHR
-    "really find much code. And most of the code I found 'solved' the"EOL_CHR
-    "puzzle by brute force. Simply search for the first empty slot,"EOL_CHR
-    "select a suitable candidate by excluding current row, column and box"EOL_CHR
-    "(region) and insert the remainders, and see what works."EOL_CHR EOL_CHR
-    "No way! I wanted my program to only use known stategies, and be"EOL_CHR
-    "educational in showing the steps it was taking. That is it shows all"EOL_CHR
-    "candidates for an empty slot. On the first run through a stategy"EOL_CHR
-    "only 'mark' what is is going to change, then in a second run eliminates"EOL_CHR
-    "candidates, and in a third run insert values into slots where there"EOL_CHR
-    "remains only ONE candidate, then starts over."EOL_CHR EOL_CHR
-    "Of course the initial stategies are quite simple, and as each one 'fails'"EOL_CHR
-    "to succeed, increase the complexity of the elimination of candidates."EOL_CHR
-    "This involves some 'rating' of the strategies, and at the present time"EOL_CHR
-    "can solve lots of examples. BUT it sometimes FAILS ;=(("EOL_CHR EOL_CHR
-    "So it is a forever search for stategies that can be added. And not only"EOL_CHR
-    "that, at this time some implemented strategies incorrectly eliminates"EOL_CHR
-    "candidates, and can lead to a blocked path! So this is an ongoing task."EOL_CHR EOL_CHR
-    "What I have done so far is released under a GNU GPL 2 licence, so welcome."EOL_CHR
-    "others to enhance the code. It is presently targeted to the MS Windows OS,"EOL_CHR
-    "but I have tried to isolate the logic code, so other GUI interfaces can"EOL_CHR
-    "be supported."EOL_CHR EOL_CHR
-    "Geoff."EOL_CHR
-    "2012/08/27"EOL_CHR;
+static char mission[] = "Mission Statement" EOL_CHR EOL_CHR
+    "For many, many years, initially my only interest in Soduku" EOL_CHR
+    "was to occassionally attempt the puzzle while sitting on the toilet ;=))" EOL_CHR EOL_CHR
+    "Then on 18 August 2012 I decided why not write a program to solve " EOL_CHR
+    "the puzzle. Of course that program should ONLY use the 'stategies'" EOL_CHR
+    "I had developed" EOL_CHR EOL_CHR
+    "After an initial command line attempt, I got interested enough" EOL_CHR
+    "that I wanted it in a GUI to be able to 'see' what was happening." EOL_CHR EOL_CHR
+    "After some progression I decided to try to see what was available" EOL_CHR
+    "on internet. I suppose I should NOT have been so surpised that it has" EOL_CHR
+    "quite a large internet presence. There are lots of interesting sites." EOL_CHR
+    "Just put Sudoku in any search engine." EOL_CHR EOL_CHR
+    "While quite a number also enumerated various strategies, I did not" EOL_CHR
+    "really find much code. And most of the code I found 'solved' the" EOL_CHR
+    "puzzle by brute force. Simply search for the first empty slot," EOL_CHR
+    "select a suitable candidate by excluding current row, column and box" EOL_CHR
+    "(region) and insert the remainders, and see what works." EOL_CHR EOL_CHR
+    "No way! I wanted my program to only use known stategies, and be" EOL_CHR
+    "educational in showing the steps it was taking. That is it shows all" EOL_CHR
+    "candidates for an empty slot. On the first run through a stategy" EOL_CHR
+    "only 'mark' what is is going to change, then in a second run eliminates" EOL_CHR
+    "candidates, and in a third run insert values into slots where there" EOL_CHR
+    "remains only ONE candidate, then starts over." EOL_CHR EOL_CHR
+    "Of course the initial stategies are quite simple, and as each one 'fails'" EOL_CHR
+    "to succeed, increase the complexity of the elimination of candidates." EOL_CHR
+    "This involves some 'rating' of the strategies, and at the present time" EOL_CHR
+    "can solve lots of examples. BUT it sometimes FAILS ;=((" EOL_CHR EOL_CHR
+    "So it is a forever search for stategies that can be added. And not only" EOL_CHR
+    "that, at this time some implemented strategies incorrectly eliminates" EOL_CHR
+    "candidates, and can lead to a blocked path! So this is an ongoing task." EOL_CHR EOL_CHR
+    "What I have done so far is released under a GNU GPL 2 licence, so welcome." EOL_CHR
+    "others to enhance the code. It is presently targeted to the MS Windows OS," EOL_CHR
+    "but I have tried to isolate the logic code, so other GUI interfaces can" EOL_CHR
+    "be supported." EOL_CHR EOL_CHR
+    "Geoff." EOL_CHR
+    "2012/08/27" EOL_CHR;
 
  
 BOOL CALLBACK MyEnumProc( HWND hwnd, LPARAM lParam )
@@ -220,7 +220,7 @@ VOID Get_Edit_Control_Text( HWND hdlg )
     cbText = (WORD) SendDlgItemMessage(hdlg, IDC_EDIT3,
         EM_GETLINE,
         0,                          /* Line number.              */
-        (DWORD) (LPSTR) szBuf);     /* Buffer address.           */
+        (LPARAM) szBuf);     /* Buffer address.           */
     szBuf[cbText] = '\0';           /* Null-terminates the line. */
 }
 
@@ -402,8 +402,8 @@ INT_PTR Do_INIT_GENERATE(HWND hDlg)
             if (pb->line[row].val[col]) spots;
 
     char *tb = GetNxtBuf();
-    sprintf(tb,"The current box has %d spots set."EOL_CHR"Give a number larger than this below"EOL_CHR"to generate a new Sudoku.", spots);
-    strcat(tb,EOL_CHR"An attempt will be made to generate"EOL_CHR"a Sudoku with a single unique solution.");
+    sprintf(tb,"The current box has %d spots set." EOL_CHR "Give a number larger than this below" EOL_CHR "to generate a new Sudoku.", spots);
+    strcat(tb,EOL_CHR"An attempt will be made to generate" EOL_CHR "a Sudoku with a single unique solution.");
     SetDlgItemText(hDlg, IDC_EDIT1, tb);
 
     if (spots < g_iMinGiven)
@@ -470,7 +470,7 @@ void Do_ID_EDIT_GENERATE(HWND hWnd)
             bool b = Generate_New( pb, g_iMinGiven );
             if (!b) {
                 char *tb = GetNxtBuf();
-                sprintf(tb,"EEK! Failed to generate a NEW sudoku!"EOL_CHR"with %d spots."EOL_CHR"Click [Yes] to try again!", g_iMinGiven);
+                sprintf(tb,"EEK! Failed to generate a NEW sudoku!" EOL_CHR "with %d spots." EOL_CHR "Click [Yes] to try again!", g_iMinGiven);
                 //res = MB2(tb,"Generation Failed");
                 //if (res != IDYES) {
                 res = Do_MsgBox_YN(tb,"Generation Failed");
@@ -1191,6 +1191,8 @@ BOOL CreateMessageDialog( HWND hWnd )
     return bRet;
 }
 
+
+#if 0 // 0000000000000000 NOT USED 00000000000000000000000
 // ------------------------------------------------------------------------------------
 // ====================================================================================
 // ====================================
@@ -1218,9 +1220,15 @@ BOOL CALLBACK DialogProc(HWND hwndDlg, UINT message, WPARAM wParam, LPARAM lPara
     return FALSE; 
 } 
 
-
 LPWORD lpwAlign(LPWORD lpIn)
 {
+#if defined(WIN64) || defined(_WIN64)
+    uint64_t u = (uint64_t)lpIn;
+    u++;
+    u >>= 1;
+    u <<= 1;
+    return (LPWORD)u;
+#else
     ULONG ul;
 
     ul = (ULONG)lpIn;
@@ -1228,6 +1236,7 @@ LPWORD lpwAlign(LPWORD lpIn)
     ul >>=1;
     ul <<=1;
     return (LPWORD)ul;
+#endif
 }
 
 LRESULT DisplayMyMessage(HINSTANCE hinst, HWND hwndOwner, LPSTR lpszMessage)
@@ -1325,6 +1334,8 @@ LRESULT DisplayMyMessage(HINSTANCE hinst, HWND hwndOwner, LPSTR lpszMessage)
     return ret; 
 }
 
+#endif // 0000000000000000000000000000000000000000000000000000000000
+
 // ======================================================================
 // Import a SUDOKU
 static char curr_sudo[128];
@@ -1404,19 +1415,19 @@ BOOL Do_Import_OK(HWND hDlg)
         sprintf(tb,"Invalid Sudoku! Got %d spots, but" MEOL, spots);
         switch(c) {
         case 1:   // contains an invalid value = NO PAINT
-            sprintf(EndBuf(tb),"Found cell with invalid value!"MEOL);
+            sprintf(EndBuf(tb),"Found cell with invalid value!" MEOL);
             break;
         case 2: // duplicate value in a ROW
-            sprintf(EndBuf(tb),"Found duplicated value in a ROW!"MEOL);
+            sprintf(EndBuf(tb),"Found duplicated value in a ROW!" MEOL);
             break;
         case 3: // duplicate value in a COLUMN
-            sprintf(EndBuf(tb),"Found duplicated value in a COLUMN!"MEOL);
+            sprintf(EndBuf(tb),"Found duplicated value in a COLUMN!" MEOL);
             break;
         case 4: // duplicate value in a SQUARE
-            sprintf(EndBuf(tb),"Found duplicated value in a BOX!"MEOL);
+            sprintf(EndBuf(tb),"Found duplicated value in a BOX!" MEOL);
             break;
         default:
-            sprintf(EndBuf(tb),"Found some uncase error! (%d)!"MEOL, c);
+            sprintf(EndBuf(tb),"Found some uncase error! (%d)!" MEOL, c);
             break;
         }
         strcat(tb,get_last_box_error());

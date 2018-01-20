@@ -1,5 +1,6 @@
 @setlocal
-
+@REM 20180120 Build with msvc140 2015
+@set VCVERS=14
 @set TMPPRJ=Sudoku
 @echo Build %TMPPRJ% project, in 64-bits
 @set TMPLOG=bldlog-1.txt
@@ -7,7 +8,7 @@
 @set TMPROOT=..
 @set DOINST=0
 
-@set SET_BAT=%ProgramFiles(x86)%\Microsoft Visual Studio 10.0\VC\vcvarsall.bat
+@set SET_BAT=%ProgramFiles(x86)%\Microsoft Visual Studio %VCVERS%.0\VC\vcvarsall.bat
 @if NOT EXIST "%SET_BAT%" goto NOBAT
 @if NOT EXIST %TMPROOT%\nul goto NOROOT
 @set TMPSRC=%TMPROOT%
@@ -45,7 +46,7 @@
 @REM Adjust to suit your environment
 @REM ##########################################
 @set TMPOPTS=-DCMAKE_INSTALL_PREFIX=%TMPINST%
-@set TMPOPTS=%TMPOPTS% -G "Visual Studio 10 Win64"
+@set TMPOPTS=%TMPOPTS% -G "Visual Studio %VCVERS% Win64"
 
 :RPT
 @if "%~1x" == "x" goto GOTCMD
@@ -130,7 +131,7 @@
 @goto ISERR
 
 :ERR0
-@echo MSVC 10 setup error
+@echo MSVC %VCVERS% setup error
 @goto ISERR
 
 :ERR1

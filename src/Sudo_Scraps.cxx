@@ -964,7 +964,7 @@ bool Check_Changed()
     if (g_bChanged && total_empty_count) {
         char *tb = GetNxtBuf();
         sprintf(tb,"Have generated a NEW box with %d spots.", g_iMinGiven);
-        strcat(tb,EOL_CHR"But current Sudoku box has been changed."EOL_CHR"Do you want to SAVE these results?"EOL_CHR"Click [Yes] to save this change."EOL_CHR"Click [ NO ] to over write with the new.");
+        strcat(tb,EOL_CHR"But current Sudoku box has been changed." EOL_CHR "Do you want to SAVE these results?" EOL_CHR "Click [Yes] to save this change." EOL_CHR "Click [ NO ] to over write with the new.");
         //res = MB2(tb,"Save on Generation?");
         //if (res == IDYES) {
         //    Do_ID_FILE_SAVE(g_hWnd);

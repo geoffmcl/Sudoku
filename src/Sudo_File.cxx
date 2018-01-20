@@ -14,7 +14,7 @@
 #define STRICMP strcasecmp
 #endif  // WIN32 y/n - STRICMP macro
 
-#define EOL_CHRS "\r\n"
+#define EOL_CHR "\r\n"
 #define NUL_VAL "0"
 
 #ifndef MAX_STRING
@@ -1033,9 +1033,9 @@ bool Save_a_File( HWND hWnd, char *pf, int flag )
                     if ((col + 1) < 9)
                         strcat(ps,",");
                 }
-                strcat(ps,EOL_CHRS);
+                strcat(ps,EOL_CHR);
             }
-            strcat(ps,EOL_CHRS);
+            strcat(ps,EOL_CHR);
         }
 
         if ( !(flag & sff_NO_ADD_ASCII) ) {
@@ -1048,9 +1048,9 @@ bool Save_a_File( HWND hWnd, char *pf, int flag )
                         strcat(ps,NUL_VAL);
                 }
             }
-            strcat(ps,EOL_CHRS);
+            strcat(ps,EOL_CHR);
         }
-        strcat(ps,EOL_CHRS);
+        strcat(ps,EOL_CHR);
 
         len = (DWORD)strlen(ps);
         //WriteFile(hfile,ps,len,&wtn,NULL);
@@ -1064,12 +1064,12 @@ bool Save_a_File( HWND hWnd, char *pf, int flag )
             char *cp = Get_Act_File();
             *ps = 0;
             if (cp)
-                sprintf(ps,"// File: %s"EOL_CHRS, cp);
-            strcat(ps,"//      1   2   3    4   5   6    7   8   9"EOL_CHRS);
-            strcat(ps,"//    ======================================="EOL_CHRS);
+                sprintf(ps,"// File: %s" EOL_CHR, cp);
+            strcat(ps,"//      1   2   3    4   5   6    7   8   9" EOL_CHR);
+            strcat(ps,"//    =======================================" EOL_CHR);
             for (row = 0; row < 9; row++) {     // 9 ROWS
                 //if (((row + 1) & 3) == 0)
-                //    strcat(ps,"//    ======================================="EOL_CHRS);
+                //    strcat(ps,"//    =======================================" EOL_CHR);
                 for (rc = 0; rc < 3; rc++) {    // each row in 3 rows
                     // commence a ROW
                     switch(rc) {
@@ -1210,25 +1210,25 @@ bool Save_a_File( HWND hWnd, char *pf, int flag )
                     // END OF EACH ROW
                     switch(rc) {
                     case 0:
-                        strcat(ps,EOL_CHRS);
+                        strcat(ps,EOL_CHR);
                         break;
                     case 1:
-                        sprintf(EndBuf(ps)," %d"EOL_CHRS, (row + 1));
+                        sprintf(EndBuf(ps)," %d" EOL_CHR, (row + 1));
                         break;
                     case 2:
-                        strcat(ps,EOL_CHRS);
+                        strcat(ps,EOL_CHR);
                         break;
                     }
                 }
                 if ( ( (row + 1) % 3 ) == 0 )
-                    strcat(ps,"//    ======================================="EOL_CHRS);
+                    strcat(ps,"//    =======================================" EOL_CHR);
                 else
-                    strcat(ps,"//    ---------------------------------------"EOL_CHRS);
+                    strcat(ps,"//    ---------------------------------------" EOL_CHR);
             }
-            strcat(ps,"//      1   2   3    4   5   6    7   8   9"EOL_CHRS);
-            strcat(ps,EOL_CHRS);
+            strcat(ps,"//      1   2   3    4   5   6    7   8   9" EOL_CHR);
+            strcat(ps,EOL_CHR);
         }
-        sprintf(EndBuf(ps),"// eof - generated %s"EOL_CHRS, get_date_time_stg());
+        sprintf(EndBuf(ps),"// eof - generated %s" EOL_CHR, get_date_time_stg());
         len = (DWORD)strlen(ps);
         //WriteFile(hfile,ps,len,&wtn,NULL);
         wtn = fwrite(ps,1,len,hfile);
@@ -1287,9 +1287,9 @@ bool Save_SDK_File( HWND hWnd, char *pf, int flag )
                     strcat(ps,".");
                 }
             }
-            strcat(ps,EOL_CHRS);
+            strcat(ps,EOL_CHR);
         }
-        strcat(ps,EOL_CHRS);
+        strcat(ps,EOL_CHR);
 
         len = (DWORD)strlen(ps);
         //WriteFile(hfile,ps,len,&wtn,NULL);
