@@ -221,6 +221,93 @@ long                Do_WM_INITMENUPOPUP( HWND hWnd, WPARAM wParam, LPARAM lParam
 
 int ParseArgs(int argc, char **argv);
 
+/////////////////////////////////////////////////////////////////////////
+///////////// Attach Console ///////////////////////////
+// add shorter, clearer message of 'type'
+typedef struct tagDW2STG {
+    DWORD val;
+    char *type;
+    char *desc;
+}DW2STG, *PDW2STG;
+
+static DW2STG ft2stg[] = {
+    { FILE_TYPE_CHAR, "FILE_TYPE_CHAR", "is a character file, typically an LPT device or a console." },
+    { FILE_TYPE_DISK, "FILE_TYPE_DISK", "is a disk file." },
+    { FILE_TYPE_PIPE, "FILE_TYPE_PIPE", "is a socket, a named pipe, or an anonymous pipe." },
+    { FILE_TYPE_REMOTE, "FILE_TYPE_REMOTE", "Unused." },
+    { FILE_TYPE_UNKNOWN, "FILE_TYPE_UNKNOWN", "Either the type of the specified file is unknown, or the function failed." },
+
+    // LAST
+    { 0, 0 }
+};
+
+static char *GetFileTypeStg(DWORD dw)
+{
+    PDW2STG pdw = &ft2stg[0];
+    while (pdw->desc) {
+        if (pdw->val == dw)
+            return pdw->type;   // pdw->desc;
+        pdw++;
+    }
+    return "Unexpected type";
+}
+
+// See Reference
+static void sendEnterKey(void)
+{
+    INPUT ip;
+    // Set up a generic keyboard event. 
+    ip.type = INPUT_KEYBOARD;
+    ip.ki.wScan = 0; // hardware scan code for key 
+    ip.ki.time = 0;
+    ip.ki.dwExtraInfo = 0;
+    // Send the "Enter" key 
+    ip.ki.wVk = 0x0D; // virtual-key code for the "Enter" key 
+    ip.ki.dwFlags = 0; // 0 for key press 
+    SendInput(1, &ip, sizeof(INPUT));
+    // Release the "Enter" key 
+    ip.ki.dwFlags = KEYEVENTF_KEYUP; // KEYEVENTF_KEYUP for key release 
+    SendInput(1, &ip, sizeof(INPUT));
+}
+
+int attach_console()
+{
+    int iret = 0;
+    DWORD dwMode = 0;
+    BOOL bRedON = FALSE;
+    // get 'stdout' info
+    HANDLE hout = GetStdHandle(STD_OUTPUT_HANDLE);  // get stdout handle
+    DWORD type = GetFileType(hout);
+    char *desc = GetFileTypeStg(type);
+    if (hout && !GetConsoleMode(hout, &dwMode))
+        bRedON = TRUE;
+
+    if (AttachConsole(ATTACH_PARENT_PROCESS)) {
+        int dnfro1 = 0;
+        // selectively use 'freopen', if not already REDIRECTED!
+        if ((type != FILE_TYPE_DISK) && !bRedON) {
+            freopen("conout$", "w", stdout);
+            dnfro1 = 1;
+        }
+        SPRTF("\nAttachConsole succeeded... stdout: type %s, %s, bRedON=%s\n", desc,
+            (dnfro1 ? "done fropen" : "is disk file"),
+            (bRedON ? "TRUE" : "FALSE"));
+    }
+    else {
+        DWORD err = GetLastError();
+        const char *pmsg = (err == ERROR_ACCESS_DENIED) ? "ERROR_ACCESS_DENIED" :
+            (err == ERROR_INVALID_HANDLE) ? "ERROR_INVALID_HANDLE" :
+            (err == ERROR_GEN_FAILURE) ? "ERROR_GEN_FAILURE" :
+            "UNEXPECTED_ERROR";
+        SPRTF("\nAttachConsole FAILED... %s (%d)\n", pmsg, err);
+        iret = 1;
+    }
+    return iret;
+}
+
+
+
+/////////////////////////////////////////////////////////////////////////
 // 20120917 - Orig '#' started comment line, but add
 // '//' and ';' as comment lines
 
@@ -362,6 +449,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	MSG msg;
 	HACCEL hAccelTable;
+    int cons = attach_console();
 
     res_scn_rect = SystemParametersInfo(
         SPI_GETWORKAREA, // UINT uiAction,
@@ -428,6 +516,8 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     //Kill_Change();
 
     add_app_end();
+    if (!cons)
+        sendEnterKey();
     close_log_file();
 	return (int) msg.wParam;
 }
