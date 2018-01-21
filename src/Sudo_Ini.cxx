@@ -1023,7 +1023,8 @@ void ReadINI( void )
 
    char * lpini = GetINIFile();
    icnt = 0;
-   if (add_debug_ini) sprtf("Reading INI file [%s]\n", lpini);
+    // if (add_debug_ini) 20180121 - always SHOW INI being read
+    sprtf("Reading INI file [%s]\n", lpini);
     while( ( dwt = plst->i_Type ) != it_None )
     {
         pSect = plst->i_Sect;   // pointer to [section] name
