@@ -19,4 +19,5 @@ Makefile
 bldlog-u.txt
 Sudo-con
 libOpenSudoku.a
-
+.vs/*
+x64/*

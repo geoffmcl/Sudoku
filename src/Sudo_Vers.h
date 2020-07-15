@@ -23,6 +23,7 @@
 #endif  // #ifdef WIN32
 
 // This should be the SAME as the VERSION resource - need to abandon this windows ONLY embedded version
+// THIS IS CURRENTLY SUPPLIED VIA CMakeLists.txt -> version.txt - IT SHOULD BE AN ERROR IF NOT!!!
 #ifndef SUDO_VERSION
 #define SUDO_VERSION "1.0.0.RC1"
 #endif
@@ -38,4 +39,4 @@
 #define USE_COLOR2_SCAN
 
 #endif // #ifndef _SUDO_VERS_H_
-// eof targetver.h
+// eof Sudo_Vers.h

@@ -87,8 +87,12 @@ int   add_sys_time( int val )
 
 int   open_log_file( void )
 {
-   if (logfile[0] == 0)
-      strcpy(logfile,def_log);
+    if (logfile[0] == 0) {
+        if (Get_LocalData_Path(logfile))
+            strcat(logfile, def_log);
+        else
+            strcpy(logfile, def_log); // just default to local
+    }
    outfile = fopen(logfile, "wb");
    if( outfile == 0 ) {
       outfile = (FILE *)-1;

@@ -28,7 +28,8 @@ typedef struct	tagINILST {	/* i */
 	GS_DOUBLE   gs_double;
 } INILST, * PINILST;
 
-#define  SUDO_VERS_DATE "2012-08-18"
+#define  SUDO_VERS_DATE "2020-07-15"
+// SUDO_VERS_DATE "2012-08-18"
 
 extern void ReadINI( void );
 extern void WriteINI( void );
@@ -68,7 +69,7 @@ extern DWORD g_dwSvOptBits;
 extern BOOL gChgTSO;
 
 // char szTmpSvFl[] = "TempSaveFile";
-extern char g_szSvOptFl[]; // = {"temptemp.txt"};
+extern char g_szSvOptFl[]; // = {"\0"};
 extern BOOL gChgTSF;
 
 // char szATab[] = "AutoTab";

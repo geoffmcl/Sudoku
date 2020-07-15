@@ -30,9 +30,9 @@
 @echo Build source %TMPSRC%... all output to build log %TMPLOG%
 @echo Build source %TMPSRC%... all output to build log %TMPLOG% >> %TMPLOG%
 
-@if EXIST build-cmake.bat (
-@call build-cmake >> %TMPLOG%
-)
+@REM if EXIST build-cmake.bat (
+@REM call build-cmake >> %TMPLOG%
+@REM )
 
 @if NOT EXIST %TMPSRC%\CMakeLists.txt goto NOCM
 

@@ -507,7 +507,10 @@ INT_PTR Do_INIT_SAVETEMP(HWND hDlg)
         (g_dwSvOptBits & sff_ADD_CANDIDATES) ? BST_CHECKED : BST_UNCHECKED);
 
     if (g_szSvOptFl[0] == 0) {
-        strcpy(g_szSvOptFl,"temptemp.txt");
+        if (Get_LocalData_Path(g_szSvOptFl))
+            strcat(g_szSvOptFl, "temptemp.txt");
+        else
+            strcpy(g_szSvOptFl,"temptemp.txt");
         gChgTSF = TRUE;
     }
     SetDlgItemText(hDlg, IDC_EDIT1, g_szSvOptFl);

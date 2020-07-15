@@ -337,7 +337,7 @@ VOID Do_WM_NOTIFY( HWND hWnd, WPARAM wParam, LPARAM lParam )
 {
     char buf[256];
     LPNMHDR pnh = (LPNMHDR)lParam;
-    sprintf(buf,"WM_NOTIFY: Code %d - ID %d", pnh->code, pnh->idFrom );
+    sprintf(buf,"WM_NOTIFY: Code %d - ID %d", (int)pnh->code, (int)pnh->idFrom );
     //switch (pnh->code)
 #ifdef ADD_LISTVIEW
     if (g_hListView && g_bDoneInit) {

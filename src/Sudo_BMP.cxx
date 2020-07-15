@@ -266,7 +266,7 @@ BOOL  WriteBMPFile( PTSTR pf, HANDLE hDIB )
 void Do_Write_BMP( HWND hWnd )
 {
     BOOL bRet = FALSE;
-    char *pfile = "tempsudo.bmp";
+	char* pfile;
     HDC memDC = 0;
     HBITMAP old;
     HBITMAP bitmap = 0;
@@ -274,6 +274,13 @@ void Do_Write_BMP( HWND hWnd )
     if (!hdc) return;
     SIZE sz;
     RECT rc = g_rcSudokuLeg;
+
+	pfile = GetNxtBuf();
+	if (Get_LocalData_Path(pfile))
+		strcat(pfile, "tempsudo.bmp");
+	else
+		strcpy(pfile, "tempsudo.bmp");
+
     sz.cx = rc.right - rc.left;
     sz.cy = rc.bottom - rc.top;
 

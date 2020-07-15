@@ -369,7 +369,7 @@ DWORD g_dwSvOptBits = sff_TEMP_FILE;
 BOOL gChgTSO = FALSE;
 
 char szTmpSvFl[] = "TempSaveFile";
-char g_szSvOptFl[_MAX_PATH] = {"temptemp.txt"};
+char g_szSvOptFl[_MAX_PATH] = {"\0"};
 BOOL gChgTSF = FALSE;
 
 char szPntChN[] = "Paint_CHain_Number";

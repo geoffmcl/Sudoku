@@ -510,12 +510,12 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		}
 	}
 
-    //WriteINI();
     //clean_up_paint_tools();
     //Free_Boxes2();
     //Kill_Change();
 
     add_app_end();
+    WriteINI();
     if (!cons)
         sendEnterKey();
     close_log_file();
@@ -954,7 +954,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         Do_WM_PAINT(hWnd);
 		break;
 	case WM_DESTROY:
-        WriteINI();
+        // WriteINI(); -// too early in close process
         clean_up_paint_tools();
         Free_Boxes2();
         // Kill_Change();
@@ -1339,8 +1339,8 @@ int main( int argc, char **argv )
         sprtf("Error: Failed to load '%s'\n", usr_input);
         iret = 1;
     }
-    WriteINI();
     add_app_end();
+    WriteINI();
     return iret;
 }
 

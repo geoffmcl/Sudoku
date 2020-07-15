@@ -1331,7 +1331,13 @@ bool Save_SDK_File( HWND hWnd, char *pf, int flag )
 void Write_Temp_File()
 {
     char *pf = g_szSvOptFl;
-    if (*pf == 0) strcpy(pf,"temptemp.txt");
+    if (*pf == 0) {
+        if (Get_LocalData_Path(pf))
+            strcat(pf, "temptemp.txt");
+        else 
+            strcpy(pf, "temptemp.txt");
+        gChgTSF = TRUE;
+    }
     DWORD opts = g_dwSvOptBits;
     bool ok = Save_a_File( NULL, pf, opts );
     size_t st = strlen(pf);
