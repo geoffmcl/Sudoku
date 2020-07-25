@@ -45,11 +45,11 @@ typedef vector<GRID> vGRID;
 typedef vGRID::iterator vGRIDi;
 #endif // #ifndef _SUDOKU_HXX_
 
-vGRID vGrid;
+vGRID m_vGrid;
 
 ostringstream msg;
 
-vGRID *get_vector_grid() { return &vGrid; }
+vGRID *get_vector_grid() { return &m_vGrid; }
 
 bool is_valid_grid( GRID & grid )
 {
@@ -240,10 +240,12 @@ chksol:
                     grid.v[i1][j1] = k[i1][j1];
                 }
             }
-            if (is_valid_grid(grid))
-               vGrid.push_back(grid);
+            vGRID* pvg = get_vector_grid();
+            if (is_valid_grid(grid)) {
+                pvg->push_back(grid);
+            }
 			// if(count == max_solutions)
-			if( (int)vGrid.size() >= max_solutions )
+			if( (int)pvg->size() >= max_solutions )
 			{
                 msg << endl;
 				msg << "Too many solutions. Greater than " << max_solutions << endl;
@@ -721,8 +723,9 @@ void Write_To_File(char * file, char *mode)
     msg.str("");
     vGRIDi ii;
     GRID grid;
+    vGRID *pvg = get_vector_grid();
     int i, j, v, ok;
-    for (ii = vGrid.begin(); ii != vGrid.end(); ii++) {
+    for (ii = pvg->begin(); ii != pvg->end(); ii++) {
         grid = *ii;
         ok = 0;
         for(i = 0; i < 9; i++) {
@@ -753,9 +756,14 @@ void Write_To_File(char * file, char *mode)
 
 void Write_Solution_File()
 {
-    char *file = "temptest.txt";
-    char *mode = "w";
-    Write_To_File(file,mode);
+    static const char *test_file = "temptest.txt";
+    char *mode = "w";   // creat, always
+    char* pf = GetNxtBuf();
+    if (Get_LocalData_Path(pf))
+        strcat(pf, test_file);
+    else
+        strcpy(pf, test_file);
+    Write_To_File(pf,mode);
 }
 
 void run_test(PABOX2 pb)
@@ -778,12 +786,13 @@ void run_test2(PABOX2 pb)
     get_matrix = 0;
     shown_solution = false;
     msg.str("");
-    vGrid.clear();
+    vGRID* pvg = get_vector_grid();
+    pvg->clear();
     sudo_main();
 #ifdef WIN32 // windows MessageBox
     MessageBox( g_hWnd, msg.str().c_str(), "Test Solution", MB_OK | MB_ICONINFORMATION );
 #endif // WIN32 MessageBox - TODO: alternative    
-    if (vGrid.size()) {
+    if (pvg->size()) {
         Write_Solution_File();
     }
 }
@@ -832,9 +841,10 @@ vGRID *Get_Hints2(PABOX2 pb)
     get_matrix = 0;
     shown_solution = false;
     msg.str("");
-    vGrid.clear();
+    vGRID* pvg = get_vector_grid();
+    pvg->clear();
     sudo_main();
-    return get_vector_grid();
+    return pvg; // == get_vector_grid();
 }
 
 int Test_Solve( PABOX2 pb )
@@ -905,7 +915,7 @@ int Get_Solution( PABOX2 pb, bool test_unique )
         }
     }
     if (cnt < 5) {
-        sprtf("Spot count %d < 5. No solution attempted\n",cnt);
+        sprtf("Get_Solution: Spot count %d < 5. No solution attempted\n",cnt);
         return 0;
     }
     x = 0;
@@ -939,7 +949,7 @@ int Get_Solution( PABOX2 pb, bool test_unique )
         x = 2;
     }
     tb = GetNxtBuf();
-    sprintf(tb,"solved cycs %d, dep %d %s ",
+    sprintf(tb,"Get_Solution: solved cycs %d, dep %d %s ",
         solve_iter, max_depths,
         (x ? "ok" : "FAILED"));
         //(x ? "SUCCEEDED" : "FAILED"));
@@ -981,9 +991,14 @@ bool Check_Changed()
 
 void Write_Generation_File()
 {
-    char *file = "tempgen.txt";
-    char *mode = "a";   // append
-    Write_To_File(file,mode);
+    static const char* gen_file = "tempgen.txt";
+    char* mode = "a";   // append
+    char* pf = GetNxtBuf();
+    if (Get_LocalData_Path(pf))
+        strcat(pf, gen_file);
+    else
+        strcpy(pf, gen_file);
+    Write_To_File(pf,mode);
 }
 
 

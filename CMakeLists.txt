@@ -245,6 +245,24 @@ if (BUILD_WIN32_EXE)
     endif ()
 endif ()
 
+if(BUILD_SUDOKUZ)
+    set(name sudokuz)
+    set(dir src/${name})
+    set( ${name}_SRCS
+        ${dir}/${name}.c
+        )
+    add_executable( ${name} ${${name}_SRCS} )
+    if (add_LIBS)
+        target_Link_libraries(${name} ${add_LIBS} )
+    endif ()
+    if (NOT WIN32)
+        target_Link_libraries(${name} ${CMAKE_THREAD_LIBS_INIT})
+    endif ()
+    if (MSVC)
+        set_target_properties(${name} PROPERTIES DEBUG_POSTFIX d )
+    endif ()
+endif(BUILD_SUDOKUZ)
+
 # deal with install, if required
 # install(TARGETS ${inst_LIBS}
 #     RUNTIME DESTINATION bin
@@ -252,5 +270,6 @@ endif ()
 #     ARCHIVE DESTINATION lib )
 # install(TARGETS ${inst_BINS} DESTINATION bin)
 # install(FILES ${inst_HDRS} DESTINATION include)
+
 
 # eof
