@@ -3250,10 +3250,12 @@ BOOL g_bChkElims = TRUE;
 
 int Count_Fill_By_Flag( PABOX2 pb, uint64_t eflg )
 {
-    int row, col, val, i, count;
+    int row, col, val, i, count, over;
     uint64_t flag;
     PSET ps;
     count = 0;
+    over = 0;
+    size_t max_buf = 512;   // limit to less that MX_ONE_BUF 1024
     char *tb = GetNxtBuf();
     // do whole puzzle
     sprintf(tb,"Fill Count for %s ", get_I64x_Stg(eflg));
@@ -3267,7 +3269,13 @@ int Count_Fill_By_Flag( PABOX2 pb, uint64_t eflg )
                 if (!val) continue; // no candidate
                 flag = ps->flag[i];
                 if (flag & eflg) {
-                    sprintf(EndBuf(tb),"D%d@%c%d ", val, (char)(row + 'A'), col + 1);
+                    if (strlen(tb) < max_buf) {
+                        // add another elimintation
+                        sprintf(EndBuf(tb), "D%d@%c%d ", val, (char)(row + 'A'), col + 1);
+                    }
+                    else {
+                        over++; // this suggests somehing is seriously WRONG here
+                    }
                     count++;    // count an elimination of a candidate
                 }
             }
