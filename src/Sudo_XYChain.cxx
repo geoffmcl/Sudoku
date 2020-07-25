@@ -427,6 +427,7 @@ int Follow_XY_Chain(PXYSTR pxystr)
     row = prc->row;
     col = prc->col;
     box = GETBOX(row,col);
+    ret = 0;
     char *tb = GetNxtBuf();
     for (ii = 0; ii < max; ii++) {
         prc = &pempty->at(ii);

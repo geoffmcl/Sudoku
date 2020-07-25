@@ -85,14 +85,21 @@ int   add_sys_time( int val )
    return i;
 }
 
-int   open_log_file( void )
+// set the log file, to %LOCALAPPDATA%/sudoku/<rel_file> given
+void set_log_file_rel(const char* def)
 {
     if (logfile[0] == 0) {
         if (Get_LocalData_Path(logfile))
-            strcat(logfile, def_log);
+            strcat(logfile, def);
         else
-            strcpy(logfile, def_log); // just default to local
+            strcpy(logfile, def); // just default to local
     }
+}
+
+
+int   open_log_file( void )
+{
+    set_log_file_rel(def_log);
    outfile = fopen(logfile, "wb");
    if( outfile == 0 ) {
       outfile = (FILE *)-1;
@@ -111,9 +118,8 @@ void close_log_file( void )
 }
 char * get_log_file( void )
 {
-   if (logfile[0] == 0)
-      strcpy(logfile,def_log);
-   return logfile;
+    set_log_file_rel(def_log); //  %LOCALAPPDATA%/sudoku/<def_log> given
+    return logfile;
 }
 
 #ifdef WIN32    // STRCMP macro = strcmpi
@@ -124,11 +130,13 @@ char * get_log_file( void )
 
 void   set_log_file( char * nf )
 {
-   if (logfile[0] == 0)
-      strcpy(logfile,def_log);
-   if ( nf && *nf && STRCMP(nf,logfile) ) {
+    char* nb = GetNxtBuf();
+    strcpy(nb, logfile); // keep any current
+    logfile[0] = 0; // clear the buffer
+    set_log_file_rel(nf);
+   if ( nf && *nf && STRCMP(nb,logfile) ) {
+       // new is different from old
       close_log_file(); // remove any previous
-      strcpy(logfile,nf); // set new name
       open_log_file();  // and open it ... anything previous written is 'lost'
    }
 }

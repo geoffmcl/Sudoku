@@ -58,7 +58,7 @@ BOOL Change_Box(PABOX2 pb, int row, int col, int val, int flag)
 // After making SURE what is PUSHED is a NEW memory address started to work fine
 
 int debug_push_pop = 0;
-PABOX2 pCurr_Box = 0;
+PABOX2 pCurr_Box = 0;   // current active current BOX
 
 PABOX2 Copy_Box2( PABOX2 pb_in )
 {

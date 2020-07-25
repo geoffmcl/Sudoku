@@ -959,6 +959,9 @@ int Get_Solution( PABOX2 pb, bool test_unique )
     solution_time = tm.getElapsedTime();
     sprintf(EndBuf(tb)," in %s.",tm.getTimeStg());
     sprtf("%s\n",tb);   // SHOW some results after running a brute force solution
+        // show solution (or restart) value
+    SPRTF("%s\n", get_ASCII_81_Stg(pb));
+
     if (x) {
         pb->bflag |= bf_DnTest;
         if (r == Unique)

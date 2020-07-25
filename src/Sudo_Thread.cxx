@@ -8,7 +8,7 @@
 #endif  // WIN32 process.h/pthread.h
 #include "Sudo_Time.hxx"
 
-static PABOX2 pb_copy = 0;
+static PABOX2 s_pb_con = 0; // this contains the SOLVED, or not, by brute force, on a thread
 static int got_solution = 0;
 static int in_thread = 0;
 
@@ -26,10 +26,15 @@ int get_solution_valid() { return got_solution; }
 int set_solution_valid(int val) { int curr = got_solution; got_solution = val; return curr; }
 static double thread_time = 0.0;
 
+PABOX2 get_pb_con() {
+    return s_pb_con;
+}
+
 int get_solution_value( int row, int col )
 {
-    if (!in_thread && got_solution)
-        return pb_copy->line[row].val[col];
+    PABOX2 pb = get_pb_con();
+    if (pb && !in_thread && got_solution)
+        return pb->line[row].val[col];
     return 0;
 }
 
@@ -40,13 +45,14 @@ static void solve_on_thread()
     tm.start();
     set_solution_valid(0);
     //sprtf( "In second thread...\n" );
-    got_solution = Get_Solution(pb_copy, true);
+    PABOX2 pb = get_pb_con();
+    got_solution = Get_Solution(pb, true);
     //sprtf( "Thread exit... %d\n", got_solution );
     tm.stop();
     thread_time = tm.getElapsedTime();
     if (got_solution) {
         PABOX2 pb = get_curr_box();
-        pb->bflag |= pb_copy->bflag;    // transfer some flags
+        pb->bflag |= pb->bflag;    // transfer some flags
     }
     in_thread--;
 }
@@ -84,16 +90,19 @@ bool StartThread()  // windows - uses _beginthreadex()
     if (!cnt || (cnt >= 81))
         return bret;
     PABOX2 pb = get_curr_box();
+    PABOX2 pb_con = get_pb_con();
     // sprtf( "Creating second thread... %d spots\n", cnt );
-    if (pb_copy) {
+    if (pb_con) {
         int row, col;
         for (row = 0; row < 9; row++) {
             for (col = 0; col < 9; col++) {
-                pb_copy->line[row].val[col] = pb->line[row].val[col];
+                pb_con->line[row].val[col] = pb->line[row].val[col];
             }
         }
-    } else 
-        pb_copy = Copy_Box2(pb);
+    }
+    else {
+        s_pb_con = Copy_Box2(pb); // make COPY of current box
+    }
 
     // Create the second thread.
     hThread = (HANDLE)_beginthreadex( NULL, 0, &ThreadFunc, NULL, 0, &threadID );
@@ -128,7 +137,7 @@ bool StartThread()  // unix - uses pthread_create()
         return bret;
     PABOX2 pb = get_curr_box();
     // sprtf( "Creating second thread... %d spots\n", cnt );
-    if (pb_copy) {
+    if (pb_con) {
         int row, col;
         for (row = 0; row < 9; row++) {
             for (col = 0; col < 9; col++) {
@@ -136,7 +145,7 @@ bool StartThread()  // unix - uses pthread_create()
             }
         }
     } else 
-        pb_copy = Copy_Box2(pb);
+        pb_con = Copy_Box2(pb);
 
     // Create the second thread.
     // hThread = (HANDLE)_beginthreadex( NULL, 0, &ThreadFunc, NULL, 0, &threadID );

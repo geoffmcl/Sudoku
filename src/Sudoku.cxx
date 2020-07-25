@@ -1147,8 +1147,27 @@ int parse_args( int argc, char **argv )
     }
 #endif
     if (!usr_input) {
-        printf("%s: No user input found in command!\n", module);
-        return 1;
+        sprtf("%s: No user input found in command!\n", module);
+        if (g_bAutoLoad) { // AutoLoad
+            char* cp = Get_First_INI_File();
+            if (cp) {
+                if (is_file_or_directory((char*)cp) == 1) {
+                    usr_input = strdup(cp);
+                    sprtf("%s: g_bAutoLoad: using first INI file '%s'.\n", module, usr_input);
+                }
+                else {
+                    return 1;
+                }
+
+            }
+            else {
+                return 1;
+            }
+        }
+        else {
+
+            return 1;
+        }
     }
     if (VERB9) {
         Set_ALL_Dbg_ON();
@@ -1261,10 +1280,10 @@ int solve_the_Sudoku()
 #endif
             // take a STEP
             //////////////////////////////////////////////////////////
-            int savestdout = add_std_out(0);    // set none, well maybe log file...
-            if (VERB5) add_std_out(1);          // -v5 show it all
+            // int savestdout = add_std_out(0);    // set none, well maybe log file...
+            // if (VERB5) add_std_out(1);          // -v5 show it all
             Do_ID_OPTIONS_ONESTEP( hWnd );      // take a step
-            add_std_out(savestdout);            // resore stdout io setting
+            // add_std_out(savestdout);            // resore stdout io setting
             //////////////////////////////////////////////////////////
             get_empty_count();
             // if no change in 'stage' then failed or finished
@@ -1306,7 +1325,23 @@ int solve_the_Sudoku()
     }
 
     // show solution (or restart) value
-    SPRTF("%s\n", get_ASCII_81_Stg(get_curr_box()));
+    char* cp = get_ASCII_81_Stg(get_curr_box());
+    size_t len = strlen(cp);
+    SPRTF("%s\n", cp );
+    PABOX2 pb_con = get_pb_con();
+    if (pb_con) {
+        char* cp2 = get_ASCII_81_Stg(pb_con);
+        size_t ii, len2 = strlen(cp2);
+        if (len == len2) {
+            for (ii = 0; ii < len2; ii++) {
+                if ((cp[ii] != '0') && (cp[ii] == cp2[ii])) {
+                    cp2[ii] = '=';
+                }
+            }
+        }
+        SPRTF("%s\n", cp2);
+    }
+
 
 #ifdef SHOW_STAGE_LIST
     if (VERB2) {
@@ -1321,11 +1356,16 @@ int main( int argc, char **argv )
 {
     int iret = 0;
     add_std_out(1);
+    add_sys_time(1);
+    set_log_file("tempcon.txt");
     g_AutoDelay = 0.0001;  // was 0.02;
     ReadINI();
     iret = parse_args( argc, argv );
-    if (iret) 
+    if (iret) {
+        if (iret == 2)
+            iret = 0;
         return iret;
+    }
     add_app_begin();
     if (VERB2) {
         SPRTF("%s: Will read input file '%s',\n"
