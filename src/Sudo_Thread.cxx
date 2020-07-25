@@ -45,14 +45,15 @@ static void solve_on_thread()
     tm.start();
     set_solution_valid(0);
     //sprtf( "In second thread...\n" );
-    PABOX2 pb = get_pb_con();
-    got_solution = Get_Solution(pb, true);
+    PABOX2 pbc = get_pb_con();
+    got_solution = Get_Solution(pbc, true);
     //sprtf( "Thread exit... %d\n", got_solution );
     tm.stop();
     thread_time = tm.getElapsedTime();
-    if (got_solution) {
-        PABOX2 pb = get_curr_box();
-        pb->bflag |= pb->bflag;    // transfer some flags
+    if (got_solution && pbc) {
+        // was pb->bflag |= pb_copy->bflag;    // transfer some flags
+        PABOX2 pb2 = get_curr_box();
+        pb2->bflag |= pbc->bflag;    // transfer some flags
     }
     in_thread--;
 }
