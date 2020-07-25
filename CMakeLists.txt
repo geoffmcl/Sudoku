@@ -74,6 +74,26 @@ if(WIN32 AND MSVC)
     
     # to distinguish between debug and release lib in windows
     set( CMAKE_DEBUG_POSTFIX "d" ) # little effect in unix
+    if (MSVC)
+        option( USE_STATIC_RUNTIME "Set ON to change /MD(DLL) to /MT(static)" ON )
+        if (USE_STATIC_RUNTIME)
+            set(CompilerFlags
+                CMAKE_CXX_FLAGS
+                CMAKE_CXX_FLAGS_DEBUG
+                CMAKE_CXX_FLAGS_RELEASE
+                CMAKE_C_FLAGS
+                CMAKE_C_FLAGS_DEBUG
+                CMAKE_C_FLAGS_RELEASE
+                )
+            foreach(CompilerFlag ${CompilerFlags})
+                string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+            endforeach()    
+            message(STATUS "Using /MT STATIC runtime")
+        else ()
+            message(STATUS "Using /MD DYNAMIC runtime")
+        endif ()
+    endif ()
+    
 else()
     set(MSVC_FLAGS "${MSVC_FLAGS} -Wno-write-strings -Wno-unused-variable -Wno-unused-but-set-variable")
     set(BUILD_WIN32_EXE NO)
