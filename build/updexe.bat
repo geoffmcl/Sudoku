@@ -1,8 +1,21 @@
 @setlocal
 @REM copy the EXE into C:\MDOS, IFF changed
+@set TMPCNT=0
 @set TMPDIR=C:\MDOS
 @set TMPFIL1=Sudoku.exe
 @set TMPFIL2=%TMPFIL1%
+@call :DOCHK
+@set /A TMPCNT+=1
+@echo %TMPCNT%: Done exe %TMPFIL1%
+@set TMPFIL1=Sudo-con.exe
+@set TMPFIL2=%TMPFIL1%
+@call :DOCHK
+@set /A TMPCNT+=1
+@echo %TMPCNT%: Done exe %TMPFIL1%
+
+@goto END
+
+:DOCHK
 @set TMPSRC=Release\%TMPFIL1%
 @if NOT EXIST %TMPSRC% goto ERR1
 @echo Current source %TMPSRC%
@@ -38,7 +51,7 @@ copy %TMPSRC% %TMPDST%
 @echo.
 :DNFILE1
 
-@goto END
+@goto :EOF
 
 :ERR1
 @echo Source %TMPSRC% does NOT exist! Has it been built? *** FIX ME ***
@@ -53,6 +66,7 @@ copy %TMPSRC% %TMPDST%
 @goto ISERR
 
 :ISERR
+@pause
 @endlocal
 @exit /b 1
 
