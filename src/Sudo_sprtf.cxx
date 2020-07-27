@@ -39,7 +39,7 @@ char *GetNxtBuf()
 }
 
 
-#define  MXIO     512
+#define  MXIO     1024  // was 512
 static char def_log[] = "tempsudo.txt";
 char logfile[256] = "\0";
 FILE * outfile = NULL;
@@ -283,7 +283,7 @@ static void oi( char * ps )
 static void	prt( char * ps )
 {
     //static char buf[MXIO + 4];
-    static char _s_buf[1024];
+    static char _s_buf[MXIO + 8]; // was 1024
 	char * pb = _s_buf;
 	size_t i, j, k;
 	char   c, d;

@@ -3274,7 +3274,10 @@ int Count_Fill_By_Flag( PABOX2 pb, uint64_t eflg )
                         sprintf(EndBuf(tb), "D%d@%c%d ", val, (char)(row + 'A'), col + 1);
                     }
                     else {
-                        over++; // this suggests somehing is seriously WRONG here
+                        if (over == 0) {
+                            strcat(tb, "... ");
+                        }
+                        over++; // this suggests somehing is seriously WRONG qith using static buffers
                     }
                     count++;    // count an elimination of a candidate
                 }
@@ -3315,12 +3318,13 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
     mflags = 0;
     cflags = 0;
     char *tb = GetNxtBuf();
+    size_t len, max_len = 512;
 #ifdef WIN32 // format 64-bit value - I64
     sprintf(tb,"%s eflg=%I64x mflg=%I64x cflg=%I64x ",type, eflg, mflg, cflg);
 #else   // !WIN32 - use PRIx64    
     sprintf(tb,"%s eflg=%" PRIx64 " mflg=%" PRIx64 " cflg=%" PRIx64 " ",type, eflg, mflg, cflg);
 #endif  // WIN32 y/n
-
+    len = strlen(tb);
     // do whole puzzle
     for (row = 0; row < 9; row++) {
         for (col = 0; col < 9; col++) {
@@ -3331,8 +3335,11 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
                 val = ps->val[i];
                 if (!val) continue; // no candidate
                 flag = ps->flag[i];
+                len = strlen(tb);
                 if (flag & eflg) {
-                    sprintf(EndBuf(tb),"D%d@%c%d ", val, (char)(row + 'A'), col + 1);
+                    if (len < max_len) {
+                        len += sprintf(EndBuf(tb), "D%d@%c%d ", val, (char)(row + 'A'), col + 1);
+                    }
                     if (do_delete)
                         ps->val[i] = 0; // CLEAR value marked for elimination
                     ps->flag[i] &= ~eflg;
@@ -3345,7 +3352,9 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
                     elims.push_back(rc);
                 }
                 if (flag & mflg) {
-                    sprintf(EndBuf(tb),"M%c%d ", (char)(row + 'A'), col + 1);
+                    if (len < max_len) {
+                        len += sprintf(EndBuf(tb), "M%c%d ", (char)(row + 'A'), col + 1);
+                    }
                     ps->flag[i] &= ~mflg;
                     mflags++;
                     rc.row = row;
@@ -3360,7 +3369,10 @@ int Do_Fill_By_Flags( PABOX2 pb, uint64_t eflg, uint64_t mflg, char *smsg, char 
                 if (ps->cellflg & cflg) {
                     ps->cellflg &= ~cflg;
                     cflags++;
-                    sprintf(EndBuf(tb),"C%c%d ", (char)(row + 'A'), col + 1);
+                    len = strlen(tb);
+                    if (len < max_len) {
+                        len += sprintf(EndBuf(tb), "C%c%d ", (char)(row + 'A'), col + 1);
+                    }
                 }
             }
         }
