@@ -1,7 +1,7 @@
 @setlocal
 @set TMPEXE=Release\Sudo-con.exe
 @if NOT EXIST %TMPEXE% goto NOEXE
-@set TMP_DEF_FILE=C:\GTools\tools\Sudoku\examples\diabolical.txt
+@set TMP_DEF_FILE=..\examples\diabolical.txt
 @REM set TMP_DEF_FILE    "/home/geoff/projects/Sudoku/examples/y-wing.txt"
 @if NOT EXIST %TMP_DEF_FILE% goto NOFIL
 
@@ -29,5 +29,16 @@
 
 :NOEXE
 @echo Can NOT locate %TMPEXE%! Has it been built? *** FIX ME ***
+@goto ISERR
+
+:ISERR
+@endlocal
+@exit /b 1
+
 :END
+@endlocal
+@exit /b 0
+
+@REM eof
+
 
