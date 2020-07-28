@@ -1046,6 +1046,8 @@ void give_help( char *name )
     printf(" --verb[n]     (-v) = Bump or set verbosity. (def=%d)\n", verbosity);
     printf(" --Version     (-V) = Show the version and exit(2)\n");
     printf(" --delay float (-d) = Set Auto_Solve_Delay_Seconds_as_float. (def=%lf)\n", g_AutoDelay);
+    printf(" --D|S 'Opt=val'    = Set/Unset DEBUG or STRATEGIES. The option, Opt, can be 'all', or one per INI file.\n");
+    printf("  The val ON can be '1','y','t','yes','true','on', OFF 1 of '0','n','f','no','false','off'\n");
     printf("\n");
     printf(" Given a Sudoku puzzle file input, read and auto solve the Sudoku.\n");
     printf(" The 'solution' will be compared to the 'brute force' solution, and\n");
@@ -1071,6 +1073,118 @@ void give_help( char *name )
     show_version();
 }
 
+typedef std::vector<std::string> vSTR;
+vSTR split_string(const string& str, const char* sep, int maxsplit = 0);
+
+
+vSTR split_string(const string& str, const char* sep, int maxsplit)
+{
+    //if (sep == 0)
+    //    return split_whitespace(str, maxsplit);
+
+    vSTR result;
+    size_t n = std::strlen(sep);
+    if (n == 0)
+    {
+        // Error: empty separator string
+        return result;
+    }
+    const char* s = str.c_str();
+    string::size_type len = str.length();
+    string::size_type i = 0;
+    string::size_type j = 0;
+    int splitcount = 0;
+
+    while (i + n <= len)
+    {
+        if (s[i] == sep[0] && (n == 1 || std::memcmp(s + i, sep, n) == 0))
+        {
+            result.push_back(str.substr(j, i - j));
+            i = j = i + n;
+            ++splitcount;
+            if (maxsplit && (splitcount >= maxsplit))
+                break;
+        }
+        else
+        {
+            ++i;
+        }
+    }
+
+    result.push_back(str.substr(j, len - j));
+    return result;
+}
+
+const char* choices_no[] =
+{ "0", "n", "f", "no",  "false", "off", 0 };
+
+const char* choices_yes[] =
+{ "1", "y", "t", "yes", "true",  "on", 0 };
+
+int is_a_no(const char* cp)
+{
+    const char* *list = &choices_no[0];
+    while (*list) {
+        if (strcmp(cp,*list) == 0)
+            return 1;
+        list++;
+    }
+    return 0;
+}
+int is_a_yes(const char* cp)
+{
+    const char** list = &choices_yes[0];
+    while (*list) {
+        if (strcmp(cp, *list) == 0)
+            return 2;
+        list++;
+    }
+    return 0;
+}
+
+int set_degbug_strats(int c, char* arg)
+{
+    std::string s = arg;
+    size_t pos = s.find('=');
+    if (pos != std::string::npos) {
+        vSTR vs = split_string(s, "=");
+        if (vs.size() == 2) {
+            std::string opt = vs[0];
+            std::string of = vs[1];
+            int onoff = is_a_yes(of.c_str());
+            if (!onoff)
+                onoff = is_a_no(of.c_str());
+            if (onoff) {
+                // we have something worth looking at
+                if (opt == "all") {
+                    if (c == 'D') {
+                        if (onoff == 2)
+                            Set_ALL_Dbg_ON(true);
+                        else
+                            Set_ALL_Dbg_OFF(true);
+                    }
+                    else {
+                        if (onoff == 2)
+                            Set_ALL_Strat_ON(true);
+                        else
+                            Set_ALL_Strat_OFF(true);
+                    }
+                    printf("%s: Arg '%s' option set %d\n", module, opt.c_str(), onoff);
+                    return onoff;
+                }
+                else {
+                    if (Set_One_DS_opt(opt.c_str(), c, &onoff)) {
+                        printf("%s: Arg '%s' option set %d\n", module, opt.c_str(), onoff);
+                        return 1;
+                    }
+                }
+            }
+        }
+    }
+    printf("%s: Arg '%s' no split on '='! Or some other prob...\n", module, arg);
+    return 0;
+}
+
 int parse_args( int argc, char **argv )
 {
     int i,i2,c;
@@ -1083,6 +1197,10 @@ int parse_args( int argc, char **argv )
             while (*sarg == '-')
                 sarg++;
             c = *sarg;
+            if (strcmp(arg, "--version") == 0) {
+                show_version();
+                return 2;
+            }
             switch (c) {
             case 'h':
             case '?':
@@ -1115,6 +1233,21 @@ int parse_args( int argc, char **argv )
             case 'V':
                 show_version();
                 return 2;
+            case 'D':
+            case 'S':
+                if (i2 < argc) {
+                    i++;
+                    sarg = argv[i];
+                    if (!set_degbug_strats(c, sarg)) {
+                        printf("%s: Failed to set the strategy '%s, like 'Naked Pairs=off' !\n", module, sarg);
+
+                    }
+                }
+                else {
+                    printf("%s: Expected a strategy, like 'Naked Pairs=off' to follow '%s'!\n", module, arg);
+                    return 1;
+                }
+                break;
 
             // TODO: Other arguments
             default:
@@ -1240,6 +1373,61 @@ void do_message_block( double elap, const char *why )
     }
 }
 
+#define IS129(a) ((a >= '1') && (a <= '9'))
+
+// show solution - after solved, or not...
+void show_solution()
+{
+    // show solution (or restart) value
+    size_t ii, len;
+    char* fb = get_ASCII_81_Stg(get_file_box());
+    len = strlen(fb);
+    int in_slot_cnt = 0;
+    int added_slots = 0;
+    int missed_slots = 0;
+    for (ii = 0; ii < len; ii++) {
+        if (fb[ii] != '0')
+            in_slot_cnt++;
+    }
+    SPRTF("%s - start %d slots\n", fb, in_slot_cnt);  // this is the initial BOX from the file
+
+
+    char* cp = get_ASCII_81_Stg(get_curr_box());
+    char* cp3 = GetNxtBuf();
+    strcpy(cp3, cp);
+    len = strlen(cp3);
+    for (ii = 0; ii < len; ii++) {
+        if ((cp3[ii] != '0') && (cp3[ii] == fb[ii])) {
+            cp3[ii] = '=';
+        }
+        else if (cp3[ii] == '0') {
+            cp3[ii] = ' ';
+        }
+        if (IS129(cp3[ii]))
+            added_slots++;
+
+    }
+    SPRTF("%s - added %d slots.\n", cp3, added_slots);
+    PABOX2 pb_con = get_pb_con();
+    if (pb_con) {
+        char* cp2 = get_ASCII_81_Stg(pb_con);
+        size_t len2 = strlen(cp2);
+        if (len == len2) {
+            for (ii = 0; ii < len2; ii++) {
+                if (cp[ii] != '0') {
+                    if (cp[ii] == cp2[ii]) {
+                        cp2[ii] = '=';
+                    }
+                }
+                if (IS129(cp2[ii]))
+                    missed_slots++;
+            }
+        }
+        SPRTF("%s - missed %d slots.\n", cp2);
+    }
+} // show solution - after solved, or not...
+
+
 // now it is loaded, and analyses, or in the process of doing that,
 // we could ID_OPTIONS_ONESTEP, or an outright ID_OPTIONS_SOLVE
 // TODO: A user option to choose this, but heer choose one step, since I think this gives more informat
@@ -1324,23 +1512,7 @@ int solve_the_Sudoku()
         }
     }
 
-    // show solution (or restart) value
-    char* cp = get_ASCII_81_Stg(get_curr_box());
-    size_t len = strlen(cp);
-    SPRTF("%s\n", cp );
-    PABOX2 pb_con = get_pb_con();
-    if (pb_con) {
-        char* cp2 = get_ASCII_81_Stg(pb_con);
-        size_t ii, len2 = strlen(cp2);
-        if (len == len2) {
-            for (ii = 0; ii < len2; ii++) {
-                if ((cp[ii] != '0') && (cp[ii] == cp2[ii])) {
-                    cp2[ii] = '=';
-                }
-            }
-        }
-        SPRTF("%s\n", cp2);
-    }
+    show_solution(); // show solution - after solved, or not...
 
 
 #ifdef SHOW_STAGE_LIST

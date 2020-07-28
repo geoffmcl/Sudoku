@@ -1616,7 +1616,7 @@ VOID Do_ID_OPTIONS_DEBUGOPTIONS(HWND hWnd)
 // ID_OPTIONS_ENABLESTRATEGIES - IDD_STRATEGIES
 BOOL Do_INIT_Strategies(HWND hDlg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Do_INIT_Strategies(HWND hDlg)
     while (plist->pcaption) {
         if (plist->penab) {
             CheckDlgButton(hDlg, plist->conrol,
@@ -1630,7 +1630,7 @@ BOOL Do_INIT_Strategies(HWND hDlg)
 
 BOOL Do_Strategies_OK(HWND hDlg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Do_Strategies_OK(HWND hDlg)
     UINT res;
     char *ponoff;
 
@@ -1651,7 +1651,7 @@ BOOL Do_Strategies_OK(HWND hDlg)
 
 VOID Do_ALL_Strat_ON(HWND hDlg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Do_ALL_Strat_ON(HWND hDlg)
     while (plist->pcaption) {
         if (plist->penab)
             CheckDlgButton(hDlg, plist->conrol, BST_CHECKED);
@@ -1660,7 +1660,7 @@ VOID Do_ALL_Strat_ON(HWND hDlg)
 }
 VOID Do_ALL_Strat_OFF(HWND hDlg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Do_ALL_Strat_OFF(HWND hDlg)
     while (plist->pcaption) {
         if (plist->penab)
             CheckDlgButton(hDlg, plist->conrol, BST_UNCHECKED);

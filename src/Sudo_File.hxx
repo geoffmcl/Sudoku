@@ -20,6 +20,7 @@ extern PABOX2 Copy_Box2( PABOX2 pb );
 extern void Add_Box2(PABOX2 pb);
 extern PABOX2 Get_Box2( int offset );
 extern int Get_Box2_Count();
+extern PABOX2 get_file_box();   // initial file loaded box
 
 #define flg_ADDSCREEN 0x01
 #define flg_SHOWVALS  0x02

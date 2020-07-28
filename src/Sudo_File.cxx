@@ -97,13 +97,20 @@ void Set_Window_Title()
 #endif // #ifdef WIN32 // windows SetWindowText
 }
 
+static ABOX2 file_box = { 0 };
+PABOX2 get_file_box()
+{
+    return &file_box;
+}
 void File_Reset()
 {
     Set_Window_Title();
     char *cp = Get_Act_File();
+    PABOX2 cb = get_curr_box();
+    file_box = *cb;
     if (cp && strcmp(g_pSpecial,cp)) {
         sprtf("Loaded [%s]\n",cp);
-        sprtf("%s\n", get_ASCII_81_Stg(get_curr_box()));
+        sprtf("%s\n", get_ASCII_81_Stg(cb));
         Add_to_INI_File_List(cp);
     }
     done_end_dialog = false;

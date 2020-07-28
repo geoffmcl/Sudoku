@@ -194,7 +194,7 @@ DBGLIST DbgList[] = {
 
 VOID Set_ALL_Dbg_ON(BOOL markchg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Set_ALL_Dbg_ON
     while (plist->pcaption) {
         int *pi = plist->pdebug;
         PBOOL pb = plist->pchg;
@@ -209,7 +209,7 @@ VOID Set_ALL_Dbg_ON(BOOL markchg)
 
 VOID Set_ALL_Dbg_OFF(BOOL markchg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Set_ALL_Dbg_OFF
     while (plist->pcaption) {
         int *pi = plist->pdebug;
         PBOOL pb = plist->pchg;
@@ -222,11 +222,87 @@ VOID Set_ALL_Dbg_OFF(BOOL markchg)
     }
 }
 
+VOID Set_ALL_Strat_ON(BOOL markchg)
+{
+    PDBGLIST plist = &DbgList[0]; // Set_ALL_Dbg_ON
+    while (plist->pcaption) {
+        int* pi = plist->penab;
+        PBOOL pb = plist->pchgd;
+        if (!*pi) {
+            *pi = 1;
+            if (markchg)
+                *pb = TRUE;
+        }
+        plist++;
+    }
+}
+
+VOID Set_ALL_Strat_OFF(BOOL markchg)
+{
+    PDBGLIST plist = &DbgList[0]; // Set_ALL_Dbg_OFF
+    while (plist->pcaption) {
+        int* pi = plist->penab;
+        PBOOL pb = plist->pchgd;
+        if (*pi) {
+            *pi = 0;
+            if (markchg)
+                *pb = TRUE;
+        }
+        plist++;
+    }
+}
+
+int Set_One_DS_opt(const char* opt, int DorS, int *pint)
+{
+    int onoff = *pint;
+    PDBGLIST plist = &DbgList[0]; // Set_One_DS_opt(const char* opt, int DorS, int onoff)
+    if (((DorS == 'D') || (DorS == 'S')) && ((onoff == 1) || (onoff == 2))) {
+        while (plist->pcaption) {
+            if (strcmp(plist->pcaption, opt) == 0)
+            {
+                int* pi;
+                PBOOL pb;
+                if (DorS == 'S') {
+                    pi = plist->penab;
+                    pb = plist->pchgd;
+                }
+                else {
+                    pi = plist->pdebug;
+                    pb = plist->pchg;
+                }
+                if (onoff == 2) {
+                    // YES
+                    if (!*pi) {
+                       *pi = 1;
+                       *pb = TRUE;
+                       onoff += 10;
+                    }
+                }
+                else {
+                    // NO
+                    if (*pi) {
+                        *pi = 0;
+                        *pb = TRUE;
+                        onoff += 20;
+                    }
+                }
+                *pint = onoff;
+                return onoff;
+
+            }
+            plist++;
+        }
+    }
+    return 0;
+}
+
+
+
 #ifdef WIN32    // windows select debug options dialog
 
 BOOL Do_INIT_DebugOptions(HWND hDlg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Do_INIT_DebugOptions(HWND hDlg)
     while (plist->pcaption) {
         CheckDlgButton(hDlg, plist->conrol,
             *plist->pdebug ? BST_CHECKED : BST_UNCHECKED);
@@ -238,7 +314,7 @@ BOOL Do_INIT_DebugOptions(HWND hDlg)
 
 BOOL Do_DebugOptions_OK(HWND hDlg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Do_DebugOptions_OK(HWND hDlg)
     UINT res;
     while (plist->pcaption) {
         res = IsDlgButtonChecked(hDlg, (int)plist->conrol);
@@ -252,7 +328,7 @@ BOOL Do_DebugOptions_OK(HWND hDlg)
 
 VOID Do_ALL_Dbg_ON(HWND hDlg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Do_ALL_Dbg_ON(HWND hDlg)
     while (plist->pcaption) {
         CheckDlgButton(hDlg, plist->conrol, BST_CHECKED);
         plist++;
@@ -260,7 +336,7 @@ VOID Do_ALL_Dbg_ON(HWND hDlg)
 }
 VOID Do_ALL_Dbg_OFF(HWND hDlg)
 {
-    PDBGLIST plist = &DbgList[0];
+    PDBGLIST plist = &DbgList[0]; // Do_ALL_Dbg_OFF(HWND hDlg)
     while (plist->pcaption) {
         CheckDlgButton(hDlg, plist->conrol, BST_UNCHECKED);
         plist++;

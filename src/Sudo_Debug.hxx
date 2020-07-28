@@ -109,9 +109,12 @@ extern BOOL Do_SL3; //, &Chg_SL3  },  // 19
 //    { "Hidden Pairs",IDC_CHECK22,&add_debug_hp, &bChgHP      , Do_Hidden_Pairs, &
 extern BOOL Do_HP;  //, &Chg_HP         },  // 21
 
-// toggle the debug flags, mark changne if desired
+// toggle the debug flags, mark change if desired
 extern VOID Set_ALL_Dbg_ON(BOOL markchg = FALSE);
 extern VOID Set_ALL_Dbg_OFF(BOOL markchg = FALSE);
+extern VOID Set_ALL_Strat_ON(BOOL markchg = FALSE);
+extern VOID Set_ALL_Strat_OFF(BOOL markchg = FALSE);
+extern int Set_One_DS_opt(const char* opt, int DorS, int *pint);
 
 
 #endif // #ifndef _SUDO_DEBUG_HXX_
