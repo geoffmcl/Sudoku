@@ -137,6 +137,7 @@ bool StartThread()  // unix - uses pthread_create()
     if (!cnt || (cnt >= 81))
         return bret;
     PABOX2 pb = get_curr_box();
+    PABOX2 pb_con = get_pb_con();
     // sprtf( "Creating second thread... %d spots\n", cnt );
     if (pb_con) {
         int row, col;
@@ -146,7 +147,7 @@ bool StartThread()  // unix - uses pthread_create()
             }
         }
     } else 
-        pb_con = Copy_Box2(pb);
+        s_pb_con = Copy_Box2(pb);
 
     // Create the second thread.
     // hThread = (HANDLE)_beginthreadex( NULL, 0, &ThreadFunc, NULL, 0, &threadID );
