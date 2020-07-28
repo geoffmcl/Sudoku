@@ -143,7 +143,7 @@ bool StartThread()  // unix - uses pthread_create()
         int row, col;
         for (row = 0; row < 9; row++) {
             for (col = 0; col < 9; col++) {
-                pb_copy->line[row].val[col] = pb->line[row].val[col];
+                pb_con->line[row].val[col] = pb->line[row].val[col];
             }
         }
     } else 
