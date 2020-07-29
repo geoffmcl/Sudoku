@@ -1317,21 +1317,32 @@ typedef std::vector<int> vINT;
 #ifdef SHOW_STAGE_LIST
 static vINT vStages;
 
+// order of stageg run, using one-step
 void Show_Stage_List()
 {
     if (vStages.size() > 0) {
         size_t ii, max = vStages.size();
+        int last = add_sys_time(0);
         int i;
         const char *st;
-        SPRTF("%d stages: ", (int)max);
-        for (ii = 0; ii < max; ii++) {
-            i = vStages[ii];
-            st = stage_to_text(i);
-            if (i == 0)
-                SPRTF("\n");
-            SPRTF("%s (%d) ", st, i );
+        int restarts = 0;
+        SPRTF("Solver: %d stages: ", (int)max);
+        if (VERB2) {
+            for (ii = 0; ii < max; ii++) {
+                i = vStages[ii];
+                st = stage_to_text(i);
+                if (i == 0) {
+                    SPRTF("\n");
+                    restarts++;
+                }
+                SPRTF("%s (%d) ", st, i);
+            }
+            SPRTF("w/ %d restarts...\n", restarts);
         }
-        SPRTF("\n");
+        else {
+            SPRTF("Use -v2 to show each...\n");
+        }
+        last = add_sys_time(last);
     }
 }
 
@@ -1520,10 +1531,9 @@ int solve_the_Sudoku()
 
 
 #ifdef SHOW_STAGE_LIST
-    if (VERB2) {
-        Show_Stage_List();
-    }
+    Show_Stage_List();
 #endif
+
     return iret;
 }
 
