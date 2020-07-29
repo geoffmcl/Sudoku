@@ -1083,7 +1083,7 @@ vSTR split_string(const string& str, const char* sep, int maxsplit)
     //    return split_whitespace(str, maxsplit);
 
     vSTR result;
-    size_t n = std::strlen(sep);
+    size_t n = ::strlen(sep);
     if (n == 0)
     {
         // Error: empty separator string
@@ -1097,7 +1097,7 @@ vSTR split_string(const string& str, const char* sep, int maxsplit)
 
     while (i + n <= len)
     {
-        if (s[i] == sep[0] && (n == 1 || std::memcmp(s + i, sep, n) == 0))
+        if (s[i] == sep[0] && (n == 1 || ::memcmp(s + i, sep, n) == 0))
         {
             result.push_back(str.substr(j, i - j));
             i = j = i + n;

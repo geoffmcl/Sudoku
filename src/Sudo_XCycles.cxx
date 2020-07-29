@@ -1252,7 +1252,7 @@ int Transfer_Chain_Pairs( PABOX2 pb, vRCP *pdst, vRCP &src )
     size_t max, ii, i2;
     int setval;
     ROWCOL rc;
-    bool change;
+    bool change = false;
     const char *lnktype;
     const char *clrtype1;
     const char *clrtype2;
@@ -1576,7 +1576,7 @@ int Mark_Other_Pairs_Linked_to_this_pair(PABOX2 pb, int setval, PROWCOL prcA, PR
 }
 
 
-
+#if 0 // 0000000000000000000000000000000000000000000000000000000000000000000000000
 // if ((setvalcnt == 1) && count && g_bIBL && !g_bIWL && !g_bASW) {
 // Is ONLY a list of STRONG LINKS for ONE setval
 int Process_SL_Chains_NOT_USED(PABOX2 pb, int setval) // strong links for ONE setval
@@ -1755,6 +1755,7 @@ int Process_SL_Chains_NOT_USED(PABOX2 pb, int setval) // strong links for ONE se
     return count;
 }
 
+#endif // if 0 // 0000000000000000000000000000000000000000000000000000000000000000000000000
 
 // Used to process EXTENDED list
 // if ( count && g_bIBL && g_bIWL && g_bASW ) {

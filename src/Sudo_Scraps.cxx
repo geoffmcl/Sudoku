@@ -69,8 +69,9 @@ int get_new_matrix(int n)
 {
     int i, j, error, temp;
 
-    if (n)
+    if (n) {
         goto matrixupdation;
+    }
 
 	for(i=0;i<9;i++)
 	for(j=0;j<9;j++)

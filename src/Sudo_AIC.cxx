@@ -1215,7 +1215,7 @@ int Mark_AIC_Scans( PABOX2 pb )
     vRCP vrcp;
     PAICSTR paic = &_s_aicstr;
     vINT virow, vicol, vibox;
-    int scnout;
+    int scnout = 1;
     int cnt;
 
     char *tb = GetNxtBuf();
@@ -1266,7 +1266,7 @@ int Do_AIC_Scans( PABOX2 pb )
     vRCP vrcp;
     PAICSTR paic = &_s_aicstr;
     vINT virow, vicol, vibox;
-    int scnout;
+    int scnout = 1;
     int cnt;
 
     char *tb = GetNxtBuf();

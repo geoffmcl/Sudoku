@@ -91,7 +91,7 @@ void AddSet2BufExFlag( char *tb, PSET ps, uint64_t flag )
     for (i = 0; i < 9; i++) {
         val = ps->val[i];
         if (val) {
-            if ( !ps->flag[i] & flag ) {
+            if ( !(ps->flag[i] & flag) ) {
                 sprintf(EndBuf(tb),"%d",val);
                 cnt++;
             }
