@@ -47,7 +47,7 @@ endif ()
 
 add_definitions ( -DSUDO_VERSION="${LIBSUDO_VERSION}" )
 add_definitions ( -DSUDO_DATE="${SUDO_YEAR}/${SUDO_MONTH}/${SUDO_DAY}" )
-add_definitions ( -DSUDO_RC_VALUE="RC1" )
+### add_definitions ( -DSUDO_RC_VALUE="RC1" )
 
 # Setup MSVC 3rd party directories if available and needed
 # include( ConfigureMsvc3rdParty )
