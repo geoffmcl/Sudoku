@@ -1389,7 +1389,7 @@ void show_solution()
         if (fb[ii] != '0')
             in_slot_cnt++;
     }
-    SPRTF("%s - start %d slots\n", fb, in_slot_cnt);  // this is the initial BOX from the file
+    SPRTF("%s - start  %2d slots.\n", fb, in_slot_cnt);  // this is the initial BOX from the file
 
 
     char* cp = get_ASCII_81_Stg(get_curr_box());
@@ -1407,10 +1407,10 @@ void show_solution()
             added_slots++;
 
     }
-    SPRTF("%s - added %d slots.\n", cp3, added_slots);
+    SPRTF("%s - added  %2d slots.\n", cp3, added_slots);
     PABOX2 pb_con = get_pb_con();
     if (pb_con) {
-        char* cp2 = get_ASCII_81_Stg(pb_con);
+        char* cp2 = get_ASCII_81_Stg(pb_con); // get the SECRET brute force solution
         size_t len2 = strlen(cp2);
         if (len == len2) {
             for (ii = 0; ii < len2; ii++) {
@@ -1419,11 +1419,12 @@ void show_solution()
                         cp2[ii] = '=';
                     }
                 }
-                if (IS129(cp2[ii]))
+                if (IS129(cp2[ii])) {
                     missed_slots++;
+                }
             }
         }
-        SPRTF("%s - missed %d slots.\n", cp2);
+        SPRTF("%s - missed %2d slots.\n", cp2, missed_slots);
     }
 } // show solution - after solved, or not...
 
