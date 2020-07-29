@@ -1029,7 +1029,7 @@ void show_version()
 #else // !SUDO_RC_VALUE
     printf("%s: version %s of %s\n", module, SUDO_VERSION, SUDO_DATE );
 #endif // SUDO_RC_VALUE y/n
-    printf(" Copyright (C) Geoff R. McLane, 2012-2015\n");
+    printf(" Copyright (C) Geoff R. McLane, 2012-2020\n");
     printf(" Compiled on %s at %s\n", __DATE__, __TIME__);
     printf(" Compiled by %s\n", COMPILER_STR);
     printf(" Licence GNU GPL version 2 (or later)\n");
@@ -1394,7 +1394,7 @@ void show_solution()
 
     char* cp = get_ASCII_81_Stg(get_curr_box());
     char* cp3 = GetNxtBuf();
-    strcpy(cp3, cp);
+    strcpy(cp3, cp); // copy, before modification
     len = strlen(cp3);
     for (ii = 0; ii < len; ii++) {
         if ((cp3[ii] != '0') && (cp3[ii] == fb[ii])) {
@@ -1424,7 +1424,10 @@ void show_solution()
                 }
             }
         }
-        SPRTF("%s - missed %2d slots.\n", cp2, missed_slots);
+        if (VERB9)
+            SPRTF("%s - missed %2d slots.\n", cp2, missed_slots);
+        else
+            SPRTF("****************** elevate to -v9, to see brute force solution ****************** - missed %2d slots.\n", missed_slots);
     }
 } // show solution - after solved, or not...
 

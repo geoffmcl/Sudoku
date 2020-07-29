@@ -110,7 +110,7 @@ void File_Reset()
     file_box = *cb;
     if (cp && strcmp(g_pSpecial,cp)) {
         sprtf("Loaded [%s]\n",cp);
-        sprtf("%s - spots % 2d\n", get_ASCII_81_Stg(cb), Get_Spots(cb));
+        sprtf("%s - spots %2d\n", get_ASCII_81_Stg(cb), Get_Spots(cb));
         Add_to_INI_File_List(cp);
     }
     done_end_dialog = false;
