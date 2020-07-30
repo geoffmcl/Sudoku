@@ -1263,9 +1263,7 @@ int parse_args( int argc, char **argv )
             if (is_file_or_directory(arg) == 1)
                 Reset_Active_File(arg);
             else {
-                char * tb = GetNxtBuf();
-                sprintf(tb,"ERROR: Unable to 'stat' file\n%s\nCheck file name and location\nWill abort on OK",arg);
-                Do_MsgBox_OK(tb);
+                printf("ERROR: Unable to 'stat' file\n'%s'\nCheck file name and location... aborting...",arg);
                 return 1;
             }
             usr_input = strdup(arg);
