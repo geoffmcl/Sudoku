@@ -404,6 +404,10 @@ char szASD[] = "Auto_Solve_Delay_Seconds_as_float";
 // extern double g_AutoDelay;
 BOOL gChgASD = FALSE;
 
+char szTAICWAE[] = "Treat_AIC_Warn_As_Error";
+extern int g_bTAICWAE; // was treat_aic_warn_as_error = 1;
+BOOL gChgAICWAE = FALSE;
+
 // Colors SECTION
 // char szClr[] = "Colors"; = it_Color
 // Text Colors By Type
@@ -585,6 +589,7 @@ INILST sIniLst[] = {
    { szOpt, szLIndOpn, it_Int,   (char *)&g_iLIndOpn,    &gChgLIO,  0, 0 },
    { szOpt, szLPath,   it_String,        g_szLastPath,   &gChgLPath, 0, 0 },
    { szOpt, szASD,     it_Double,(char *)&g_AutoDelay,   &gChgASD,   0, 0 },
+   { szOpt, szTAICWAE, it_Bool,   (char*)&g_bTAICWAE,    &gChgAICWAE, 0, 0 },
 
    // Colors SECTION
    { szClr, szOrgVal,  it_Color, (char *)&crOrgVal,      &gChgOVal, 0,  0 },
@@ -654,6 +659,19 @@ INILST sIniLst[] = {
    // last entry
    { 0,  0,  it_None, 0, 0, 0, 0 }
 };
+
+PINILST Find_an_Options(const char* popt)
+{
+    PINILST plist = &sIniLst[0];
+    while (plist->i_Sect) {
+        if (strcmp(plist->i_Sect, szOpt) == 0) {
+            if (strcmp(plist->i_Item, popt) == 0)
+                return plist;
+        }
+        plist++; // bump list pointer
+    }
+    return NULL;
+}
 
 //typedef struct tagDBGLIST  {
 //    const char *pcaption;

@@ -8,12 +8,6 @@
 
 #include "Sudoku.hxx"
 
-#ifdef WIN32    // windows STRICMP macro = stricmp
-#define STRICMP stricmp
-#else           // !WIN32  STRICMP macro = strcasecmp
-#define STRICMP strcasecmp
-#endif  // WIN32 y/n - STRICMP macro
-
 #define EOL_CHR "\r\n"
 #define NUL_VAL "0"
 

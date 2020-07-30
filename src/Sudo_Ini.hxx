@@ -43,6 +43,9 @@ extern char *Get_First_INI_File();
 extern char *Get_INI_File( int off );
 extern void Remove_INI_File( char *pf );
 
+extern PINILST Find_an_Options(const char* popt);
+
+
 #define  m_atoi   atoi
 #define  m_sscanf sscanf
 

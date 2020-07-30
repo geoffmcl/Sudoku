@@ -193,7 +193,7 @@ BOOL CALLBACK MyEnumProc( HWND hwnd, LPARAM lParam )
     char szName[256];
     HWND* FoundWindow = (HWND *)lParam; 
     GetClassName( hwnd, szName, 255 ); // Get the class name
-    if (stricmp(szName, "SCROLLBAR") == 0 ) // Is it "SCROLLBAR"?
+    if (STRICMP(szName, "SCROLLBAR") == 0 ) // Is it "SCROLLBAR"?
     {
         // Yes
         *FoundWindow = hwnd; // assign to our lparam that we passed in

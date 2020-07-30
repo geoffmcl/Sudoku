@@ -55,6 +55,13 @@
 #include <inttypes.h> // for PRIx64, ...
 #endif  // WIN32 y/n
 
+#ifdef WIN32    // windows STRICMP macro = stricmp
+#define STRICMP stricmp
+#else           // !WIN32  STRICMP macro = strcasecmp
+#define STRICMP strcasecmp
+#endif  // WIN32 y/n - STRICMP macro
+
+
 using namespace std;
 
 // Cell Flags - 64-bits

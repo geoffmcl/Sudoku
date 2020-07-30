@@ -42,7 +42,7 @@
 // for cell coloring, use cf_XCA and cf_XCB
 
 int only_one_aic = 1;
-int treat_aic_warn_as_error = 1;
+int g_bTAICWAE = 1;     // treat_aic_warn_as_error = 1;
 
 // int test_start_cand = 8;
 // examples\AIC-scan-01.txt - 
@@ -364,7 +364,7 @@ void Check_AIC_Chain( PAICSTR paic )
         int val2 = get_solution_value(prc->row,prc->col);
         if (val2 && (val2 == prc->cnum)) {
             sprtf("Warning: AIC: Candidate %s marked for deletion!\n", Get_RC_setval_RC_Stg(prc,val2));
-            if (treat_aic_warn_as_error) {
+            if (g_bTAICWAE) { // treat_aic_warn_as_error
                 paic->exit_scan = true;
                 paic->had_error = true;
                 paic->elim_count = 0;

@@ -1125,7 +1125,7 @@ int is_a_no(const char* cp)
 {
     const char* *list = &choices_no[0];
     while (*list) {
-        if (strcmp(cp,*list) == 0)
+        if (STRICMP(cp,*list) == 0)
             return 1;
         list++;
     }
@@ -1135,7 +1135,7 @@ int is_a_yes(const char* cp)
 {
     const char** list = &choices_yes[0];
     while (*list) {
-        if (strcmp(cp, *list) == 0)
+        if (STRICMP(cp, *list) == 0)
             return 2;
         list++;
     }
@@ -1145,7 +1145,16 @@ int is_a_yes(const char* cp)
 int set_degbug_strats(int c, char* arg)
 {
     std::string s = arg;
+    int onoff = 0;
     size_t pos = s.find('=');
+    const char* pSect = "Unknown";
+    const char* pAct = "Unknown";
+
+    if (c == 'D')
+        pSect = "Debug";
+    if (c == 'S')
+        pSect = "Strategies";
+
     if (pos != std::string::npos) {
         vSTR vs = split_string(s, "=");
         if (vs.size() == 2) {
@@ -1155,6 +1164,12 @@ int set_degbug_strats(int c, char* arg)
             if (!onoff)
                 onoff = is_a_no(of.c_str());
             if (onoff) {
+                // set the action ON or OFF
+                if (onoff == 2)
+                    pAct = "YES";
+                if (onoff == 1)
+                    pAct = "NO";
+
                 // we have something worth looking at
                 if (opt == "all") {
                     if (c == 'D') {
@@ -1169,19 +1184,116 @@ int set_degbug_strats(int c, char* arg)
                         else
                             Set_ALL_Strat_OFF(true);
                     }
-                    printf("%s: Arg '%s' option set %d\n", module, opt.c_str(), onoff);
+
+                    SPRTF("%s: Sect [%s] item '%s' set %s (%d)\n", module, pSect, opt.c_str(), pAct, onoff);
                     return onoff;
                 }
                 else {
                     if (Set_One_DS_opt(opt.c_str(), c, &onoff)) {
-                        printf("%s: Arg '%s' option set %d\n", module, opt.c_str(), onoff);
+                        SPRTF("%s: Sect [%s] item '%s' set %s (%d)\n", module, pSect, opt.c_str(), pAct, onoff);
                         return 1;
                     }
                 }
             }
         }
     }
-    printf("%s: Arg '%s' no split on '='! Or some other prob...\n", module, arg);
+    SPRTF("%s: Arg '%s' no split on '='! Or some other prob...\n", module, arg);
+    return 0;
+}
+
+int set_an_option(char* arg)
+{
+    std::string s = arg;
+    size_t pos = s.find('=');
+    if (pos != std::string::npos) {
+        vSTR vs = split_string(s, "=");
+        if (vs.size() == 2) {
+            std::string opt = vs[0];
+            std::string of = vs[1];
+            PINILST plst = Find_an_Options(opt.c_str());
+            if (plst) {
+                int i;
+                char* lpb = (char*)of.c_str();
+                unsigned int dwt = plst->i_Type;
+                char *pSect = plst->i_Sect;   // pointer to [section] name
+                char *pItem = plst->i_Item;   // pointer to item in section
+                char *pDef = plst->i_Deft;   // pointer to destination
+                int *pb = plst->i_Chg;    // pointer to CHANGE flag
+                int* pi;
+                int* pbd;
+                vSTG* vsp = 0;
+                switch (dwt) {
+                case it_String:
+                    if (strcmp(pDef, lpb)) {
+                        strcpy(pDef, lpb);
+                        *pb = TRUE;
+                        SPRTF("%s: Sect [Options], set item '%s' to '%s' - set change\n", module, opt.c_str(), lpb);
+                    }
+                    else {
+                        SPRTF("%s: Sect [Options], item '%s' already '%s'\n", module, opt.c_str(), lpb);
+                    }
+                    return 1;
+                    break;
+                case it_Int:   // also doubles as a DWORD in WIN32
+                    pi = (int*)pDef;
+                    i = (int)atoi(lpb);
+                    if (*pi != i) {
+                        *pi = i;
+                        *pb = TRUE;
+                        SPRTF("%s: Sect [Options], set item '%s' to '%d' - set change\n", module, opt.c_str(), i);
+                    }
+                    else {
+                        SPRTF("%s: Sect [Options], item '%s' already '%d' - no change\n", module, opt.c_str(), i);
+                    }
+                    return 1;
+                    break;
+                case it_Bool:
+                    pbd = (int*)pDef;
+                    if (is_a_yes(lpb)) {
+                        if (*pbd != TRUE) {
+                            *pbd = TRUE;
+                            *pb = TRUE;
+                            SPRTF("%s: Sect [Options], set item '%s' to TRUE - set change\n", module, opt.c_str());
+                        }
+                        else {
+                            SPRTF("%s: Sect [Options], item '%s' already TRUE - no change\n", module, opt.c_str());
+                        }
+                        return 1;
+
+                    } else if (is_a_no(lpb)) {
+                        if (*pbd != FALSE) {
+                            *pbd = FALSE;
+                            *pb = TRUE;
+                            SPRTF("%s: Sect [Options], set item '%s' to FALSE - set change\n", module, opt.c_str());
+                        }
+                        else {
+                            SPRTF("%s: Sect [Options], item '%s' already FALSE - no change\n", module, opt.c_str());
+                        }
+                        return 1;
+                    }
+                    break;
+                case it_WinSize: // // special WINDOWPLACEMENT
+                    break;
+                case it_Rect:
+                    break;
+                case it_Color:
+                    break;
+                case it_Double:
+                    break;
+                case it_Files: // 9   // vector<string> if files
+                    //vsp = (vSTG*)pDef;
+                    //vsp->push_back(of);
+                    //return 1;
+                    break;
+                default:
+                    break;
+                }
+            }
+
+        }
+    }
+
+    SPRTF("%s: Arg '%s' no split on '='! or some other prob...\n", module, arg);
     return 0;
 }
 
@@ -1213,7 +1325,7 @@ int parse_args( int argc, char **argv )
                     sarg = argv[i];
                     g_AutoDelay = atof(sarg);
                 } else {
-                    printf("%s: Expected a float value to follow '%s'!\n", module, arg);
+                    SPRTF("%s: Expected a float value to follow '%s'!\n", module, arg);
                     return 1;
                 }
                 break;
@@ -1239,31 +1351,45 @@ int parse_args( int argc, char **argv )
                     i++;
                     sarg = argv[i];
                     if (!set_degbug_strats(c, sarg)) {
-                        printf("%s: Failed to set the strategy '%s, like 'Naked Pairs=off' !\n", module, sarg);
+                        SPRTF("%s: Failed to set the strategy '%s, like 'Naked Pairs=off' !\n", module, sarg);
 
                     }
                 }
                 else {
-                    printf("%s: Expected a strategy, like 'Naked Pairs=off' to follow '%s'!\n", module, arg);
+                    SPRTF("%s: Expected a strategy, like 'Naked Pairs=off' to follow '%s'!\n", module, arg);
+                    return 1;
+                }
+                break;
+            case 'O':
+                if (i2 < argc) {
+                    i++;
+                    sarg = argv[i];
+                    if (!set_an_option(sarg)) {
+                        SPRTF("%s: Failed to set the option '%s, like 'ShowHints=off' !\n", module, sarg);
+
+                    }
+                }
+                else {
+                    SPRTF("%s: Expected an option, like 'ShowHints=off' to follow '%s'!\n", module, arg);
                     return 1;
                 }
                 break;
 
             // TODO: Other arguments
             default:
-                printf("%s: Unknown argument '%s'. Try -? for help...\n", module, arg);
+                SPRTF("%s: Unknown argument '%s'. Try -? for help...\n", module, arg);
                 return 1;
             }
         } else {
             // bear argument
             if (usr_input) {
-                printf("%s: Already have input '%s'! What is this '%s'?\n", module, usr_input, arg );
+                SPRTF("%s: Already have input '%s'! What is this '%s'?\n", module, usr_input, arg );
                 return 1;
             }
             if (is_file_or_directory(arg) == 1)
                 Reset_Active_File(arg);
             else {
-                printf("ERROR: Unable to 'stat' file\n'%s'\nCheck file name and location... aborting...",arg);
+                SPRTF("ERROR: Unable to 'stat' file\n'%s'\nCheck file name and location... aborting...",arg);
                 return 1;
             }
             usr_input = strdup(arg);
@@ -1540,7 +1666,6 @@ int main( int argc, char **argv )
 {
     int iret = 0;
     add_std_out(1);
-    add_sys_time(1);
     set_log_file("tempcon.txt");
     g_AutoDelay = 0.0001;  // was 0.02;
     ReadINI();
@@ -1556,6 +1681,7 @@ int main( int argc, char **argv )
             "and begin a thread to analyse the puzzle by BRUTE FORCE. Try each possible\n"
             "value for each blank cell, and report if the solution is UNIQUE!\n", module, usr_input );
     }
+    add_sys_time(1);
     if (Load_a_file( 0, (LPTSTR)usr_input )) {
         SLEEP(msSleep);
         iret = solve_the_Sudoku(); // action of the app
