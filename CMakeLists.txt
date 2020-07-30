@@ -254,6 +254,7 @@ if (BUILD_WIN32_EXE)
         ${dir}/Sudoku.hxx
         )
     add_executable( ${name} ${${name}_SRCS} ${${name}_HDRS} )
+    set_target_properties(${name} PROPERTIES COMPILE_FLAGS "-DADD_MSGBOX_IO" )
     if (add_LIBS)
         target_Link_libraries(${name} ${add_LIBS} )
     endif ()
