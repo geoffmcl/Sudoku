@@ -264,6 +264,8 @@ if (BUILD_WIN32_EXE)
     if (MSVC)
         set_target_properties(${name} PROPERTIES DEBUG_POSTFIX d )
     endif ()
+    # deal with install, if any...
+    install( TARGETS ${name} DESTINATION bin )
 endif ()
 
 if(BUILD_SUDOKUZ)
