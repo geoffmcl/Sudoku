@@ -243,6 +243,8 @@ if (BUILD_WIN32_EXE)
 else ()
     set_target_properties(${name} PROPERTIES OUTPUT_NAME Sudo-con)
 endif ()
+    # deal with install, if any...
+    install( TARGETS ${name} DESTINATION bin )
 
 if (BUILD_WIN32_EXE)
     set(name Sudo-con)
