@@ -198,6 +198,155 @@ VOID Do_MsgBox_OK(const char *msg)
     MB(msg);
 }
 
+
+
+/////////////////////////////////////////////////////////////////////////
+// 20120917 - Orig '#' started comment line, but add
+// '//' and ';' as comment lines
+#define MMX_OPTS    64
+#ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
+int ParseArgs(int, char**);
+#else
+int parse_args(int, char**);
+#endif 
+
+int Load_Input_File(char* file, struct stat* psb, int* pcnt = 0);
+
+
+int Load_Input_File(char* file, struct stat* psb, int *pcnt)
+{
+    if (pcnt) {
+        *pcnt = 0;
+    }
+    if (psb->st_size == 0)
+        return 0; // quietly IGNORE a zero length input file
+    FILE* fp = fopen(file, "rb");
+    if (!fp)
+        return 1;
+    int size = psb->st_size + 2;
+    char* pb = (char*)malloc(size + (sizeof(char*) * MMX_OPTS));
+    CHKMEM(pb);
+    int res = fread(pb, 1, psb->st_size, fp);
+    if (res != psb->st_size) {
+        fclose(fp);
+        return 0;
+    }
+    fclose(fp);
+    int i, c;
+    char* bgn = pb;
+    int off = 0;
+    int inquot = 0;
+    char* ptmp = pb;
+    char** argv = (char**)&pb[size];
+    int argc = 0;
+    int cnt = 0;
+    argv[argc++] = "dummy";
+    for (i = 0; i < res; i++) {
+        c = pb[i];
+        ptmp = &pb[i];
+        // remove leading...
+        if (off == 0) {
+            if (c == '\n') continue;
+            if (c == '\r') continue;
+            if ((c <= ' ') && (off == 0)) continue;
+            if ((c == '#') || (c == ';')) {
+                i++;
+                for (; i < res; i++) {
+                    c = pb[i];
+                    if (c == '\n') break;
+                    if (c == '\r') break;
+                }
+                continue;
+            }
+            else if ((c == '/') && ((i + 1) < res) && (pb[i + 1] == '/')) {
+                // skip until END OF LINE
+                i++;
+                for (; i < res; i++) {
+                    c = pb[i];
+                    if (c == '\n') break;
+                    if (c == '\r') break;
+                }
+                continue;
+            }
+        }
+
+        // accumulate
+        if ((c < ' ') || (c == '#')) {
+            // back off any white space
+ add_opt:
+            if (off) {
+                while (off--) {
+                    if (bgn[off] > ' ') {
+                        off++;
+                        break;
+                    }
+                    bgn[off] = 0;
+                }
+            }
+            if (c == '#') {
+                i++;
+                for (; i < res; i++) {
+                    c = pb[i];
+                    if (c == '\n') break;
+                    if (c == '\r') break;
+                }
+            }
+            off++;
+            argv[argc++] = bgn; // set begin of arg
+            bgn += off; // bump buffer
+            off = 0;    // restart offset
+            cnt++;
+        }
+        else if (c == ' ') {
+            if (inquot) {
+                bgn[off++] = (char)c;
+                bgn[off] = 0;
+            }
+            else
+                goto add_opt;
+        }
+        else if (c == '"') {
+            if (inquot)
+                inquot = 0;
+            else
+                inquot = 1;
+        }
+        else {
+            bgn[off++] = (char)c;
+            bgn[off] = 0;
+        }
+    }
+
+    // catch any last entry in file, which does NOT have a CR or LF trailing!!!
+    if (off) {
+        while (off--) {
+            if (bgn[off] > ' ')
+                break;
+            bgn[off] = 0;
+        }
+        if (off) {
+            argv[argc++] = bgn;
+            cnt++;
+        }
+    }
+
+    off = 0;
+    if (argc > 1) {
+        // quietly ignore no arguments
+#ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
+        off = ParseArgs(argc, argv);
+#else
+        off = parse_args(argc, argv);
+#endif 
+    }
+    free(pb);
+    if (pcnt) {
+        *pcnt = cnt;
+    }
+    return off;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////
 #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -216,8 +365,6 @@ LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
 long                Do_WM_INITMENUPOPUP( HWND hWnd, WPARAM wParam, LPARAM lParam );
 
-
-#define MMX_OPTS    64
 
 int ParseArgs(int argc, char **argv);
 
@@ -305,104 +452,6 @@ int attach_console()
     return iret;
 }
 
-
-
-/////////////////////////////////////////////////////////////////////////
-// 20120917 - Orig '#' started comment line, but add
-// '//' and ';' as comment lines
-
-int Load_Input_File(char *file, struct stat *psb)
-{
-    if (psb->st_size == 0)
-        return 0; // quietly IGNORE a zero length input file
-    FILE *fp = fopen(file,"r");
-    if (!fp)
-        return 1;
-    int size = psb->st_size + 2;
-    char *pb = (char *)malloc( size + (sizeof(char *) * MMX_OPTS));
-    CHKMEM(pb);
-    int res = fread(pb,1,psb->st_size,fp);
-    if (res == 0) {
-        fclose(fp);
-        return 0;
-    }
-    fclose(fp);
-    int i, c;
-    char *bgn = pb;
-    int off = 0;
-    char **argv = (char **)&pb[size];
-    int argc = 0;
-    argv[argc++] = "dummy";
-    for (i = 0; i < res; i++) {
-        c = pb[i];
-        if (off == 0) {
-            if (c == '\n') continue;
-            if (c == '\r') continue;
-            if ((c <= ' ')&&(off == 0)) continue;
-            if ((c == '#')||( c == ';')) {
-                i++;
-                for (; i < res; i++) {
-                    c = pb[i];
-                    if (c == '\n') break;
-                    if (c == '\r') break;
-                }
-                continue;
-            } else if ((c == '/')&&((i + 1) < res)&&(pb[i+1] == '/')) {
-                // skip until END OF LINE
-                i++;
-                for (; i < res; i++) {
-                    c = pb[i];
-                    if (c == '\n') break;
-                    if (c == '\r') break;
-                }
-                continue;
-            }
-        }
-        // accumulate
-        if (( c == '\n') || (c == '\r') || (c == '#')) {
-            // back off any white space
-            while(off--) {
-                if (bgn[off] > ' ')
-                    break;
-                bgn[off] = 0;
-            }
-            if (c == '#') {
-                i++;
-                for (; i < res; i++) {
-                    c = pb[i];
-                    if (c == '\n') break;
-                    if (c == '\r') break;
-                }
-            }
-            off++;
-            argv[argc++] = bgn; // set begin of arg
-            bgn += off; // bump buffer
-            off = 0;    // restart offset
-        } else {
-            bgn[off++] = (char)c;
-            bgn[off] = 0;
-        }
-    }
-
-    // catch any last entry in file, which does NOT have a CR or LF trainig!!!
-    if (off) {
-        while(off--) {
-            if (bgn[off] > ' ')
-                break;
-            bgn[off] = 0;
-        }
-        if (off)
-            argv[argc++] = bgn;
-    }
-
-    off = 0;
-    if (argc > 1) {
-        // quietly ignore no arguments
-        off = ParseArgs(argc, argv);
-    }
-    free(pb);
-    return off;
-}
 
 int ParseArgs(int argc, char **argv) 
 {
@@ -1041,13 +1090,14 @@ void give_help( char *name )
     printf("\n");
     printf("%s: usage: [options] usr_input\n", module);
     printf("Options:\n");
-    printf(" --help  (-h or -?) = This help and exit(2)\n");
+    printf(" --help   (-h or -?) = This help and exit(2)\n");
     // char szASD[] = "Auto_Solve_Delay_Seconds_as_float";
-    printf(" --verb[n]     (-v) = Bump or set verbosity. (def=%d)\n", verbosity);
-    printf(" --Version     (-V) = Show the version and exit(2)\n");
-    printf(" --delay float (-d) = Set Auto_Solve_Delay_Seconds_as_float. (def=%lf)\n", g_AutoDelay);
-    printf(" --D|S 'Opt=val'    = Set/Unset DEBUG or STRATEGIES. The option, Opt, can be 'all', or one per INI file.\n");
-    printf("  The val ON can be '1','y','t','yes','true','on', OFF 1 of '0','n','f','no','false','off'\n");
+    printf(" --verb[n]      (-v) = Bump or set verbosity. (def=%d)\n", verbosity);
+    printf(" --Version      (-V) = Show the version and exit(2)\n");
+    printf(" --delay float  (-d) = Set Auto_Solve_Delay_Seconds_as_float. (def=%lf)\n", g_AutoDelay);
+    printf(" --input <file> (-i) = Input command file of space sep. options. # begins comment.\n");
+    printf(" --D|S|O 'opt=val'  = Set/Unset Debug|Strategies|Option. The 'opt' is per the INI file. Can be 'all' for D|S.\n");
+    printf("  The val for /ON/ can be '1','y','t','yes','true','on', and /OFF/ 1 of '0','n','f','no','false','off', case ignored.\n");
     printf("\n");
     printf(" Given a Sudoku puzzle file input, read and auto solve the Sudoku.\n");
     printf(" The 'solution' will be compared to the 'brute force' solution, and\n");
@@ -1297,8 +1347,32 @@ int set_an_option(char* arg)
     return 0;
 }
 
+static int in_input = 0;
+
+int Con_Input_File(char *sarg, int *pir, int *pcnt)
+{
+    int iret = 0;
+    int res = -1;
+    if (!sarg || (!*sarg) || !pir || !pcnt) {
+        return 0;
+    }
+    if (is_file_or_directory(sarg) == 1) {
+        in_input++;
+        res = Load_Input_File(sarg, Get_Stat_Buf(), pcnt);
+        in_input--;
+        if (res) {
+            *pir = res;
+        }
+        iret = 1;
+    }
+
+    return iret;
+}
+
+
 int parse_args( int argc, char **argv )
 {
+    int iret = 0;
     int i,i2,c;
     char *arg, *sarg;
     for (i = 1; i < argc; i++) {
@@ -1319,6 +1393,30 @@ int parse_args( int argc, char **argv )
                 give_help(argv[0]);
                 return 2;
                 break;
+            case 'i':
+                if (i2 < argc) {
+                    i++;
+                    sarg = argv[i];
+                    if (Con_Input_File(sarg, &iret, &i2)) {
+                        if (iret) {
+                            SPRTF("%s: Loaded Input File '%s %s', %d args, got exit(%d).\n", module, arg, sarg, i2, iret);
+                            return iret;
+                        }
+                        else {
+                            SPRTF("%s: Loaded Input File '%s %s', %d args, ok...\n", module, arg, sarg, i2);
+                        }
+                    }
+                    else {
+                        SPRTF("%s: Input file load '%s %s', %d args, FAILED!\n", module, arg, sarg, i2);
+                        return 1;
+                    }
+                }
+                else {
+                    SPRTF("%s: Expected a float value to follow '%s'!\n", module, arg);
+                    return 1;
+                }
+                break;
+
             case 'd':
                 if (i2 < argc) {
                     i++;
@@ -1395,6 +1493,9 @@ int parse_args( int argc, char **argv )
             usr_input = strdup(arg);
         }
     }
+
+    if (in_input)
+        return 0;   // no probs so far
 #ifndef NDEBUG
     if (!usr_input) {
         const char *def_file = DEF_FILE;
@@ -1429,7 +1530,7 @@ int parse_args( int argc, char **argv )
     if (VERB9) {
         Set_ALL_Dbg_ON();
     }
-    return 0;
+    return iret;
 }
 
 DWORD msSleep = 55; // a very short time

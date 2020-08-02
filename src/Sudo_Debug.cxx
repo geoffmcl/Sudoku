@@ -198,10 +198,12 @@ VOID Set_ALL_Dbg_ON(BOOL markchg)
     while (plist->pcaption) {
         int *pi = plist->pdebug;
         PBOOL pb = plist->pchg;
-        if (!*pi) {
-            *pi = 1;
-            if (markchg)
-                *pb = TRUE;
+        if (pi) {
+            if (!*pi) {
+                *pi = 1;
+                if (markchg)
+                    *pb = TRUE;
+            }
         }
         plist++;
     }
@@ -213,10 +215,12 @@ VOID Set_ALL_Dbg_OFF(BOOL markchg)
     while (plist->pcaption) {
         int *pi = plist->pdebug;
         PBOOL pb = plist->pchg;
-        if (*pi) {
-            *pi = 0;
-            if (markchg)
-                *pb = TRUE;
+        if (pi) {
+            if (*pi) {
+                *pi = 0;
+                if (markchg)
+                    *pb = TRUE;
+            }
         }
         plist++;
     }
@@ -228,10 +232,12 @@ VOID Set_ALL_Strat_ON(BOOL markchg)
     while (plist->pcaption) {
         int* pi = plist->penab;
         PBOOL pb = plist->pchgd;
-        if (!*pi) {
-            *pi = 1;
-            if (markchg)
-                *pb = TRUE;
+        if (pi) {
+            if (!*pi) {
+                *pi = 1;
+                if (markchg && pb)
+                    *pb = TRUE;
+            }
         }
         plist++;
     }
@@ -243,10 +249,12 @@ VOID Set_ALL_Strat_OFF(BOOL markchg)
     while (plist->pcaption) {
         int* pi = plist->penab;
         PBOOL pb = plist->pchgd;
-        if (*pi) {
-            *pi = 0;
-            if (markchg)
-                *pb = TRUE;
+        if (pi) {
+            if (*pi) {
+                *pi = 0;
+                if (markchg && pb)
+                    *pb = TRUE;
+            }
         }
         plist++;
     }
@@ -260,7 +268,7 @@ int Set_One_DS_opt(const char* opt, int DorS, int *pint)
         while (plist->pcaption) {
             if (strcmp(plist->pcaption, opt) == 0)
             {
-                int* pi;
+                int* pi = 0;
                 PBOOL pb;
                 if (DorS == 'S') {
                     pi = plist->penab;
@@ -270,23 +278,25 @@ int Set_One_DS_opt(const char* opt, int DorS, int *pint)
                     pi = plist->pdebug;
                     pb = plist->pchg;
                 }
-                if (onoff == 2) {
-                    // YES
-                    if (!*pi) {
-                       *pi = 1;
-                       *pb = TRUE;
-                       onoff += 10;
+                if (pi) {
+                    if (onoff == 2) {
+                        // YES
+                        if (!*pi) {
+                            *pi = 1;
+                            *pb = TRUE;
+                            onoff += 10;
+                        }
                     }
-                }
-                else {
-                    // NO
-                    if (*pi) {
-                        *pi = 0;
-                        *pb = TRUE;
-                        onoff += 20;
+                    else {
+                        // NO
+                        if (*pi) {
+                            *pi = 0;
+                            *pb = TRUE;
+                            onoff += 20;
+                        }
                     }
+                    *pint = onoff;
                 }
-                *pint = onoff;
                 return onoff;
 
             }

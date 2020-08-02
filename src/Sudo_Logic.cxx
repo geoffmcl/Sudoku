@@ -4513,28 +4513,29 @@ int Do_Simple_Scan(PABOX2 pb)
 }
 
 /* -----------------------------------------------
-    { "Naked Pairs",IDC_CHECK1, &add_debug_np, &bChgDNP      , Do_Naked_Pairs, &Do_NP, &Chg_NP          },  // 0
-    { "Color Scan",IDC_CHECK2,  &add_debug_cs2, &bChgDCS2    , Do_Color_Scan2, &Do_CS2, &Chg_CS2        },  // 1
-    { "Pointing Pairs",IDC_CHECK3,&add_debug_PP2, &bChgDPP2  , Do_Pointing_Pairs, &Do_PP, &Chg_PP       },  // 2
-    { "Locked Exclusion",IDC_CHECK4,&add_debug_lk, &bChgDLK  , Do_Locked_Excl, &Do_LE, &Chg_LE          },  // 3
-    { "X-Wings",IDC_CHECK5,&add_debug_xw, &bChgDXW           , Do_XWing_Scan, &Do_XW, &Chg_XW           },  // 4
-    { "Y-Wings",IDC_CHECK6,&add_debug_yw, &bChgDYW           , Do_YWing_Scan, &Do_YW, &Chg_YW           },  // 5
-    { "Unique Rectangle",IDC_CHECK7,&add_debug_ur, &bChgDUR  , Do_UniqRect_Scan, &Do_UR, &Chg_UR        },  // 6
-    { "X-Cycles",IDC_CHECK8,&add_debug_xc, &bChgDXC          , Do_XCycles_Scan, &Do_XC, &Chg_XC         },  // 7
-    { "Hidden Triples",IDC_CHECK9,&add_debug_ht, &bChgDHT    , Do_Hidden_Triple_Scan, &Do_HT, &Chg_HT   },  // 8
-    { "XY-Chains",IDC_CHECK10,&add_debug_xy, &bChgDXY        , Do_XY_Chains, &Do_XY, &Chg_XY            },  // 9
-    { "Strong Links",IDC_CHECK11,&add_debug_sl, &bChgDSL     , Do_Strong_Links_Scan, &Do_SL, &Chg_SL    },  // 10
-    { "Strong Links 2",IDC_CHECK12,&add_debug_sl2, &bChgDSL2 , Do_Strong_Links2_Scan, &Do_SL2, &Chg_SL2 },  // 11
-    { "Fill by Flags",IDC_CHECK13,&add_debug_ff, &bChgDFF    , 0, 0, 0                                  },  // 12
-    { "Paint Rect. Fill",IDC_CHECK14,&add_debug_pfr,&bChgPFR , 0, 0, 0                                  },  // 13
-    { "X-Cycles 3",IDC_CHECK15,&add_debug_xc3, &bChgDXC3     , Do_XCycles_Scan3, &Do_XC3, &Chg_XC3      },  // 14
-    { "Paint XY-Chains 2",IDC_CHECK16,&add_debug_pxy2, &bChgPXY2, 0, 0, 0                               },  // 15
-    { "AIC",IDC_CHECK17,&add_debug_aic, &bChgDAIC            , Do_AIC_Scans, &Do_AIC, &Chg_AIC          },  // 16
-    { "Paint AIC",IDC_CHECK18,&add_debug_paic, &bChgPAIC     , 0, 0, 0                                  },  // 17
-    { "XYZ-Scan",IDC_CHECK19,&add_debug_xyz, &bChgDXYZ       , Do_XYZ_Wings, &Do_XYZ, &Chg_XYZ          },  // 18
-    { "Strong Links 3",IDC_CHECK20,&add_debug_sl3, &bChgDSL3 , Do_Strong_Link3_Scan, &Do_SL3, &Chg_SL3  },  // 19
-    { "Unique Rects 2",IDC_CHECK21,&add_debug_ur2, &bChgDUR2 , Do_UniqRect2_Scan, &Do_UR2, &Chg_UR2     },  // 20
-    { "Hidden Pairs",IDC_CHECK22,&add_debug_hp, &bChgHP      , Do_Hidden_Pairs, &Do_HP, &Chg_HP         },  // 21
+ //   { "Naked Pairs",IDC_CHECK1, &add_debug_np, &bChgDNP      , Do_Naked_Pairs, &Do_NP, &Chg_NP          },  // 0
+ //   { "Color Scan",IDC_CHECK2,  &add_debug_cs2, &bChgDCS2    , Do_Color_Scan2, &Do_CS2, &Chg_CS2        },  // 1
+ //   { "Pointing Pairs",IDC_CHECK3,&add_debug_PP2, &bChgDPP2  , Do_Pointing_Pairs, &Do_PP, &Chg_PP       },  // 2
+ //   { "Locked Exclusion",IDC_CHECK4,&add_debug_lk, &bChgDLK  , Do_Locked_Excl, &Do_LE, &Chg_LE          },  // 3
+ //   { "X-Wings",IDC_CHECK5,&add_debug_xw, &bChgDXW           , Do_XWing_Scan, &Do_XW, &Chg_XW           },  // 4
+ //   { "Y-Wings",IDC_CHECK6,&add_debug_yw, &bChgDYW           , Do_YWing_Scan, &Do_YW, &Chg_YW           },  // 5
+ //   { "Unique Rectangle",IDC_CHECK7,&add_debug_ur, &bChgDUR  , Do_UniqRect_Scan, &Do_UR, &Chg_UR        },  // 6
+ //   { "X-Cycles",IDC_CHECK8,&add_debug_xc, &bChgDXC          , Do_XCycles_Scan, &Do_XC, &Chg_XC         },  // 7
+ //   { "Hidden Triples",IDC_CHECK9,&add_debug_ht, &bChgDHT    , Do_Hidden_Triple_Scan, &Do_HT, &Chg_HT   },  // 8
+ //   { "XY-Chains",IDC_CHECK10,&add_debug_xy, &bChgDXY        , Do_XY_Chains, &Do_XY, &Chg_XY            },  // 9
+ //   { "Strong Links",IDC_CHECK11,&add_debug_sl, &bChgDSL     , Do_Strong_Links_Scan, &Do_SL, &Chg_SL    },  // 10
+ //   { "Strong Links 2",IDC_CHECK12,&add_debug_sl2, &bChgDSL2 , Do_Strong_Links2_Scan, &Do_SL2, &Chg_SL2 },  // 11
+ //   { "Fill by Flags",IDC_CHECK13,&add_debug_ff, &bChgDFF    , 0, 0, 0                                  },  // 12
+ //   { "Paint Rect. Fill",IDC_CHECK14,&add_debug_pfr,&bChgPFR , 0, 0, 0                                  },  // 13
+ //   { "X-Cycles 3",IDC_CHECK15,&add_debug_xc3, &bChgDXC3     , Do_XCycles_Scan3, &Do_XC3, &Chg_XC3      },  // 14
+ //   { "Paint XY-Chains 2",IDC_CHECK16,&add_debug_pxy2, &bChgPXY2, 0, 0, 0                               },  // 15
+ //   { "AIC",IDC_CHECK17,&add_debug_aic, &bChgDAIC            , Do_AIC_Scans, &Do_AIC, &Chg_AIC          },  // 16
+ //   { "Paint AIC",IDC_CHECK18,&add_debug_paic, &bChgPAIC     , 0, 0, 0                                  },  // 17
+ //   { "XYZ-Scan",IDC_CHECK19,&add_debug_xyz, &bChgDXYZ       , Do_XYZ_Wings, &Do_XYZ, &Chg_XYZ          },  // 18
+ //    { "Strong Links 3",IDC_CHECK20,&add_debug_sl3, &bChgDSL3 , Do_Strong_Link3_Scan, &Do_SL3, &Chg_SL3  },  // 19
+ //   { "Unique Rects 2",IDC_CHECK21,&add_debug_ur2, &bChgDUR2 , Do_UniqRect2_Scan, &Do_UR2, &Chg_UR2     },  // 20
+ //   { "Hidden Pairs",IDC_CHECK22,&add_debug_hp, &bChgHP      , Do_Hidden_Pairs, &Do_HP, &Chg_HP         },  // 21
+
    ----------------------------------------------- */
 
 // This could be done run per the above TABLE
@@ -4590,15 +4591,16 @@ int Do_Stage_Two(PABOX2 pb)
     if (!count && Do_AIC) {
         count = Do_AIC_Scans(pb);
     }
-    if (!count && Do_XYZ) {
-        count = Do_XYZ_Wings(pb);
+    if (!count && Do_XYZ) { // -S "XYZ-Scan=1|0"
+        count = Do_XYZ_Wings(pb); // Warning: XYZ: ...deletion!
     }
     if (!count && Do_UR) {
         count = Do_UniqRect_Scan(pb);
     }
     if (!count && Do_CS2) {
 #ifdef USE_COLOR2_SCAN
-        count = Do_Color_Scan2(pb);
+        count = Do_Color_Scan2(pb); // chain  Mark_Color2_Elims -> Mark_Color_Rule_1 -> set_color2_elim_cand -> 
+        // sprtf("Warning: Color2: Candidate %s marked for deletion!\n", ...); if (treat_color2_warn_as_error) {
 #else // !USE_COLOR2_SCAN
         count = Do_Color_Scan(pb);
 #endif // USE_COLOR2_SCAN y/n
