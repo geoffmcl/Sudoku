@@ -1,0 +1,9 @@
+
+# 20200801: some elimination experiments...
+
+# -S "XYZ-Scan=OFF" -S "Color Scan=OFF" -O "ShowHints=NO" -S "AIC=off" -D "all=off" 
+
+-S all=ON -D all=ON
+
+..\examples\diabolical.txt
+ 
