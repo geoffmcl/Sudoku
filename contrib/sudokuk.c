@@ -67,7 +67,7 @@ static int assignConstraints(void)
         const struct constraint* s = constraints + k;
         for (i = 0; i < 9; ++i) {
             uchar p = s->loc[i];
-            assigned[p][mapped[p]++] = k;
+            assigned[p][mapped[p]++] = (uchar)k;
         }
     }
     for (i = 0; i < 81; ++i) {
@@ -118,11 +118,11 @@ static int readBoard(char *file)
         for(i=0; i<9; ++i) {
             c = board[s->loc[i]];
             if(!c) continue;
-            if(used[c]) { 
+            if(used[c] != (uchar)0) { 
                 fprintf(stderr, "file '%s', constraint violated, value %c, col %d, %s\n", file, (c + '0'), (i+1), s->name );
                 return 1;
             }
-            used[c] = 1;
+            used[c] = (uchar)1;
         }
     }
     return 0;
@@ -160,6 +160,7 @@ static int place(int lev)
     if (lev > max_lev)
         max_lev = lev;
     iter_cnt++;
+    bestloc = 0;
     // find best location
     for (i = 0; i < 81; ++i) {
         if (board[i]) continue; // already placed
