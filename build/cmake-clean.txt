@@ -4,4 +4,5 @@ Sudo-con
 libOpenSudoku.a
 bldlog-u.txt
 bldlog-u.txt.bak
+solve-it
 

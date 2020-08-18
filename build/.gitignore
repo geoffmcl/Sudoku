@@ -22,4 +22,5 @@ libOpenSudoku.a
 .vs/*
 x64/*
 install_manifest.txt
+solve-it
 
