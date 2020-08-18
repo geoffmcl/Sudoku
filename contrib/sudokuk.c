@@ -60,7 +60,7 @@ const char *name;
 static uchar assigned[81][4];
 static int assignConstraints(void)
 {
-    char mapped[81];
+    uchar mapped[81];
     int k, i;
     memset(mapped, 0, sizeof(mapped));
     for (k = 0; k < 27; ++k) {
@@ -84,7 +84,7 @@ static char ascboard[100]; // copy of input
 
 static int readBoard(char *file)
 {
-    char c;
+    uchar c;
     int i, k;
     FILE* fp = fopen(file, "rb");
     if (!fp) {
