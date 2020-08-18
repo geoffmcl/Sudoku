@@ -286,6 +286,8 @@ if(BUILD_SUDOKUZ)
     if (MSVC)
         set_target_properties(${name} PROPERTIES DEBUG_POSTFIX d )
     endif ()
+    # deal with install, if any...
+    install( TARGETS ${name} DESTINATION bin )
 endif(BUILD_SUDOKUZ)
 
 # deal with install, if required
@@ -296,5 +298,23 @@ endif(BUILD_SUDOKUZ)
 # install(TARGETS ${inst_BINS} DESTINATION bin)
 # install(FILES ${inst_HDRS} DESTINATION include)
 
+# 20200818 - contibuted by Karl Dahlke
+set(name solve-it)
+set(dir contrib)
+set( ${name}_SRCS
+    ${dir}/sudokuk.c
+    )
+add_executable( ${name} ${${name}_SRCS} )
+if (add_LIBS)
+    target_Link_libraries(${name} ${add_LIBS} )
+endif ()
+if (NOT WIN32)
+    target_Link_libraries(${name} ${CMAKE_THREAD_LIBS_INIT})
+endif ()
+if (MSVC)
+    set_target_properties(${name} PROPERTIES DEBUG_POSTFIX d )
+endif ()
+# deal with install, if any...
+install( TARGETS ${name} DESTINATION bin )
 
 # eof
