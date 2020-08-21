@@ -300,7 +300,7 @@ endif(BUILD_SUDOKUZ)
 
 # 20200818 - contibuted by Karl Dahlke
 set(name sudoku-k)
-set(dir contrib)
+set(dir contrib/Karl)
 set( ${name}_SRCS
     ${dir}/${name}.c
     )
