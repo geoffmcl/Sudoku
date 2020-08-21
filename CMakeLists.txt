@@ -299,10 +299,10 @@ endif(BUILD_SUDOKUZ)
 # install(FILES ${inst_HDRS} DESTINATION include)
 
 # 20200818 - contibuted by Karl Dahlke
-set(name solve-it)
+set(name sudoku-k)
 set(dir contrib)
 set( ${name}_SRCS
-    ${dir}/sudokuk.c
+    ${dir}/${name}.c
     )
 add_executable( ${name} ${${name}_SRCS} )
 if (add_LIBS)
