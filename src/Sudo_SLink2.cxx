@@ -25,10 +25,32 @@ static int only_one_sl = 1;
 
 static char *stgstg = (char *)"ssl";
 
-static vRC SL_Scans2[9];
-static vRCP SL_FL_Pairs[9];
+static vRC* SL_Scans2[9] = { 0 }; // blank array
+static vRCP* SL_FL_Pairs[9] = { 0 }; // blank array
 static int curr_SL_setval = 0;
 int Get_SL_setval() { return curr_SL_setval; }
+
+void init_SLinks()
+{
+    for (int i = 0; i < 9; i++) {
+        SL_Scans2[i] = new vRC;   // init vRC
+        SL_FL_Pairs[i] = new vRCP;  // init vRCP
+    }
+}
+
+void delete_SLinks()
+{
+    for (int i = 0; i < 9; i++) {
+        if (SL_Scans2[i])
+            delete SL_Scans2[i];
+        SL_Scans2[i] = 0;
+        if (SL_FL_Pairs[i])
+            delete SL_FL_Pairs[i];
+        SL_FL_Pairs[i] = 0;
+    }
+}
+
+
 int Set_SL_invalid(int val) 
 {
     int curr = curr_SL_setval;
@@ -39,13 +61,13 @@ vRC *Get_SL_Chain_for_setval( int setval )
 {
     if (!VALUEVALID(setval))
         return 0;
-    return &SL_Scans2[setval - 1];
+    return SL_Scans2[setval - 1];
 }
 vRCP *Get_SL_FL_Pairs_for_setval( int setval )
 {
     if (!VALUEVALID(setval))
         return 0;
-    return &SL_FL_Pairs[setval - 1];
+    return SL_FL_Pairs[setval - 1];
 }
 
 void Show_RC_SL_Chain2(vRC * vprc, int setval, char *type)
@@ -53,20 +75,25 @@ void Show_RC_SL_Chain2(vRC * vprc, int setval, char *type)
     size_t ii;
     size_t max = vprc->size();
     PROWCOL prc;
-    bool onoff;
+    //bool onoff;
     char *tb = GetNxtBuf();
     const char *lnktyp;
     uint64_t flg, lflg;
     sprintf(tb,"%s: ",type);
-    onoff = true;
-    for (ii = 0; ii < max; ii++) {
-        prc = &vprc->at(ii);
-        Append_RC_Settings( tb, prc, setval );
-        flg = prc->set.flag[setval - 1];
-        lflg = (flg & cl_SLA); // isolate LINK type - same both ends
-        lnktyp = (lflg & cl_SLA) ? stglnk : weklnk;
-        if ((ii + 1) < max)
-            strcat(tb,lnktyp);
+    //onoff = true;
+    if (max) {
+        for (ii = 0; ii < max; ii++) {
+            prc = &vprc->at(ii);
+            Append_RC_Settings(tb, prc, setval);
+            flg = prc->set.flag[setval - 1];
+            lflg = (flg & cl_SLA); // isolate LINK type - same both ends
+            lnktyp = (lflg & cl_SLA) ? stglnk : weklnk;
+            if ((ii + 1) < max)
+                strcat(tb, lnktyp);
+        }
+    }
+    else {
+        strcat(tb, "<none>");
     }
     OUTIT(tb);
 }
@@ -100,7 +127,7 @@ int Check_SL_for_Elims(PABOX2 pb, vRC *pvrc, int setval)
     max2 = vint.size();
     sprintf(EndBuf(tb),"Total %d chains", (int)max2);
     OUTITSL2(tb);
-    SL_FL_Pairs[setval-1].clear();
+    vRCP* pvrcp = Get_SL_FL_Pairs_for_setval(setval);  // SL_FL_Pairs[setval-1].clear();
     for (jj = 0; jj < max2; jj++) {
         i = vint[jj];
         ch_num = (time_t)i;
@@ -180,7 +207,9 @@ int Check_SL_for_Elims(PABOX2 pb, vRC *pvrc, int setval)
             RCPAIR rcpair;
             rcpair.rowcol[0] = *prcf;
             rcpair.rowcol[1] = *prcl;
-            SL_FL_Pairs[setval-1].push_back(rcpair);
+            if (pvrcp) { //SL_FL_Pairs[setval - 1]->push_back(rcpair);
+                pvrcp->push_back(rcpair);
+            }
         } else {
             strcat(tb,"None");
         }
@@ -434,14 +463,30 @@ int Scan_Strong_Links_by_setval( PABOX2 pb, int setval )
         }
     }
     if (add_debug_sl2) {
-        sprtf("Have SL %d chains, with %d cells\n", (int)ch_num, count);
+        sprtf("Setval %d: Have SL %d chains, with %d cells\n", setval, (int)ch_num, count);
         Show_RC_SL_Chain2(pvrc, setval,"SL-Chain: before sort");
     }
-    vRC *pvrc2 = Get_SL_Chain_for_setval(setval);
+    if (!count)
+        return 0;   // found NO strong links
+
+    vRC* pvrc2 = Get_SL_Chain_for_setval(setval);
+
+    if (!pvrc2) {
+        sprtf("WARNING: Setval %d: SLink has not been initialized!\n", setval);
+        return 0;
+    }
+
+    pvrc2->clear();
+
     //  Sort into contin   SRC   DST
     Sort_RC_SL_Chain2( pb, pvrc, pvrc2, setval );
     // Got CHAIN in correct ORDER
     if (add_debug_sl2) Show_RC_SL_Chain2(pvrc2, setval,"SL-Chain: after sort");
+    if (!pvrc2->size()) {
+        sprtf("Warning: Setval %d: Sort_RC_SL_Chain2 FAILED\n", setval);
+        return 0;
+    }
+
     val = Check_SL_for_Elims(pb, pvrc2, setval);
     if (val) {
         if (add_debug_sl2) sprtf("SL Scan elim %d\n",val);

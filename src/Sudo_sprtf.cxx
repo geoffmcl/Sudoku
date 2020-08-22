@@ -24,7 +24,7 @@
 #define MX_ONE_BUF 1024
 #endif
 #ifndef MX_BUFFERS
-#define MX_BUFFERS 1024
+#define MX_BUFFERS 2048
 #endif
 
 static char _s_strbufs[MX_ONE_BUF * MX_BUFFERS];

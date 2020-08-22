@@ -11,7 +11,7 @@ int only_one_sl3 = 1;
 #define sl3_elim cf_CCE
 #define sl3_mark cf_CC
 
-vRCP added_pairs;    // piars added during LINK scan and elim scan
+static vRCP* added_pairs = 0;    // pairs added during LINK scan and elim scan
 
 int Show_RCP_Pairs3( vRCP *psrc, char *type )
 {
@@ -195,10 +195,10 @@ int Process_SL_Colored_Pairs_for_Elims_per_ch_num3(PABOX2 pb, int setval, vRCP *
                         elimby.push_back(*prcc);
                         rcpair.rowcol[0] = *prc;
                         rcpair.rowcol[1] = *prcr;
-                        added_pairs.push_back(rcpair);
+                        added_pairs->push_back(rcpair);
                         rcpair.rowcol[0] = *prc;
                         rcpair.rowcol[1] = *prcc;
-                        added_pairs.push_back(rcpair);
+                        added_pairs->push_back(rcpair);
                         sprintf(tb,"RC Chk %s facing R=%d C=%d B=%d ",  Get_RC_setval_RC_Stg(prc,setval),
                             (int)maxr, (int)maxc, (int)maxb);
                         sprintf(EndBuf(tb),"elim by %s & %s",Get_RC_setval_color_Stg(prcr,setval),
@@ -678,8 +678,8 @@ int Mark_All_Pairs_linked_with_this_pair3( PABOX2 pb, int setval, vRCP *pp,
                 rcpair.rowcol[0].set.flag[lval] &= ~(cl_SLA);
                 rcpair.rowcol[1].set.flag[lval] &= ~(cl_SLA);
                 // and KEEP this WEAK link
-                if (!prcp_in_pvrcp(&rcpair,pp) && !prcp_in_pvrcp(&rcpair,&added_pairs))
-                    added_pairs.push_back(rcpair);
+                if (added_pairs && !prcp_in_pvrcp(&rcpair,pp) && !prcp_in_pvrcp(&rcpair,added_pairs))
+                    added_pairs->push_back(rcpair);
             }
         }
     }
@@ -733,7 +733,10 @@ int Mark_SL_Pairs3(PABOX2 pb, int setval, vRCP *pp)
     if (add_debug_sl2)
         Show_SL_Colored_Pair_Chains( pb, setval, pp );
 
-    added_pairs.clear();  // clear ADDITIONAL links
+    if (added_pairs == 0) {
+        added_pairs = new vRCP;
+    }
+    added_pairs->clear();  // clear ADDITIONAL links
     // Clear ALL color flags
     // =====================
     sprintf(tb,"Strong Links %d: ", (int)max);
@@ -993,10 +996,12 @@ int Mark_SL_Pairs3(PABOX2 pb, int setval, vRCP *pp)
     if (add_debug_sl2)
         Show_SL_Colored_Pair_Chains( pb, setval, pp );
     count = Process_SL_Colored_Pairs_for_Elims3(pb, setval, pp);
-    max = added_pairs.size();
+    max = added_pairs->size();
     if (count && max) {
-        for (ii = 0; ii < max; ii++)
-            pp->push_back(added_pairs[ii]);
+        for (ii = 0; ii < max; ii++) {
+            RCPAIR rcp = added_pairs->at(ii);
+            pp->push_back(rcp);
+        }
     }
 
     return count;

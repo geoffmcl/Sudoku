@@ -25,7 +25,7 @@ extern int Set_SL_invalid(int val); // 1-9 valid otherwise INVLAID
 extern vRC *Get_SL_Chain_for_setval( int setval );
 //extern int Scan_Strong_Links_by_setval( PABOX2 pb, int setval );
 extern int Mark_Strong_Link_for_setval( PABOX2 pb, int setval );
-extern vRCP *Get_SL_FL_Pairs_for_setval( int setval );
+extern vRCP* Get_SL_FL_Pairs_for_setval(int setval); // return NULL if not init_SLink();
 
 // =======================================
 

@@ -133,6 +133,7 @@ void add_app_begin()
         sprtf("Get workarea FAILED!\n");
     }
 #endif // #ifdef BUILD_WIN32_EXE // WIN32 GUI EXE
+    init_SLinks();
 }
 
 void add_app_end()
@@ -148,6 +149,7 @@ void add_app_end()
     char *log = get_log_file();
     sprtf("End Application. Ran for %s. log %s\n", InApptmr.getTimeStg(), log);
     add_sys_time(curr);         // retore adding time to message output
+    delete_SLinks();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////

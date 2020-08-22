@@ -65,7 +65,7 @@ typedef struct tagXYSTR {
     uint64_t last_lnk_flg;
     vINT vsetvals;
     int level;
-    char dbg_buf[1024];
+    //char dbg_buf[1024]; // UGH! Found buffer OVERRUN, so remove it
 }XYSTR, *PXYSTR;
 
 static vRC curr_act_chain;
@@ -417,7 +417,7 @@ int Follow_XY_Chain(PXYSTR pxystr)
     int ccnt       = pxystr->count;
     vINT *pvsv     = &pxystr->vsetvals;
     int level      = pxystr->level;
-    char *tsb      = &pxystr->dbg_buf[0];
+    // char *tsb      = &pxystr->dbg_buf[0];
     size_t ii;
     PROWCOL prc;
     PSET ps;
@@ -467,8 +467,8 @@ int Follow_XY_Chain(PXYSTR pxystr)
             sprintf(tb,"Cont %d %s-%s ", level + 1,
                 Get_RC_setval_RC_Stg(prc, nxt_setval),
                 Get_RC_setval_RC_Stg(prc,nxtval) );
-            strcat(tsb,tb);
-            sprintf(EndBuf(tsb)," EOC %d", level + 1);
+            //strcat(tsb,tb);
+            sprintf(EndBuf(tb)," EOC %d", level + 1);
 #ifdef DO_IMMEDIATE_ELIM
             OUTITXY(tb);
             count += Test_XY_Chain_for_Elims( pxystr );
@@ -481,7 +481,7 @@ int Follow_XY_Chain(PXYSTR pxystr)
             sprintf(tb,"Cont %d %s-%s ", level + 1,
                 Get_RC_setval_RC_Stg(prc, nxt_setval),
                 Get_RC_setval_RC_Stg(prc,nxtval) );
-            strcat(tsb,tb);
+            //strcat(tsb,tb);
             OUTITXY(tb);
             pxystr->level = level + 1;
             ret = Follow_XY_Chain( pxystr );
@@ -489,10 +489,10 @@ int Follow_XY_Chain(PXYSTR pxystr)
         if (ret == END_OF_CHAIN) {
             if (*tb)
                 strcat(tb," EOC");
-            if (*tsb)
-                sprintf(EndBuf(tsb)," EOC %d", level + 1);
+            //if (*tsb)
+            //    sprintf(EndBuf(tsb)," EOC %d", level + 1);
             OUTITXY(tb);
-            OUTITXY(tsb);
+            //OUTITXY(tsb);
             return END_OF_CHAIN;
         } else {
             pxystr->nxt_setval = pxystr->prev_setval;
@@ -502,7 +502,7 @@ int Follow_XY_Chain(PXYSTR pxystr)
             pvsv->pop_back();   // FIX20120923 - KICK off LAST
             sprintf(tb,"Drop %s-%s ", Get_RC_setval_RC_Stg(prc, nxt_setval),
                     Get_RC_setval_RC_Stg(prc,nxtval) );
-            sprintf(EndBuf(tsb),"%s %d ", tb, level + 1);
+            //sprintf(EndBuf(tsb),"%s %d ", tb, level + 1);
             OUTITXY(tb);
         }
     }
@@ -646,7 +646,7 @@ int Mark_XY_Chain( PABOX2 pb, int setval, vRC &empty, PRCRCB prcrcb, PRCRCB prcr
                     Get_RC_setval_RC_Stg(prc,nxtval) );
                 sprintf(EndBuf(tb),"<->%s-%s ", Get_RC_setval_RC_Stg(prc2, nxtval),
                     Get_RC_setval_RC_Stg(prc2,xystr.nxt_setval) );
-                strcpy(xystr.dbg_buf,tb); // Being the DIAG string
+                //strcpy(xystr.dbg_buf,tb); // Being the DIAG string
                 OUTITXY(tb);
                 xystr.level = 0; // start the LEVEL counter
                 ret = Follow_XY_Chain(&xystr);
