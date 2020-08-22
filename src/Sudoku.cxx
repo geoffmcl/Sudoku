@@ -1449,8 +1449,8 @@ int parse_args( int argc, char **argv )
                     i++;
                     sarg = argv[i];
                     if (!set_degbug_strats(c, sarg)) {
-                        SPRTF("%s: Failed to set the strategy '%s, like 'Naked Pairs=off' !\n", module, sarg);
-
+                        SPRTF("%s: Failed to set the strategy '%s', like 'Naked Pairs=off'!\n", module, sarg);
+                        return 1;
                     }
                 }
                 else {
