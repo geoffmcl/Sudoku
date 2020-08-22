@@ -1347,9 +1347,9 @@ void Write_Temp_File()
         opts |= sff_NO_ADD_CSV;
     }
     if (ok) {
-        sprtf("Current written to [%s] opts %d\n",pf,opts);
+        sprtf("Current written to [%s] opts 0x%X\n", pf, opts);
     } else {
-        sprtf("Failed to create [%s] opts %d\n",pf,opts);
+        sprtf("Failed to create [%s] opts 0x%X\n", pf, opts);
     }
 }
 
