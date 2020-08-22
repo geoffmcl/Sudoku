@@ -1778,9 +1778,11 @@ int main( int argc, char **argv )
     }
     add_app_begin();
     if (VERB2) {
-        SPRTF("%s: Will read input file '%s',\n"
-            "and begin a thread to analyse the puzzle by BRUTE FORCE. Try each possible\n"
-            "value for each blank cell, and report if the solution is UNIQUE!\n", module, usr_input );
+        SPRTF("%s: Will input file '%s', and try to solve the sudoku, using enabled strategies.\n", module, usr_input);
+        if (VERB9) {
+            SPRTF("%s: Begin a thread to analyse the puzzle by BRUTE FORCE. Try each possible\n"
+                "value for each blank cell, and report if the solution is UNIQUE!\n", module);
+        }
     }
     add_sys_time(1);
     if (Load_a_file( 0, (LPTSTR)usr_input )) {
