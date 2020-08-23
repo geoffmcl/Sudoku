@@ -136,7 +136,7 @@ void add_app_begin()
     init_SLinks();
 }
 
-void add_app_end()
+void add_app_end(int iret)
 {
     g_dwSvOptBits = sff_TEMP_FILE;
     int count = get_empty_count();
@@ -147,7 +147,7 @@ void add_app_end()
     int curr = add_sys_time(1); // ensure time added to message output
     InApptmr.stop();
     char *log = get_log_file();
-    sprtf("End Application. Ran for %s. log %s\n", InApptmr.getTimeStg(), log);
+    sprtf("End Application. Ran for %s. log %s. Exit %d\n", InApptmr.getTimeStg(), log, iret);
     add_sys_time(curr);         // retore adding time to message output
     delete_SLinks();
 }
@@ -565,7 +565,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
     //Free_Boxes2();
     //Kill_Change();
 
-    add_app_end();
+    add_app_end((int)msg.wParam);
     WriteINI();
     if (!cons)
         sendEnterKey();
@@ -1722,6 +1722,7 @@ int solve_the_Sudoku()
                 pAutoTime->stop();
                 do_message_block( pAutoTime->getElapsedTime(), "Aborted" );
                 ok = false;
+                iret = 3;
             }
         }
         // if stage changed, then maybe solved (or stuck!)
@@ -1794,7 +1795,7 @@ int main( int argc, char **argv )
         sprtf("Error: Failed to load '%s'\n", usr_input);
         iret = 1;
     }
-    add_app_end();
+    add_app_end(iret);
     WriteINI();
     return iret;
 }
