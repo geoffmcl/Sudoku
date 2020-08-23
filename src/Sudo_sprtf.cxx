@@ -7,6 +7,7 @@
 #include "Sudo_Paint.hxx"
 #ifdef WIN32    // include 'windows.h'
 #include <Windows.h>
+#include <fcntl.h> // for _O_BINARY, ...
 #else   // !WIN32 - include 'stdarg.h' and 'sys/time.h'
 #include <stdarg.h>     /* va_list, va_start, va_arg, va_end */
 #include <sys/time.h>  /* gettimeofday() */
@@ -101,6 +102,9 @@ int   open_log_file( void )
 {
     set_log_file_rel(def_log);
    outfile = fopen(logfile, "wb");
+#ifdef _WIN32
+   _setmode(_fileno(stdout), _O_BINARY);
+#endif
    if( outfile == 0 ) {
       outfile = (FILE *)-1;
       sprtf("WARNING: Failed to open log file [%s] ...\n", logfile);
